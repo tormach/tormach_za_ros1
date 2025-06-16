@@ -46,3 +46,6 @@ __pycache__/
 autosave.halscope
 
 !/install_scripts/docker/**
+
+# GH Actions config
+/.cache/

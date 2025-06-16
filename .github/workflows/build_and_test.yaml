@@ -1,0 +1,123 @@
+---
+name: Build and Test
+
+# https://docs.docker.com/build/ci/github-actions/
+# https://docs.docker.com/build/ci/github-actions/cache/
+# https://github.com/docker/build-push-action
+# https://github.com/reproducible-containers/buildkit-cache-dance
+# https://github.com/actions/cache
+# https://docs.docker.com/reference/cli/docker/buildx/build/#cache-to
+
+on:  [push, pull_request]
+
+jobs:
+
+  build_and_test:
+
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up buildx
+      uses: docker/setup-buildx-action@v3
+      id: setup-buildx
+      with:
+        driver: docker-container
+
+    - name: Set up cache
+      uses: actions/cache@v4
+      id: cache
+      with:
+        path: |
+          .cache/cache_ccache
+          .cache/cache_apt
+          .cache/cache_apt_ros_custom
+          .cache/cache_apt_ros_d_common
+          .cache/cache_apt_ros_devel
+        key: cache_v2
+
+    - name: Inject cache mount contents into Docker
+      uses: reproducible-containers/buildkit-cache-dance@v3.2.0
+      with:
+        builder: ${{ steps.setup-buildx.outputs.name }}
+        scratch-dir: ../dance-scratch
+        cache-map: |
+          {
+            ".cache/cache_apt": "/var/cache/apt",
+            ".cache/cache_apt_ros_custom": {
+               "target": "/var/cache/apt",
+               "id": "ros_custom"
+            },
+            ".cache/cache_apt_ros_d_common": {
+               "target": "/var/cache/apt",
+               "id": "ros_d_common"
+            },
+            ".cache/cache_apt_ros_devel": {
+               "target": "/var/cache/apt",
+               "id": "ros_devel"
+            },
+            ".cache/cache_ccache": "/ccache"
+          }
+
+    - name: Move cache directories
+      # Tests run `git clean`; move stuff out of the way
+      run: |
+        set -x
+        # Fix stderr & stdout sync problems
+        exec 1>&2
+        test ! -d .cache || mv .cache ../dance-cache
+        for SUFF in ccache apt apt_ros_custom apt_ros_d_common apt_ros_devel; do
+            mkdir -p ../dance-cache/cache_$SUFF
+        done
+        du -sh ../dance-cache
+        du -sh ../dance-cache/* || true
+
+    - name: Get docker build args
+      id: args
+      run: |
+        ./install_scripts/docker-dev.sh -b
+        ./install_scripts/docker-dev.sh -b >> "$GITHUB_OUTPUT"
+
+    - name: Build Docker image
+      uses: docker/build-push-action@v6
+      with:
+        builder: ${{ steps.setup-buildx.outputs.name }}
+        # Load built image to be available for next steps
+        load: true
+        # Save build cache to GH Actions cache
+        cache-from: type=gha
+        cache-to: type=gha
+        network: host
+        # Don't push image to registry (maybe someday, for mainline branches)
+        push: false
+        labels: |
+          com.tormach.pathpilot.robot.model=${{ steps.args.outputs.ROBOT_MODEL }}
+          com.tormach.pathpilot.robot.package=${{ steps.args.outputs.ROBOT_PACKAGE }}
+        build-args: |
+          ROBOT_MODEL=${{ steps.args.outputs.ROBOT_MODEL }}
+          ROBOT_PACKAGE=${{ steps.args.outputs.ROBOT_PACKAGE }}
+          GIT_REV=${{ steps.args.outputs.GIT_SHORT_SHA }}
+          RELEASE_VERSION=${{ steps.args.outputs.RELEASE_VERSION }}
+          IMAGE_VERSION=${{ steps.args.outputs.IMAGE_VERSION }}
+          ROS_DISTRO=${{ steps.args.outputs.ROS_DISTRO }}
+          OS_VENDOR=${{ steps.args.outputs.OS_VENDOR }}
+          DEBIAN_SUITE=${{ steps.args.outputs.DEBIAN_SUITE }}
+          BASE_OS_DOCKER_IMAGE=${{ steps.args.outputs.BASE_OS_DOCKER_IMAGE }}
+        target: ${{ steps.args.outputs.TARGET }}
+        tags: ${{ steps.args.outputs.IMAGE_BASE }}
+        file: install_scripts/docker/Dockerfile
+        context: .
+
+    - name: Run tests
+      run: ./install_scripts/ci.sh devel
+
+    - name: Move cache directories back
+      # Tests have now run `git clean`; move stuff back
+      run: |
+        set -x
+        # Fix stderr & stdout sync problems
+        exec 1>&2
+        du -sh ../dance-cache
+        du -sh ../dance-cache/* || true
+        mv ../dance-cache .cache
+      if: always()  # Cache apt & ccache even from failed builds

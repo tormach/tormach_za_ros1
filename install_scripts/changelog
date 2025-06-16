@@ -1,0 +1,14 @@
+#                                                      -*-yaml-*-
+
+PathPilotRobot:
+  Versions:
+  - Version: 3.2.5
+    Codename: February 2025 Update
+    Description: February 2025 Update
+    CreatedAt: 2025-03-27T13:00:44-05:00
+    Changelog: >-
+      Notable changes
+      - New dry-run feature:  Test robot programs in simulation before real run.
+      - Fix a problem after upgrade where robot moves at 10% velocity.
+      - Added remote ROS support.
+      - Creating a global waypoint is now independent of saving robot programs

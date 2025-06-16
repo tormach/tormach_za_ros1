@@ -247,6 +247,21 @@ if $BUILD; then
         tail -1)
     GIT_SHORT_SHA=$(git rev-parse --short HEAD)
 
+    if test -n "$GITHUB_ACTIONS"; then
+        echo ROBOT_MODEL=$ROBOT_MODEL
+        echo ROBOT_PACKAGE=$ROBOT_PACKAGE
+        echo GIT_SHORT_SHA=$GIT_SHORT_SHA
+        echo RELEASE_VERSION=$RELEASE_VERSION
+        echo IMAGE_VERSION=$IMAGE_VERSION
+        echo ROS_DISTRO=$ROS_DISTRO
+        echo OS_VENDOR=$OS_VENDOR
+        echo DEBIAN_SUITE=$DEBIAN_SUITE
+        echo IMAGE_BASE=$IMAGE_BASE
+        echo TARGET=$TARGET
+        echo BASE_OS_DOCKER_IMAGE=$BASE_OS_DOCKER_IMAGE
+        exit
+    fi
+
     if ! ${USE_OVERLAY}; then
         # Build base image when -N is supplied
         # - Ensure SSH credentials exist

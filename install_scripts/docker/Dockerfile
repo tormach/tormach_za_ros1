@@ -86,6 +86,7 @@ ENV \
     LC_ALL=en_US.UTF-8 \
     LANG=en_US.UTF-8
 
+
 ###################################
 # ROS BASE PUBLISHED IMAGE
 ###################################
@@ -347,6 +348,11 @@ ENV DOCKER_REGISTRY=docker.pathpilot.com
 # Set prompt
 RUN echo "ros-${IMAGE_TYPE}@${IMAGE_VERSION}" > /etc/debian_chroot
 
+# Show ccache stats
+RUN --mount=type=cache,target=/ccache/ \
+    ccache -s && ccache -z
+
+
 ###################################
 # ROS DEVEL BUILD IMAGE
 ###################################
@@ -416,3 +422,7 @@ ENV DOCKER_REGISTRY=docker.io
 
 # Set prompt
 RUN echo "ros-${IMAGE_TYPE}@${IMAGE_VERSION}" > /etc/debian_chroot
+
+# Show ccache stats
+RUN --mount=type=cache,target=/ccache/ \
+    ccache -s && ccache -z
