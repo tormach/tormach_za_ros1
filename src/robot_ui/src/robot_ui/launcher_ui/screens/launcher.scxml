@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scxml xmlns="http://www.w3.org/2005/07/scxml" version="1.0" binding="early" xmlns:qt="http://www.qt.io/2015/02/scxml-ext" name="launcher" qt:editorversion="9.0.1" initial="internet">
+    <qt:editorinfo initialGeometry="-869.48;-622.15;-20;-20;40;40"/>
+    <state id="eula">
+        <qt:editorinfo geometry="-600.20;471.44;-186.08;-167.12;678.60;378.15" scenegeometry="-600.20;471.44;-786.28;304.32;678.60;378.15"/>
+        <transition type="external" event="check_complete" target="config">
+            <qt:editorinfo movePoint="-105.91;12.76" endTargetFactors="94.48;7.91" startTargetFactors="86.08;96.20"/>
+        </transition>
+        <state id="checkEULA">
+            <qt:editorinfo geometry="-106.08;40.64;-60;-50;252.39;100" scenegeometry="-706.28;512.08;-766.28;462.08;252.39;100"/>
+            <transition type="external" event="agreed_to_eula" target="check_final">
+                <qt:editorinfo movePoint="56.10;9.90"/>
+            </transition>
+            <transition type="external" event="display_eula" target="displayEULA">
+                <qt:editorinfo endTargetFactors="18.16;61.24"/>
+            </transition>
+        </state>
+        <final id="check_final">
+            <qt:editorinfo geometry="-37.88;153.94;-20;-20;40;40" scenegeometry="-638.08;625.38;-658.08;605.38;40;40"/>
+            <onentry>
+                <raise event="check_complete"/>
+            </onentry>
+        </final>
+        <state id="displayEULA">
+            <qt:editorinfo geometry="249.83;36.79;-60;-50;250.83;100" scenegeometry="-350.37;508.23;-410.37;458.23;250.83;100"/>
+            <transition type="external" event="agreed_to_eula" target="check_final"/>
+        </state>
+    </state>
+    <state id="config" initial="configCheck">
+        <qt:editorinfo geometry="-68.33;1322.92;-734.73;-539.55;1243.47;763.81" scenegeometry="-68.33;1322.92;-803.06;783.37;1243.47;763.81"/>
+        <transition type="external" event="config_complete" target="running">
+            <qt:editorinfo movePoint="59.47;-1.44" startTargetFactors="27.19;90.62"/>
+        </transition>
+        <transition type="external" event="shutdown" target="launcher_final">
+            <qt:editorinfo movePoint="-72.87;29.50"/>
+        </transition>
+        <state id="configCheck">
+            <qt:editorinfo geometry="498.41;-358.56;-300.83;-71.31;286.41;483.23" scenegeometry="430.08;964.36;129.25;893.05;286.41;483.23"/>
+            <transition type="external" event="config_check_done" target="configFound">
+                <qt:editorinfo endTargetFactors="84.42;26.04"/>
+            </transition>
+        </state>
+        <state id="configFound">
+            <qt:editorinfo geometry="-557.20;-198.91;-157.53;-202.68;620.06;530.20" scenegeometry="-625.53;1124.01;-783.06;921.33;620.06;530.20"/>
+            <state id="configSelect">
+                <qt:editorinfo geometry="-57.07;-80.87;-41.36;-50;203.84;208.20" scenegeometry="-682.60;1043.14;-723.96;993.14;203.84;208.20"/>
+                <transition type="external" event="config_selected" target="configStartRobot">
+                    <qt:editorinfo movePoint="51.89;-3.14"/>
+                </transition>
+            </state>
+            <state id="configStartRobot">
+                <qt:editorinfo geometry="-98.37;257.52;-39.16;-129.39;247.20;179.39" scenegeometry="-723.90;1381.53;-763.06;1252.14;247.20;179.39"/>
+                <transition type="external" event="robot_started" target="config_final">
+                    <qt:editorinfo movePoint="81.65;15.66" startTargetFactors="26.25;84.74"/>
+                </transition>
+                <transition type="external" event="config_error" target="configDisplayErrors">
+                    <qt:editorinfo movePoint="14.22;46.85" endTargetFactors="78.52;24.94"/>
+                </transition>
+            </state>
+            <state id="configDisplayErrors">
+                <qt:editorinfo geometry="264.80;132.05;-54.47;-91.27;232.20;142.88" scenegeometry="-360.73;1256.06;-415.20;1164.79;232.20;142.88"/>
+                <transition type="external" event="return_to_selection" target="configSelect">
+                    <qt:editorinfo movePoint="21.99;-22.71" startTargetFactors="52.22;17.19"/>
+                </transition>
+            </state>
+            <transition type="external" event="config_check_again" target="configCheck"/>
+            <final id="config_final">
+                <qt:editorinfo geometry="339.91;246.34;-20;-20;40;40" scenegeometry="-285.62;1370.35;-305.62;1350.35;40;40"/>
+                <onentry>
+                    <raise event="config_complete"/>
+                </onentry>
+            </final>
+            <transition type="external" event="start_robot" target="Final_7"/>
+        </state>
+        <final id="Final_7">
+            <qt:editorinfo geometry="107.43;175.75;-20;-20;40;40" scenegeometry="39.10;1498.67;19.10;1478.67;40;40"/>
+        </final>
+    </state>
+    <state id="running">
+        <qt:editorinfo geometry="650.72;1370.15;-60;-76.54;156.38;126.54" scenegeometry="650.72;1370.15;590.72;1293.61;156.38;126.54"/>
+        <transition type="external" event="shutdown" target="launcher_final">
+            <qt:editorinfo movePoint="-198.76;332.48" startTargetFactors="89.81;5.28"/>
+        </transition>
+    </state>
+    <final id="launcher_final">
+        <qt:editorinfo geometry="1642.33;1252.67;-20;-20;40;40" scenegeometry="1642.33;1252.67;1622.33;1232.67;40;40"/>
+    </final>
+    <parallel id="select">
+        <qt:editorinfo geometry="1401.92;-1360.62;-439.13;-295.14;1932.52;1531.04" scenegeometry="1401.92;-1360.62;962.79;-1655.76;1932.52;1531.04"/>
+        <state id="imageSelection" initial="defaultImageCheck">
+            <qt:editorinfo geometry="-134.51;-150.63;-224.36;6.61;1821.60;572.64" scenegeometry="1267.41;-1511.25;1043.05;-1504.64;1821.60;572.64"/>
+            <state id="defaultImageCheck">
+                <qt:editorinfo geometry="39.82;231.62;-60;-50;264.57;111.93" scenegeometry="1295.22;-580.62;1235.22;-630.62;264.57;111.93"/>
+                <transition type="external" event="select_local" target="localSelection"/>
+            </state>
+            <state id="localSelection" initial="versionSelection">
+                <qt:editorinfo geometry="379.49;205.67;-15.33;-124.70;385.34;398.94" scenegeometry="1646.90;-1305.58;1631.57;-1430.28;385.34;398.94"/>
+                <transition type="external" event="select_usb" target="usbSelection">
+                    <qt:editorinfo endTargetFactors="20.53;67.70" startTargetFactors="88.17;79.39"/>
+                </transition>
+                <state id="deletingImages">
+                    <qt:editorinfo geometry="271.63;418.80;-261.89;-292.22;339.58;100" scenegeometry="1918.53;-886.78;1656.64;-1179;339.58;100"/>
+                    <transition type="external" event="delete_finished" target="versionSelection">
+                        <qt:editorinfo endTargetFactors="47.98;85.76"/>
+                    </transition>
+                </state>
+                <state id="versionSelection">
+                    <qt:editorinfo geometry="85.08;57.38;-80.41;-118.14;343.49;100" scenegeometry="1731.98;-1248.20;1651.57;-1366.34;343.49;100"/>
+                    <transition type="external" event="delete_images" target="deletingImages">
+                        <qt:editorinfo endTargetFactors="74.28;4.46" startTargetFactors="93.43;32.99"/>
+                    </transition>
+                </state>
+            </state>
+            <state id="usbSelection" initial="usbFileSelect">
+                <qt:editorinfo geometry="934.19;240.69;-73.93;-117.16;716.98;183.94" scenegeometry="2189.59;-571.55;2115.66;-688.71;716.98;183.94"/>
+                <transition type="external" event="select_local" target="localSelection">
+                    <qt:editorinfo endTargetFactors="95.63;21.50" startTargetFactors="17.95;24.98"/>
+                </transition>
+                <state id="usbFileSelect">
+                    <qt:editorinfo geometry="7.07;-3.22;-60;-50;159.51;100" scenegeometry="2196.66;-574.77;2136.66;-624.77;159.51;100"/>
+                    <transition type="external" event="usb_load_started" target="usbLoading"/>
+                </state>
+                <state id="usbLoading">
+                    <qt:editorinfo geometry="291.93;-6.20;-60;-50;120;100" scenegeometry="2481.52;-577.75;2421.52;-627.75;120;100"/>
+                    <transition type="external" event="usb_load_completed" target="usbLoaded"/>
+                </state>
+                <state id="usbLoaded">
+                    <qt:editorinfo geometry="563.05;-11.16;-60;-50;120;100" scenegeometry="2752.64;-582.71;2692.64;-632.71;120;100"/>
+                </state>
+            </state>
+        </state>
+        <state id="update" initial="spaceCheck">
+            <qt:editorinfo geometry="142.69;728.58;-524.38;-274.01;1655.95;370.36" scenegeometry="1544.61;63.70;1020.23;-210.31;1655.95;370.36"/>
+            <state id="updateCheck">
+                <qt:editorinfo geometry="-23.76;-75.65;-130.94;-50;300.48;100" scenegeometry="1531.13;454.16;1400.19;404.16;300.48;100"/>
+                <transition type="external" event="update_available" target="updateAskUser">
+                    <qt:editorinfo movePoint="-7.23;7.23" startTargetFactors="93.24;58.07"/>
+                </transition>
+                <transition type="internal" target="updateComplete" event="check_error">
+                    <qt:editorinfo movePoint="-397.81;12.03" endTargetFactors="52.16;17.64" localGeometry="0.38;-49.52;943.94;-49.52" startTargetFactors="80.65;9.77"/>
+                </transition>
+                <transition type="external" event="no_update_available" target="Final_5">
+                    <qt:editorinfo movePoint="86.14;21.30" localGeometry="6.02;153.41" startTargetFactors="69.28;14.03"/>
+                </transition>
+            </state>
+            <state id="updateAskUser">
+                <qt:editorinfo geometry="378.81;-65.12;-106;-50;217.06;100" scenegeometry="1933.70;464.69;1827.70;414.69;217.06;100"/>
+                <transition type="external" event="pull_update" target="updatePulling">
+                    <qt:editorinfo movePoint="0.93;9.64" endTargetFactors="5.52;48.21" startTargetFactors="94.15;57.66"/>
+                </transition>
+                <transition type="external" event="skip_update" target="Final_5">
+                    <qt:editorinfo movePoint="-169.92;9.09" localGeometry="-16.85;119.02" startTargetFactors="75.04;13.07"/>
+                </transition>
+            </state>
+            <state id="updatePulling">
+                <qt:editorinfo geometry="694.64;-56.65;-106;-50;221.20;100" scenegeometry="2249.53;473.16;2143.53;423.16;221.20;100"/>
+                <transition type="external" event="pull_complete" target="updateComplete">
+                    <qt:editorinfo movePoint="-3.52;7.50" endTargetFactors="18.23;57.97" startTargetFactors="89.38;60.37"/>
+                </transition>
+                <transition type="internal" target="updateComplete" event="pull_error">
+                    <qt:editorinfo movePoint="-14.09;8.70" endTargetFactors="30.03;24.03" startTargetFactors="6.62;38.50"/>
+                </transition>
+            </state>
+            <state id="updateComplete">
+                <qt:editorinfo geometry="1051.57;-52.25;-107.24;-50;167.24;100" scenegeometry="2606.46;477.56;2499.22;427.56;167.24;100"/>
+                <transition type="internal" target="Final_5">
+                    <qt:editorinfo movePoint="58.56;3.99"/>
+                </transition>
+            </state>
+            <final id="Final_5">
+                <qt:editorinfo geometry="918.70;41.79;-20;-20;40;40" scenegeometry="2473.59;571.60;2453.59;551.60;40;40"/>
+            </final>
+            <state id="spaceCheck">
+                <qt:editorinfo geometry="-444.38;-76.50;-60;-50;274.44;100" scenegeometry="1110.51;453.31;1050.51;403.31;274.44;100"/>
+                <transition type="external" event="space_checked" target="updateCheck">
+                    <qt:editorinfo endTargetFactors="3.81;62.08"/>
+                </transition>
+            </state>
+        </state>
+        <transition type="internal" target="launcher_final" event="start_selected_image">
+            <qt:editorinfo movePoint="18.13;-116.69" startTargetFactors="85.19;98.43"/>
+        </transition>
+        <transition type="external" event="shutdown" target="launcher_final">
+            <qt:editorinfo movePoint="-94.29;-116.96" startTargetFactors="72.35;98.65"/>
+        </transition>
+        <transition type="external" event="image_selected" target="eula">
+            <qt:editorinfo movePoint="72.48;-0.95" endTargetFactors="86.76;15.77" startTargetFactors="47.28;96.90"/>
+        </transition>
+        <state id="baseOSUpdate">
+            <qt:editorinfo geometry="-318.63;903.40;-60;-53.42;1334.07;334.94" scenegeometry="1083.29;238.52;1023.29;185.10;1334.07;334.94"/>
+            <state id="systemUpdateStart">
+                <qt:editorinfo geometry="46.09;73.37;-60;-50;333.40;206.69" scenegeometry="1139.66;788.28;1079.66;738.28;333.40;206.69"/>
+            </state>
+        </state>
+        <transition type="external" event="login_requested" target="account">
+            <qt:editorinfo endTargetFactors="98.87;16.02"/>
+        </transition>
+    </parallel>
+    <state id="internet">
+        <qt:editorinfo geometry="-701.30;-828;-60;-50;500.95;144.47" scenegeometry="-701.30;-828;-761.30;-878;500.95;144.47"/>
+        <transition type="external" event="internet_available" target="account">
+            <qt:editorinfo endTargetFactors="56.44;2.73"/>
+        </transition>
+        <transition type="external" event="internet_not_available" target="select">
+            <qt:editorinfo endTargetFactors="22.46;1.35"/>
+        </transition>
+    </state>
+    <state id="account">
+        <qt:editorinfo geometry="-766.12;-300.55;-60;-50;1135.46;459.85" scenegeometry="-766.12;-300.55;-826.12;-350.55;1135.46;459.85"/>
+        <state id="checkAccount">
+            <qt:editorinfo geometry="47.15;100.18;-60;-50;194.67;169.90" scenegeometry="-718.97;-200.37;-778.97;-250.37;194.67;169.90"/>
+            <transition type="external" event="account_present" target="account_final"/>
+            <transition type="external" event="account_not_present" target="acquireAccount">
+                <qt:editorinfo endTargetFactors="2.87;28.50"/>
+            </transition>
+        </state>
+        <state id="acquireAccount">
+            <qt:editorinfo geometry="459.68;103.13;-60;-50;607.43;239.18" scenegeometry="-306.44;-197.42;-366.44;-247.42;607.43;239.18"/>
+            <transition type="external" event="token_acquired" target="checkAccount">
+                <qt:editorinfo endTargetFactors="91.03;74.22"/>
+            </transition>
+        </state>
+        <final id="account_final">
+            <qt:editorinfo geometry="268.14;350.65;-20;-20;40;40" scenegeometry="-497.98;50.10;-517.98;30.10;40;40"/>
+            <onentry>
+                <raise event="account_valid"/>
+            </onentry>
+        </final>
+        <transition type="external" event="account_valid" target="select">
+            <qt:editorinfo endTargetFactors="1.23;48.99"/>
+        </transition>
+        <transition type="external" event="account_skipped" target="select">
+            <qt:editorinfo endTargetFactors="0.61;69.13"/>
+        </transition>
+    </state>
+</scxml>

@@ -1,0 +1,242 @@
+# https://github.com/ros/rosdistro/blob/master/rosdep/base.yaml
+# https://github.com/ros/rosdistro/blob/master/rosdep/python.yaml
+machinetalk:
+  debian: [machinekit]
+  ubuntu: [machinekit]
+machinetalk-protobuf:
+  debian:
+    pip:
+      packages: [machinetalk-protobuf]
+  ubuntu:
+    pip:
+      packages: [machinetalk-protobuf]
+protobuf-pip:
+  debian:
+    pip:
+      packages: [protobuf==3.20]
+  ubuntu:
+    pip:
+      packages: [protobuf==3.20]
+pymachinetalk:
+  debian:
+    pip:
+      packages: [pymachinetalk]
+  ubuntu:
+    pip:
+      packages: [pymachinetalk]
+# The robot_command package needs newer version of fysom than
+# installed by Stretch
+python3-fysom:
+  debian:
+    pip:
+      packages: [fysom]
+  ubuntu:
+    pip:
+      packages: [fysom]
+python-pint:
+  debian:
+    pip:
+      package: [pint]
+  ubuntu:
+    pip:
+      packages: [pint]
+# Newer version than what is available in Debianized package
+# is needed! (May be removed after the update is available.)
+# The core issue explained in a GitHub issue https://github.com/docker/docker-py/issues/3113
+python3-docker:
+  debian:
+    pip:
+      package: [docker]
+  ubuntu:
+    pip:
+      packages: [docker]
+# PySide6 requires newer version of pytest and pytest plugins
+# than provided by distro
+python3-pytest:
+  debian:
+    pip:
+      package: [pytest]
+  ubuntu:
+    pip:
+      packages: [pytest]
+python3-pytest-qt:
+  debian:
+    pip:
+      package: [pytest-qt]
+  ubuntu:
+    pip:
+      packages: [pytest-qt]
+python3-pytest-mock:
+  debian:
+    pip:
+      package: [pytest-mock]
+  ubuntu:
+    pip:
+      packages: [pytest-mock]
+python3-pytest-cov:
+  debian:
+    pip:
+      package: [pytest-cov]
+  ubuntu:
+    pip:
+      packages: [pytest-cov]
+
+# This may be removed once upstream ROS distro incorrect mapping is
+# fixed
+# https://github.com/ros/rosdistro/blob/master/rosdep/base.yaml
+# https://github.com/ros/rosdistro/pull/24294
+libqt4:
+  # Old, incorrect
+  # debian: [libqt4-core]
+  # Copy ubuntu key to debian
+  debian: [libqt4-dbus, libqt4-network, libqt4-script, libqt4-test, libqt4-xml, libqtcore4]
+  ubuntu: [libqt4-dbus, libqt4-network, libqt4-script, libqt4-test, libqt4-xml, libqtcore4]
+oxygen-icon-theme:
+  debian: [oxygen-icon-theme]
+  ubuntu: [oxygen-icon-theme]
+
+# Python packages not in rosdistro yet
+# https://github.com/ros/rosdistro/blob/master/rosdep/python.yaml
+python-parso:
+  debian:
+    buster: [python-parso]
+    stretch:
+      pip:
+        packages: [parso]
+  ubuntu:
+    bionic: [python-parso]
+    xenial:
+      pip:
+        packages: [parso]
+    focal: [python3-parso]
+python3-semver:
+  debian:
+      pip:
+        packages: [semver]
+  ubuntu:
+      pip:
+        packages: [semver]
+python3-tzlocal:
+  debian: [python3-tzlocal]
+  ubuntu: [python3-tzlocal]
+python3-aiodocker:
+  debian:
+    pip:
+      packages: ["git+ssh://git@bitbucket.org/tormachinc/aiodocker.git@zultron/2024-12-04_add_import_image_quiet_param"]
+  ubuntu:
+    pip:
+      packages: ["git+ssh://git@bitbucket.org/tormachinc/aiodocker.git@zultron/2024-12-04_add_import_image_quiet_param"]
+python3-dbus-next:
+  debian:
+      pip:
+        packages: [dbus-next]
+  ubuntu:
+      pip:
+        packages: [dbus-next]
+python3-aiohttp:
+  debian:
+    pip:
+      packages: [aiohttp]
+  ubuntu:
+    pip:
+      packages: [aiohttp]
+python3-hidapi:
+  debian:
+    pip:
+      packages: [hidapi]
+  ubuntu:
+    pip:
+      packages: [hidapi]
+
+# sphinx from pip
+python3-sphinx:
+  debian:
+      pip:
+        packages: [sphinx]
+  ubuntu:
+      pip:
+        packages: [sphinx]
+python3-sphinx-rtd-theme:
+  debian:
+      pip:
+        packages: [sphinx-rtd-theme]
+  ubuntu:
+      pip:
+        packages: [sphinx-rtd-theme]
+python3-sphinxcontrib-confluencebuilder:
+  debian:
+      pip:
+        packages: [sphinxcontrib-confluencebuilder]
+  ubuntu:
+      pip:
+        packages: [sphinxcontrib-confluencebuilder]
+
+# Python package not in Focal
+python3-avahi:
+  debian: [python3-avahi]
+  ubuntu: [python3-avahi]
+
+# Machinekit
+machinekit:
+  debian: [machinekit-hal]
+  ubuntu: [machinekit-hal]
+machinekit-dev:
+  debian: [machinekit-hal-dev]
+  ubuntu: [machinekit-hal-dev]
+hal_hw_interface:
+  debian: [ros-$ROS_DISTRO-hal-hw-interface]
+  ubuntu: [ros-$ROS_DISTRO-hal-hw-interface]
+linuxcnc-ethercat:
+  debian: [linuxcnc-ethercat]
+  ubuntu: [linuxcnc-ethercat]
+etherlabmaster-tools:
+  debian: [etherlabmaster-tools]
+  ubuntu: [etherlabmaster-tools]
+redis_store_msgs:
+  debian: [ros-$ROS_DISTRO-redis-store-msgs]
+  ubuntu: [ros-$ROS_DISTRO-redis-store-msgs]
+python3-redis:
+  debian: [python3-redis]
+  ubuntu: [python3-redis]
+python3-attrs:
+  debian: [python3-attr]
+  ubuntu: [python3-attr]
+redis_store:
+  debian: [ros-$ROS_DISTRO-redis-store]
+  ubuntu: [ros-$ROS_DISTRO-redis-store]
+tshark:
+  debian: [tshark]
+  ubuntu: [tshark]
+pyshark:
+  debian:
+    pip:
+      packages: [pyshark]
+  ubuntu:
+    pip:
+      packages: [pyshark]
+
+# robot_ui
+python3-pyside6:
+  debian:
+    pip:
+      packages: [PySide6==6.5.*]
+  ubuntu:
+    pip:
+      packages: [PySide6==6.5.*]
+python3-qasync:
+  debian:
+      pip:
+        packages: [qasync]
+  ubuntu:
+      pip:
+        packages: [qasync]
+udisks2:
+  debian: [udisks2]
+  ubuntu: [udisks2]
+python3-requests:
+  debian:
+    pip:
+      packages: [requests==2.26.0]
+  ubuntu:
+    pip:
+      packages: [requests==2.26.0]

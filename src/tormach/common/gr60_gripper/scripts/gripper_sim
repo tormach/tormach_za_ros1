@@ -1,0 +1,6 @@
+#!/usr/bin/env python
+from gr60_gripper.gripper_sim import GripperNode
+
+if __name__ == '__main__':
+    node = GripperNode()
+    node.run()

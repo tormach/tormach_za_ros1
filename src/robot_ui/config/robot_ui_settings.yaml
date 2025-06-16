@@ -1,0 +1,56 @@
+robot_ui_config:
+
+  window:
+    default_width: 1280
+    default_height: 800
+
+  jog:
+    joint_velocity: 1.0
+    linear_velocity: 1.0
+    angular_velocity: 1.0
+    linear_units: ["mm", "m", "in"]
+    angular_units: ["deg", "rad"]
+    time_units: ["s", "min"]
+    increments:
+      mm: ["0.100", "1.000", "10.00", "100.0"]
+      m: [".0001", ".0010", ".0100", ".1000"]
+      in: [".001", ".010", ".100", "1.00"]
+      deg: ["0.100", "1.000", "10.00", "100.0"]
+      rad: [".001", ".010", ".100", "1.00"]
+
+  # DRO decimals and digits
+  dro:
+    decimals:
+      m: 6
+      mm: 3
+      in: 4
+      deg: 3
+      rad: 4
+
+  axis_names: ["X", "Y", "Z", "A", "B", "C"]
+  joint_names: ["J1", "J2", "J3", "J4", "J5", "J6"]
+  robot_arm_base_link: "base_link"  # base link to be used for finding robot arm joints in URDF
+
+  preview:
+    rviz_config: "$(find robot_ui)/config/current.rviz"
+    fixed_frame: "world"
+    tool_frame: "tool0"
+
+  program_home_path: "~/nc_files/robot_programs"
+  recent_files:
+    maximum_count: 10
+
+  conversational:
+    default_waypoint_prefix: "waypoint_"
+    default_global_waypoint_prefix: "global_waypoint_"
+    default_program_template: "empty"
+
+  mdi_history:
+    maximum_count: 10
+
+  tool:
+    tool_types: ["none", "hand_e", "multigrip", "pivot_grip"]
+
+  pp_hub_url: "https://hub.pathpilot.com"
+  # for development:
+  # pp_hub_url: "http://127.0.0.1:5001"

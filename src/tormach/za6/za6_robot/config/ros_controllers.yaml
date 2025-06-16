@@ -1,0 +1,70 @@
+# This file augments params in
+# ../../za6_moveit_config/config/ros_controllers.yaml
+#
+# It is loaded in these places:
+# ../launch/moveit_planning_execution.launch
+# (In the latter, under the `/move_group` namespace)
+
+# Settings for ros_control hardware interface
+hardware_interface:
+  joints:
+    - joint_1
+    - joint_2
+    - joint_3
+    - joint_4
+    - joint_5
+    - joint_6
+    - tcp_lin
+    - tcp_rot
+# Publish all joint states
+# Creates the /joint_states topic necessary in ROS
+joint_state_controller:
+  type: joint_state_controller/JointStateController
+  publish_rate: 50
+
+position_trajectory_controller:
+  # For detailed explanations of parameters see
+  # http://wiki.ros.org/joint_trajectory_controller
+  type: pos_vel_controllers/InterruptibleJointTrajectoryController
+  stop_trajectory_duration: 0.02
+  # Hotfix below: allow_partial_joints_goal: true
+  # When using movef, consider refactoring robot joints that are passed by moveit in joints_trajectory_msg to ROS controller
+  # movef currently sends [joint_0, joint_1, joint_2, joint_3, joint_4, joint_5]
+  # ros controller currently expects [joint_0, joint_1, joint_2, joint_3, joint_4, joint_5, tcp_lin, tcp_rot]
+  allow_partial_joints_goal: true
+  constraints:
+    goal_time: 1.0
+    # 1 deg. in rad. = 0.0174532925199
+    stopped_velocity_tolerance: 0.005 # Defaults to 0.01
+
+    # NOTE: max acceleration settings should be less than any downstream limits for best results
+    joint_1:
+      # Trajectory position tolerance:  enforce w/in +/- rad. along trajectory
+      trajectory: 0.05
+      # Goal position tolerance:  enforce w/in +/- rad. of final goal
+      goal:       0.017
+      max_acceleration: 6
+    joint_2:
+      trajectory: 0.05
+      goal:       0.017
+      max_acceleration: 10
+    joint_3:
+      trajectory: 0.05
+      goal:       0.017
+      max_acceleration: 12
+    joint_4:
+      trajectory: 0.05
+      goal:       0.017
+      max_acceleration: 10
+    joint_5:
+      trajectory: 0.05
+      goal:       0.017
+      max_acceleration: 12
+    joint_6:
+      trajectory: 0.05
+      goal:       0.017
+      max_acceleration: 20
+    tcp_lin:
+      max_acceleration: 100
+    tcp_rot:
+      max_acceleration: 100

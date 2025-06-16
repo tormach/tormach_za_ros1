@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>robot_ui</name>
+  <version>0.1.0</version>
+  <description>
+    PathPilot Robot UI
+  </description>
+  <maintainer email="alexander@roessler.systems">Alexander Rössler</maintainer>
+  <license>TODO</license>
+
+  <url>TODO</url>
+  <author>Alexander Rössler</author>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <depend>robot_command</depend>
+  <depend>pathpilot_lib</depend>
+  <depend>robot_common</depend>
+  <depend>rospy</depend>
+  <depend>mesa-utils</depend>
+  <depend>python3-pyside6</depend>
+  <depend>python-inotify-simple-pip</depend>
+  <build_depend>unique_id</build_depend>
+  <build_depend>movej_ik_server</build_depend>
+  <build_depend>movej_ik_server_msgs</build_depend>
+
+  <exec_depend>actionlib_msgs</exec_depend>
+  <exec_depend>rviz</exec_depend>
+  <exec_depend>rqt_console</exec_depend>
+  <exec_depend>robot_command_msgs</exec_depend>
+  <exec_depend>topic_tools</exec_depend>
+  <exec_depend>python3-psutil</exec_depend>
+  <exec_depend>cartesian_state</exec_depend>
+  <exec_depend>pp_ros_launch</exec_depend>
+  <exec_depend>robot_jog</exec_depend>
+  <exec_depend>ros_machinetalk</exec_depend>
+  <exec_depend>oxygen-icon-theme</exec_depend>
+  <!-- msg files imported into local robot_jog_msgs package -->
+  <!-- <exec_depend>jog_msgs</exec_depend> -->
+  <exec_depend>robot_jog_msgs</exec_depend>
+  <exec_depend>unique_id</exec_depend>
+  <exec_depend>udisks2</exec_depend>
+  <exec_depend>python3-qasync</exec_depend>
+  <exec_depend>robot_ui_msgs</exec_depend>
+  <exec_depend>se_jogger</exec_depend>
+
+  <test_depend>rostest</test_depend>
+  <test_depend>ros_pytest</test_depend>
+  <test_depend>ros_pytest_qt</test_depend>
+  <test_depend>python-pytest-dependency-pip</test_depend>
+  <test_depend>python3-pytest-qt</test_depend>
+  <exec_depend>python3-qasync</exec_depend>
+
+  <export>
+    <rosdoc config="${prefix}/rosdoc.yaml"/>
+  </export>
+</package>

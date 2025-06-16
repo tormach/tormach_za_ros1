@@ -1,0 +1,29 @@
+#!/usr/bin/env python
+import os
+
+import rospkg
+import rospy
+
+from robot_test import ProgramLauncher
+
+
+class RobotTestProgramLauncher:
+    def __init__(self):
+        rospy.init_node('test_program_launcher')
+        self._launcher = ProgramLauncher()
+
+    def run_all_programs(self):
+        rospack = rospkg.RosPack()
+        program_path = os.path.join(
+            rospack.get_path('robot_test'), 'src', 'programs'
+        )
+        self._launcher.run_programs_in_path(program_path)
+
+    def stop(self):
+        self._launcher.stop()
+
+
+if __name__ == '__main__':
+    launcher = RobotTestProgramLauncher()
+    launcher.run_all_programs()
+    launcher.stop()

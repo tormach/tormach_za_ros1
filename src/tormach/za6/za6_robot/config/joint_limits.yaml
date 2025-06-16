@@ -1,0 +1,33 @@
+# joint_limits.yaml adds acceleration limits to position limits
+# specified in the URDF and velocity limits copiedby
+# moveit_setup_assistant from the URDF to
+# ../../za6_moveit_config/config/joint_limits.yaml
+#
+joint_limits:
+  joint_1:
+    has_acceleration_limits: true
+    max_acceleration: 6
+  joint_2:
+    has_acceleration_limits: true
+    max_acceleration: 10
+  joint_3:
+    has_acceleration_limits: true
+    max_acceleration: 12
+  joint_4:
+    has_acceleration_limits: true
+    max_acceleration: 10
+  joint_5:
+    has_acceleration_limits: true
+    max_acceleration: 12
+  joint_6:
+    has_acceleration_limits: true
+    max_acceleration: 20
+  tcp_lin:
+    has_velocity_limits: true
+    max_velocity: 1.5
+    has_acceleration_limits: true
+    max_acceleration: 4.0
+  tcp_rot:
+    has_velocity_limits: true
+    max_velocity: 1.57
+    has_acceleration_limits: false

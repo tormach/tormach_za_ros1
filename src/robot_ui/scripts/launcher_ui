@@ -1,0 +1,153 @@
+#!/usr/bin/env python
+
+import asyncio
+import sys
+import os
+import argparse
+
+from PySide6.QtCore import QObject, QUrl
+from PySide6.QtWidgets import QApplication
+from PySide6.QtQml import QQmlApplicationEngine
+from PySide6.QtGui import QIcon
+import qasync  # needs to be imported after Qt
+from pp_ros_launch.config import PPROSContainerConfig
+
+from PySide6.QtWebEngineQuick import QtWebEngineQuick
+
+import logging
+
+from robot_ui.pathpilot.base import (
+    MimeIconProvider,
+    ToolTipImageProvider,
+    Translator,
+    recursively_register_types,
+)
+from robot_ui.pathpilot.base.resource_paths import ICON_PATH, TRANSLATIONS_PATH
+from robot_ui.pathpilot.development.python_reloader import PythonReloader
+from robot_ui.launcher_ui.logic.signal_handler import SignalHandler
+
+# QML is installed in the same directory as the robot_ui top-level
+# module
+import robot_ui
+
+logging.basicConfig(level=logging.INFO)
+logging.root.setLevel(logging.INFO)
+
+
+class LauncherGui(QObject):
+    logger = logging.getLogger('launcher')
+
+    def __init__(self, args, parent=None):
+        self.logger.setLevel(logging.DEBUG)
+        super().__init__(parent)
+        self.signal_handler = SignalHandler()
+
+        self.logger.info(
+            f'Starting launcher_ui{" in LIVE mode." if args.live else "."}'
+        )
+
+        PPROSContainerConfig.init_config()
+
+        qml_main = os.path.join(
+            'launcher_ui', 'live.qml' if args.live else 'init.qml'
+        )
+        module_path = robot_ui.__path__[-1]
+        for path in robot_ui.__path__:
+            if os.path.exists(os.path.join(path, qml_main)):
+                module_path = path
+                break
+
+        if module_path not in sys.path:
+            sys.path.insert(0, module_path)
+
+        recursively_register_types(module_path)
+
+        self._engine = QQmlApplicationEngine(self)
+        self._engine.addImportPath(module_path)
+        self._engine.rootContext().setContextProperty(
+            'parsedArguments', vars(args)
+        )
+        self.icon_path = os.path.join(ICON_PATH, 'application/png/icon.png')
+        self._engine.rootContext().setContextProperty(
+            'programIconPath', self.icon_path
+        )
+        self._translator = Translator(
+            path=QUrl.fromLocalFile(TRANSLATIONS_PATH),
+            name='pathpilot',
+            engine=self._engine,
+            parent=self,
+        )
+        self._engine.rootContext().setContextProperty(
+            Translator.__name__, self._translator
+        )
+        if args.live:
+            # necessary to make reloading work, prevents garbage
+            # collection
+            global reloader
+            reloader = PythonReloader(main=__file__)
+            self._engine.rootContext().setContextProperty(
+                PythonReloader.__name__, reloader
+            )
+            self._engine.rootContext().setContextProperty(
+                'userProjectPath',
+                QUrl.fromLocalFile(os.path.join(module_path, '..')),
+            )
+        self._engine.addImageProvider('mimeIconProvider', MimeIconProvider())
+        self._engine.addImageProvider(
+            'toolTipImageProvider', ToolTipImageProvider()
+        )
+        url = QUrl.fromLocalFile(os.path.join(module_path, qml_main))
+        self._engine.objectCreated.connect(
+            lambda obj, obj_url: self._exit_on_failure(obj, obj_url, url)
+        )
+        self._engine.load(url)
+        self.logger.info('launcher_ui started')
+
+    def __del__(self):
+        self._engine.deleteLater()
+        del self._engine
+
+    @staticmethod
+    def _exit_on_failure(obj: QObject, obj_url: QUrl, main_url: QUrl):
+        if not obj and main_url == obj_url:
+            QApplication.exit(-1)
+
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(
+        description="""
+            Robot Launcher UI
+            """
+    )
+    parser.add_argument(
+        '-l',
+        '--live',
+        help='The live coding version of this application',
+        action='store_true',
+    )
+    parser.add_argument(
+        '-td',
+        '--test-deployment',
+        help='Pass this option if you just want to test the QML file '
+        'deployment, exits immediately',
+        action='store_true',
+    )
+    arguments, unknown = parser.parse_known_args()
+
+    # disable SVG loading warnings
+    os.environ['QT_LOGGING_RULES'] = 'qt.svg.warning=false'
+
+    QtWebEngineQuick.initialize()
+    app = QApplication(sys.argv)
+    loop = qasync.QEventLoop(app)
+    asyncio.set_event_loop(loop)
+    app.setOrganizationName('Tormach')
+    app.setOrganizationDomain('tormach.com')
+    app.setApplicationName('Robot Launcher')
+    gui = LauncherGui(arguments)  # changes working directory
+    app.setWindowIcon(QIcon(gui.icon_path))
+
+    with loop:
+        loop.run_forever()
+    del gui  # delete QmlEngine, fixes "cannot read property of null" errors
+    sys.exit()

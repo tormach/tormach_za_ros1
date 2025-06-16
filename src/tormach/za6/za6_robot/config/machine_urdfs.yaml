@@ -1,0 +1,3 @@
+1100M: $(find tormach_pcnc_1100_support)/urdf/tormach_pcnc_1100.xacro
+1100M+: $(find tormach_pcnc_1100_support)/urdf/tormach_pcnc_1100.xacro
+1100MX: $(find tormach_pcnc_1100_support)/urdf/tormach_pcnc_1100.xacro

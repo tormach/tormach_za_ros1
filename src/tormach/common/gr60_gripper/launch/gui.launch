@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<launch>
+
+  <arg name="sim" default="false"/>
+
+  <node pkg="gr60_gripper" type="gripper" name="gr60_gripper" output="screen" unless="$(arg sim)">
+    <!-- udp or usb -->
+    <param name="~mode" value="udp"/>
+    <param name="~baud" value="115200"/>
+    <param name="~auto_calibrate_on_startup" value="true"/>
+    <param name="~auto_calibrate_on_reconnect" value="true"/>
+    <rosparam param="grippers">{main:[1]}</rosparam>
+    <!-- for udp -->
+    <param name="~host_ip" value="10.9.0.42"/>
+    <param name="~target_ip" value="10.9.0.51"/>
+    <!-- for usb -->
+    <param name="~port" value="hwgrep://1a86:7523"/>
+  </node>
+
+  <node pkg="gr60_gripper" type="gripper_sim" name="gr60_gripper" output="screen" if="$(arg sim)">
+    <rosparam param="grippers">{main:[1]}</rosparam>
+  </node>
+
+  <node pkg="gr60_gripper" type="gripper_gui" name="gr60_gripper_gui" output="screen">
+    <rosparam param="grippers">['gr60_gripper/main']</rosparam>
+  </node>
+
+  <arg name="model" default="$(find gr60_gripper)/urdf/gr60_gripper_standalone.xacro"/>
+  <arg name="gui" default="true" />
+  <arg name="rvizconfig" default="$(find gr60_gripper)/rviz/gr60_gripper.rviz" />
+
+  <param name="robot_description" command="$(find xacro)/xacro --inorder $(arg model)" />
+  <param name="use_gui" value="$(arg gui)"/>
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" required="true" />
+</launch>

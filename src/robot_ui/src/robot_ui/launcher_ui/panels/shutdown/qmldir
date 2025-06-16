@@ -1,0 +1,2 @@
+ShutdownPanel 1.0 ShutdownPanel.qml
+singleton ShutdownSingleton 1.0 ShutdownSingleton.qml

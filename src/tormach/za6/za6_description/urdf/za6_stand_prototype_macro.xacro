@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+  <xacro:macro name="za6_stand_prototype_macro" params="robotprefix standprefix">
+
+    <xacro:include filename="$(find za6_description)/urdf/prototype_stand_macro.xacro"/>
+    <xacro:prototype_stand_macro prefix="${standprefix}"/>
+
+    <!-- attach robot to stand flange -->
+    <joint name="robot_attach_joint" type="fixed">
+      <parent link="${standprefix}stand_flange"/>
+      <child link="${robotprefix}base_link"/>
+      <axis xyz="0 0 0"/>
+      <origin rpy="0.0 0.0 0.0" xyz="0.0 0.0 0.0"/>
+    </joint>
+
+    <!-- 'world' frame: default pose reference frame -->
+    <link name="world" />
+    <joint name="world-${standprefix}stand_link" type="fixed">
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <axis xyz="0 0 1"/>
+      <parent link="world"/>
+      <child link="${standprefix}stand_link"/>
+    </joint>
+
+  </xacro:macro>
+</robot>

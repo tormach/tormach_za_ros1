@@ -1,0 +1,32 @@
+[project]
+name = "pathpilot-robot-starter-splash"
+description = "Splashscreen for PathPilot Robot Launcher"
+readme = "README.rst"
+requires-python = ">=3.6"
+keywords = ["Tormach", "PathPilot", "Robot", "starter", "splash", "splashscreen"]
+authors = [
+  {name = "Jakub Fišer", email = "jakub.fiser@eryaf.com"},
+]
+maintainers = [
+  {name = "Jakub Fišer", email = "jakub.fiser@eryaf.com"},
+]
+
+dependencies = ["psutil", "pyyaml"]
+dynamic = ["version"]
+
+[project.urls]
+homepage = "https://tormach.com"
+
+[project.scripts]
+robot_starter_splash = "starter_splash:cli"
+
+[tool.pdm]
+includes = [
+    "src/*",
+]
+package-dir = "src"
+version = {from = "src/starter_splash/__init__.py"}
+
+[build-system]
+requires = ["pdm-pep517", "setuptools"]
+build-backend = "pdm.pep517.api"

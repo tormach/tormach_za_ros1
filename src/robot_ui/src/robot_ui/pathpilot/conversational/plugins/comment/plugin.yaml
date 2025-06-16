@@ -1,0 +1,7 @@
+name: comment
+title: Comment
+description: Create comments
+type: conversational
+priority: 8
+tooltip: msg_comment_tab
+toolTipPosRight: False

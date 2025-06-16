@@ -1,0 +1,6 @@
+name: set_command
+title: Set
+description: Select different set options
+type: conversational
+tooltip: set_command_conversational_notebook
+priority: 2

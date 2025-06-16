@@ -1,0 +1,6 @@
+name: notify
+title: Notify
+description: Add a notify dialog
+type: conversational
+priority: 4
+tooltip: msg_notify_tab

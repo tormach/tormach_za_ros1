@@ -1,0 +1,102 @@
+/********************************************************************
+ * Description:  joint_helper.icomp
+ *
+ *               This file, 'joint_helper.icomp', is a HAL component that
+ *               scales and converts joint command & feedback, and
+ *               provides some simple jitter debugging functions.
+ *
+ * Authors: John Morris, Alex Poss
+ * License: BSD
+ *
+ * Copyright (c) 2022-2024 All rights reserved.
+ ********************************************************************/
+component joint_helper "Joint Helper Component";
+license "BSD";
+
+pin in float cmd_in "Position command input from controllers";
+pin in s32 fb_in "Position feedback input from drive (S32 before scale + offset)";
+pin in s32 ferror_in "Position error input from drive (S32 before scale + offset)";
+pin in float gain=1.0 "Scale for converting feedback and error (S32 to float)";
+pin in float offset=0.0 "Offset for converting feedback and error (S32 to float)";
+pin in u32 status_word "Drive status word for determining feedback passthru or synthetic mode";
+pin out s32 cmd_out "Position command output to drive (S32 after scale + offset)";
+pin out float fb_out "Position feedback output from drive (after scale + offset)";
+pin out float ferror_out "Position error output from drive (after scale + offset)";
+pin out float fb_synth_out "Synthetic or passthrough feedback output to controllers";
+pin out bit fb_synth_mode "Synthetic feedback mode output for debugging";
+pin out float cmd_fb_diff "Position error calculated from command less feedback for debugging";
+pin in float ferror_tol=1e99 "Position error tolerance limit";
+pin out bit ferror_tol_exc "Flag if position error tolerance exceeded";
+pin out s32 ferror_tol_exc_count "Count of position error tolerance exceedances";
+pin out float ferror_tol_exc_rate "Rate of position error tolerance exceedances";
+pin out s32 counter=0 "Counter for debugging";
+pin out float counterf=0.0 "Counter for debugging";
+
+function update_cmd;
+function update_fb;
+
+;;
+
+hal_s32_t fb_in_prev = 0;
+hal_s32_t cmd_out_prev = 0;
+
+static const int op_enab_mask = 1<<2;
+static int first_cycle = 1;
+
+#define fabs(a) (a<0 ? -a : a)
+
+FUNCTION(update_fb)
+{
+  int update_prev = 1;  // By default, update prev cmd+fb
+  // Convert and scale feedback + ferror
+  fb_out = fb_in / gain - offset;
+  ferror_out = ferror_in / gain;
+
+  // Switch to synthetic feedback mode when drives reach OPERATION ENABLED
+  fb_synth_mode = (status_word & op_enab_mask) ? 1 : 0;
+
+  if (fb_synth_mode) {
+    // Create synthetic feedback from command + drive-reported ferror
+    fb_synth_out = cmd_in - ferror_out;
+    if (fb_in == fb_in_prev) {
+      // Feedback not changed; most likely either incoming packet
+      // missed, or cmd velocity is zero.  To handle the first case,
+      // add cmd delta to ferror; this won't affect the second case.
+      ferror_out += cmd_in - cmd_out_prev / gain;
+      // In case missed packets stack up, don't update previous
+      // command so that ferror also stacks up.
+      update_prev = 0;
+    }
+  } else {
+    // Passthru feedback from drive
+    fb_synth_out = fb_out;
+  }
+
+  // Calculate cmd - fb ferror (using cmd from previous update)
+  cmd_fb_diff = cmd_in - fb_out;
+
+  // Check if ferror tolerance exceeded & set flag, bump counter, set rate
+  ferror_tol_exc = fabs(ferror_out) > ferror_tol ? 1 : 0;
+  ferror_tol_exc_count += ferror_tol_exc;
+  ferror_tol_exc_rate = ferror_tol_exc_count * 1.0 / (counter + 1);
+
+  // Update previous values
+  if (update_prev) {
+    cmd_out_prev = cmd_out;
+  }
+  fb_in_prev = fb_in;
+
+  return 0;
+}
+
+FUNCTION(update_cmd)
+{
+  // Scale and convert command
+  cmd_out = cmd_in * gain + offset;
+
+  // Update counter
+  counter++;
+  counterf = (hal_float_t)counter;
+
+  return 0;
+}

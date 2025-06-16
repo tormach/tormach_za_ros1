@@ -1,0 +1,7 @@
+ProgramTreeView 1.0 ProgramTreeView.qml
+ProgramCodeTreeView 1.0 ProgramCodeTreeView.qml
+ProgramCodeListView 1.0 ProgramCodeListView.qml
+WaypointTableView 1.0 WaypointTableView.qml
+AddWaypointPopup 1.0 AddWaypointPopup.qml
+ProgramWarningsPopup 1.0 ProgramWarningsPopup.qml
+WarningIndicator 1.0 WarningIndicator.qml

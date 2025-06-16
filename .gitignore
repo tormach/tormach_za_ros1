@@ -1,0 +1,48 @@
+#                                             -*-conf-*-
+# lidar sdk build
+/patches/YDLidar-SDK/build/
+
+# From `catkin build` or 'catkin_make_isolated'
+/.catkin_tools/
+/build/
+/devel/
+/install/
+/logs/
+/build_isolated/
+/devel_isolated/
+
+# rosdoc
+/doc/
+
+# temporarily generated pictures in /docs/
+/docs/*.png
+/docs/*.svg
+/docs/.asciidoctor/
+
+# Temp script output
+/.pre-commit-config.tmp.yaml
+
+# From `astyle`
+*.orig
+
+# Linux
+.directory
+core
+!core/
+
+# Python
+*.pyc
+__pycache__/
+.pytest_cache/
+
+# IDEs
+*.cache
+.idea
+.vscode
+*.user
+*~
+
+# Machinekit
+autosave.halscope
+
+!/install_scripts/docker/**

@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<launch>
+  <arg name="ros_wait_timeout_s" default="30.0"/>
+  <arg name="mastering" default="false" />
+
+  <include file="$(find redis_store)/launch/redis_store.launch">
+    <arg name="defaults_path" value="$(find za6_robot)/config/defaults"/>
+    <arg name="config" value="$(find za6_robot)/config/redis.conf"/>
+  </include>
+
+  <param name="config_manager/redis_node_wait_timeout_s" value="$(arg ros_wait_timeout_s)"/>
+
+  <node pkg="za6_robot" type="reset_param_defaults" name="reset_param_defaults" output="screen">
+    <param name="mastering" value="$(arg mastering)"/>
+  </node>
+
+</launch>

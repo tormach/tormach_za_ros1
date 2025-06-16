@@ -1,0 +1,6 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<library path="lib/libza6_manipulator_moveit_ikfast_plugin">
+  <class base_class_type="kinematics::KinematicsBase" name="za6_manipulator/IKFastKinematicsPlugin" type="za6_manipulator::IKFastKinematicsPlugin">
+    <description>IKFast61 plugin for closed-form kinematics of za6 manipulator</description>
+  </class>
+</library>

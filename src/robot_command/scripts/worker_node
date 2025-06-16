@@ -1,0 +1,302 @@
+#!/usr/bin/env python
+import os
+from enum import Enum
+
+import rospy
+from std_msgs.msg import Int32, String
+
+from robot_command.program_interpreter import (
+    ProgramInterpreter,
+    InterpreterState,
+    InterpreterContext,
+    InterpreterError,
+    ProgramState,
+    ProgramPosition,
+    ProgramError,
+    MdiSyntaxError,
+    ProgramSyntaxError,
+    ProgramFileIOError,
+    ProgramWrongStateError,
+)
+from robot_command.program_interpreter.types import FSMState
+from robot_command_msgs import msg
+import robot_command_msgs.srv as srv
+
+
+class SystemState(Enum):
+    ERROR = -1
+    POWER_OFF = 0
+    POWER_ON = 1
+    FAULT = 2
+    INIT = 3
+    STOPPING = 4
+    STARTING = 5
+
+
+class WorkerNode:
+    """Interpreter worker ROS node."""
+
+    NODE_NAME = 'interpreter_worker_node'
+    PROGRAM_POSITION_TOPIC = '/robot_command/program_position'
+    INTERPRETER_STATE_TOPIC = '/robot_command/interpreter_state'
+    STATE_FB_TOPIC = '/hal_io/state_fb'
+    FSM_STATE_TOPIC = '/robot_command/debug/fsm_state'
+    EXECUTE_MDI_SERVICE = '/robot_command/execute_mdi'
+    LOAD_PROGRAM_SERVICE = '/robot_command/worker/load_program'
+    UNLOAD_PROGRAM_SERVICE = '/robot_command/worker/unload_program'
+    RUN_COMMAND_SERVICE = '/robot_command/run_command'
+    START_SUBPROGRAM_SERVICE = '/robot_command/start_subprogram'
+    CHECK_RELOAD_REQUIRED_SERVICE = '/robot_command/check_reload_required'
+    PROGRAM_POSITION_QUEUE_SIZE = 10
+    INTERPRETER_STATE_QUEUE_SIZE = 2
+
+    def __init__(self):
+        interpreter = rospy.get_param('/robot_command/interpreter', 'execution')
+        debug = rospy.get_param('/robot_command/debug', False)
+
+        self._debug = debug
+        self._interpreter = ProgramInterpreter(interpreter)
+
+        self._run_command_srv = None
+        self._load_program_srv = None
+        self._unload_program_srv = None
+        self._execute_mdi_srv = None
+        self._start_subprogram_srv = None
+        self._state_pub = None
+        self._pos_pub = None
+        self._fsm_state_pub = None
+        self._state_fb_sub = None
+
+        self._last_pos = None
+        self._last_state_fb = SystemState.POWER_OFF
+        self._current_state = InterpreterState.Initialized
+
+    def start(self):
+        self._interpreter.start()
+        rospy.init_node(
+            self.NODE_NAME
+        )  # Note: we must init the node after forking the interpreter process
+        self._run_command_srv = rospy.Service(
+            self.RUN_COMMAND_SERVICE, srv.RunCommand, self._run_command
+        )
+        self._load_program_srv = rospy.Service(
+            self.LOAD_PROGRAM_SERVICE, srv.LoadProgram, self._load_program
+        )
+        self._unload_program_srv = rospy.Service(
+            self.UNLOAD_PROGRAM_SERVICE, srv.UnloadProgram, self._unload_program
+        )
+        self._execute_mdi_srv = rospy.Service(
+            self.EXECUTE_MDI_SERVICE, srv.ExecuteMDI, self._execute_mdi
+        )
+        self._start_subprogram_srv = rospy.Service(
+            self.START_SUBPROGRAM_SERVICE,
+            srv.StartSubprogram,
+            self._start_subprogram,
+        )
+        self._check_reload_required_srv = rospy.Service(
+            self.CHECK_RELOAD_REQUIRED_SERVICE,
+            srv.CheckReloadRequired,
+            self._check_reload_required,
+        )
+        self._state_pub = rospy.Publisher(
+            self.INTERPRETER_STATE_TOPIC,
+            msg.InterpreterState,
+            queue_size=self.INTERPRETER_STATE_QUEUE_SIZE,
+            latch=True,
+        )
+        self._pos_pub = rospy.Publisher(
+            self.PROGRAM_POSITION_TOPIC,
+            msg.ProgramPosition,
+            queue_size=self.PROGRAM_POSITION_QUEUE_SIZE,
+            latch=True,
+        )
+        if self._debug:
+            self._fsm_state_pub = rospy.Publisher(
+                self.FSM_STATE_TOPIC, String, queue_size=1, latch=True
+            )
+        self._state_fb_sub = rospy.Subscriber(
+            self.STATE_FB_TOPIC, Int32, self._on_state_fb_received
+        )
+
+        self._interpreter.status_update_cb = self._on_status_update
+
+    @staticmethod
+    def spin():
+        rospy.spin()
+
+    def stop(self):
+        self._interpreter.stop()
+        self._run_command_srv.shutdown()
+        self._load_program_srv.shutdown()
+        self._unload_program_srv.shutdown()
+        self._execute_mdi_srv.shutdown()
+        self._start_subprogram_srv.shutdown()
+        self._state_fb_sub.unregister()
+
+    def _run_command(self, req: srv.RunCommandRequest):
+        switch = {
+            req.COMMAND_START: lambda: self._interpreter.start_program(),
+            req.COMMAND_STOP: lambda: self._interpreter.stop_program(),
+            req.COMMAND_PAUSE: lambda: self._interpreter.pause_program(),
+            req.COMMAND_PAUSE_ACTIVE: lambda: self._interpreter.pause_program(
+                active=True
+            ),
+            req.COMMAND_CONTINUE: lambda: self._interpreter.continue_program(),
+            req.COMMAND_STEP: lambda: self._interpreter.step_program(),
+        }
+        try:
+            switch[req.command]()
+        except InterpreterError:
+            success = False
+        except KeyError:  # unknown command
+            success = False
+        else:
+            success = True
+        return srv.RunCommandResponse(success=success)
+
+    def _load_program(self, req: srv.LoadProgramRequest):
+        success = self._interpreter.load_program(req.path)
+        return srv.LoadProgramResponse(success=success)
+
+    def _unload_program(self, _req: srv.UnloadProgramRequest):
+        try:
+            self._interpreter.unload_program()
+        except OSError:
+            success = False
+        else:
+            success = True
+        return srv.UnloadProgramResponse(success=success)
+
+    def _execute_mdi(self, req: srv.ExecuteMDIRequest):
+        try:
+            self._interpreter.execute_mdi_command(req.command)
+        except InterpreterError:
+            success = False
+        else:
+            success = True
+        return srv.ExecuteMDIResponse(success=success)
+
+    def _start_subprogram(self, req: srv.StartSubprogramRequest):
+        try:
+            self._interpreter.start_subprogram(req.name, req.loop)
+        except InterpreterError:
+            success = False
+        else:
+            success = True
+        return srv.StartSubprogramResponse(success=success)
+
+    def _check_reload_required(self, _req: srv.CheckReloadRequiredRequest):
+        reload_required = False
+        try:
+            reload_required = self._interpreter.check_reload_required()
+        except ProgramWrongStateError:
+            success = False
+        else:
+            success = True
+        return srv.CheckReloadRequiredResponse(
+            success=success, reload_required=reload_required
+        )
+
+    def _on_status_update(self, data):
+        if isinstance(data, ProgramPosition):
+            self._handle_program_position(data)
+        elif isinstance(data, ProgramState):
+            self._handle_program_state(data)
+        elif isinstance(data, ProgramError):
+            self._handle_program_error(data)
+        elif isinstance(data, FSMState):
+            self._handle_fsm_state(data)
+        elif data is not None:
+            rospy.logerr(f"Unhandled status update: {data}")
+
+    def _handle_program_position(self, data):
+        if data == self._last_pos and data.line_number != 0:
+            return  # only re-port if line number is 0, indicating a new file
+        out = msg.ProgramPosition(
+            line_number=data.line_number, filename=data.filename
+        )
+        self._pos_pub.publish(out)
+        self._last_pos = data
+
+    def _handle_program_state(self, data):
+        out = msg.InterpreterState()
+        status_state_map = {
+            InterpreterState.Idle: msg.InterpreterState.STATE_IDLE,
+            InterpreterState.Stopped: msg.InterpreterState.STATE_STOPPED,
+            InterpreterState.Running: msg.InterpreterState.STATE_RUNNING,
+            InterpreterState.Paused: msg.InterpreterState.STATE_PAUSED,
+            InterpreterState.PausedActive: msg.InterpreterState.STATE_PAUSED_ACTIVE,
+            InterpreterState.RuntimeError: msg.InterpreterState.STATE_RUNTIME_ERROR,
+            InterpreterState.LoadError: msg.InterpreterState.STATE_LOAD_ERROR,
+        }
+        context_map = {
+            InterpreterContext.Program: msg.InterpreterState.CONTEXT_PROGRAM,
+            InterpreterContext.MDI: msg.InterpreterState.CONTEXT_MDI,
+        }
+        out.state = status_state_map.get(
+            data.state, msg.InterpreterState.STATE_UNDEFINED
+        )
+        out.context = context_map.get(
+            data.context, msg.InterpreterState.CONTEXT_UNDEFINED
+        )
+        self._current_state = data.state
+        self._state_pub.publish(out)
+
+    def _handle_fsm_state(self, data):
+        if not self._debug:
+            return
+        state_data = f"{data.event}: {data.source} -> {data.destination}"
+        self._fsm_state_pub.publish(state_data)
+
+    def _handle_program_error(self, data):
+        if data.type is MdiSyntaxError:
+            rospy.logerr(
+                f"Error executing MDI command: {data.message.msg}\n"
+                f"{data.message.text}\n"
+                f"{(data.message.offset-1) * ' '}^"
+            )
+        elif data.type is ProgramSyntaxError:
+            rospy.logerr(
+                f"Error loading program: "
+                f"file \"{data.message.filename}\", line {data.message.lineno}:\n"
+                f"{data.message.msg}\n"
+                f"{data.message.text}\n"
+                f"{(data.message.offset-1) * ' '}^"
+            )
+        elif data.type is ProgramFileIOError:
+            rospy.logerr(
+                f"Error loading program: "
+                f"File \"{data.message.filename}\" cannot be read."
+            )
+        else:
+            filename = os.path.basename(self._last_pos.filename)
+            if filename == '_mdi_command_':
+                rospy.logerr(f"Error executing MDI command: {data.message}")
+            else:
+                rospy.logerr(
+                    f"Error executing program: "
+                    f"file \"{filename}\", line {self._last_pos.line_number}:\n"
+                    f"{data.type.__name__}: {data.message}"
+                )
+
+    def _on_state_fb_received(self, data):
+        new_state = SystemState(data.data)
+        if (
+            new_state is not SystemState.POWER_ON
+            and self._last_state_fb is SystemState.POWER_ON
+            and self._current_state
+            in (InterpreterState.Running, InterpreterState.Paused)
+        ):
+            self._interpreter.stop_program()
+            if new_state is SystemState.POWER_OFF:
+                rospy.logerr("System powered down while program was running.")
+            else:
+                rospy.logerr("System fault while program was running.")
+        self._last_state_fb = new_state
+
+
+if __name__ == '__main__':
+    node = WorkerNode()
+    node.start()
+    node.spin()
+    node.stop()

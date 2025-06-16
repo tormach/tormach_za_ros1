@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+  <xacro:macro name="za6_tool_hand_e_macro" params="prefix">
+
+    <xacro:include filename="$(find za6_description)/urdf/robotiq_hand_e_macro.xacro"/>
+    <xacro:robotiq_hand_e_macro prefix="${prefix}main_"/>
+
+    <!-- attach hand_e to eef -->
+    <joint name="${prefix}flange-main_hand_e_base" type="fixed">
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <axis xyz="0 0 1"/>
+      <parent link="${prefix}flange" />
+      <child link="${prefix}main_hand_e_base" />
+    </joint>
+
+    <!-- ROS-Industrial 'tool0' frame: all-zeros tool frame -->
+    <link name="${prefix}tool0" />
+    <joint name="${prefix}flange-tool0" type="fixed">
+      <!-- marker -->
+      <origin xyz="0 0 0.1460" rpy="0 0 0" />
+      <parent link="${prefix}flange" />
+      <child link="${prefix}tool0" />
+    </joint>
+
+  </xacro:macro>
+</robot>

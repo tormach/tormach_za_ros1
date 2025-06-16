@@ -1,0 +1,9 @@
+<launch>
+  <param name="robot_description"
+  command="$(find xacro)/xacro '$(find za6_description)/urdf/za6.xacro'"/>
+
+  <param name="test_module" value="$(find robot_ui)/tests/integration/" />
+  <test
+      if="$(eval env('IMAGE_TYPE') == 'devel')"
+      test-name="test_integration" pkg="ros_pytest" type="ros_pytest_runner" />
+</launch>

@@ -1,0 +1,7 @@
+<launch>
+  <node name="lidar_pointcloud_processor" pkg="lidar_pointcloud_processor" type="lidar_pointcloud_processor.py" output="screen">
+    <!-- Add any parameters here if needed -->
+    <param name="min_global_scan_displacement" value="0.002" />
+    <param name="min_refine_scan_displacement" value="0.0005" />
+  </node>
+</launch>

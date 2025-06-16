@@ -1,0 +1,7 @@
+singleton Handlers 1.0 Handlers.qml
+StateHandler 1.0 StateHandler.qml
+AppHandler 1.0 AppHandler.qml
+ProgramHandler 1.0 ProgramHandler.qml
+ConversationalHandler 1.0 ConversationalHandler.qml
+JogHandler 1.0 JogHandler.qml
+PreviewHandler 1.0 PreviewHandler.qml

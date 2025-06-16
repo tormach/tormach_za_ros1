@@ -1,0 +1,23 @@
+#!/usr/bin/env python
+import rospy
+import sys
+import signal
+from python_qt_binding.QtWidgets import QApplication
+from python_qt_binding.QtCore import QTimer
+
+from gr60_gripper.gripper_gui import GripperGUI
+
+
+def main():
+    rospy.init_node('gripper_gui')
+    signal.signal(signal.SIGINT, lambda *args: QApplication.quit())
+    app = QApplication(sys.argv)
+    timer = QTimer()
+    timer.timeout.connect(lambda: None)
+    timer.start(100)
+    _ = GripperGUI()
+    sys.exit(app.exec_())
+
+
+if __name__ == '__main__':
+    main()

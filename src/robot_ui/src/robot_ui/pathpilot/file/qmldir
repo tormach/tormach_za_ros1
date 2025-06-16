@@ -1,0 +1,9 @@
+DeleteFilePopup 1.0 DeleteFilePopup.qml
+FileNamePopup 1.0 FileNamePopup.qml
+FileSystemBrowser 1.0 FileSystemBrowser.qml
+NewFilePopup 1.0 NewFilePopup.qml
+OpenFilePopup 1.0 OpenFilePopup.qml
+OverwriteWarningPopup 1.0 OverwriteWarningPopup.qml
+SaveModifiedWarningPopup 1.0 SaveModifiedWarningPopup.qml
+TreeFileSystemBrowser 1.0 TreeFileSystemBrowser.qml
+LocalFileSystemBrowser 1.0 LocalFileSystemBrowser.qml

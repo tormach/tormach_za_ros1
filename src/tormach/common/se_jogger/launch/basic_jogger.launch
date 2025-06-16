@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<launch>
+  <node
+    pkg="se_jogger"
+    type="basic_jogger"
+    name="basic_jogger"
+    output="screen"
+    required="true"
+    />
+</launch>

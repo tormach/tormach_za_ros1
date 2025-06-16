@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>pp_ros_launch</name>
+  <version>0.0.1</version>
+  <description>PathPilot UI launcher</description>
+  <maintainer email="john@zultron.com">John Morris</maintainer>
+
+  <license>BSD</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <build_depend>rospy</build_depend>
+
+  <exec_depend>rospy</exec_depend>
+  <exec_depend>python3-requests</exec_depend>
+  <exec_depend>python3-docker</exec_depend>
+  <exec_depend>python3-attrs</exec_depend>
+  <exec_depend>python3-yaml</exec_depend>
+  <exec_depend>python3-semver</exec_depend>
+  <exec_depend>python3-aiohttp</exec_depend>
+  <exec_depend>python3-aiodocker</exec_depend>
+  <exec_depend>pp_account</exec_depend>
+  <exec_depend>gr60_gripper</exec_depend>
+
+  <build_export_depend>rospy</build_export_depend>
+
+  <test_depend>rostest</test_depend>
+  <test_depend>ros_pytest</test_depend>
+  <test_depend>python3-mock</test_depend>
+  <test_depend>python3-pytest-mock</test_depend>
+  <test_depend>python3-coverage</test_depend>
+
+</package>

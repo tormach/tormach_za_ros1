@@ -1,0 +1,506 @@
+Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: tormachpathpilotrobotstarter
+
+Files: *
+Copyright: 2021 Tormach Inc.
+License: Tormach Inc. Software End User License Agreement
+
+ This End User License Agreement, including the Order Form which by
+ this reference is incorporated herein (this “Agreement”), is a
+ binding agreement between Tormach Inc. (“Tormach”) and the person or
+ entity identified on the Order Form as the licensee of the Software
+ (“Licensee”).
+
+ Tormach provides the software solely on the terms and conditions set
+ forth in this agreement and on the condition that licensee accepts
+ and complies with them. By proceeding with this software installation
+ you (a) accept this agreement and agree that licensee is legally
+ bound by its terms; and (b) represent and warrant that: (I) you are
+ 18 years of age or older; and (ii) if licensee is a corporation,
+ governmental organization, or other legal entity, you have the right,
+ power, and authority to enter into this agreement on behalf of
+ licensee and bind licensee to its terms. If licensee does not agree
+ to the terms of this agreement, Tormach will not and does not license
+ the software to licensee and you must not use the software or
+ documentation.
+
+ Notwithstanding anything to the contrary in this agreement or your or
+ licensee’s acceptance of the terms and conditions of this agreement,
+ no license is granted (whether expressly, by implication, or
+ otherwise) by your mere acceptance of this agreement, and this
+ agreement expressly excludes any right, concerning any software that
+ licensee did not acquire lawfully or that is not a legitimate,
+ authorized copy of Tormach’s software.
+
+     Definitions. For purposes of this Agreement, the following terms
+     have the following meanings:
+
+     “Authorized Users” means solely those individuals authorized to
+     use the Software pursuant to the license granted under this
+     Agreement, as set forth on the Order Form.
+
+     “Documentation” means user manuals, technical manuals, and any
+     other materials provided by Tormach, in printed, electronic, or
+     other form, that describe the installation, operation, use, or
+     technical specifications of the Software.
+
+     “Intellectual Property Rights” means any and all registered and
+     unregistered rights granted, applied for, or otherwise now or
+     hereafter in existence under or related to any patent, copyright,
+     trademark, trade secret, database protection, or other
+     intellectual property rights laws, and all similar or equivalent
+     rights or forms of protection, in any part of the world.
+
+     “License Fees” means any license fees, including all taxes
+     thereon, paid or required to be paid by Licensee for the license
+     granted under this Agreement.
+
+     “Order Form” means the sales order or quote accepted by or
+     submitted on behalf of Licensee, and accepted by Tormach, for
+     Licensee’s purchase of the license for the Software granted under
+     this Agreement.
+
+     “Software” means the software programs for which Licensee is
+     purchasing a license, as expressly set forth in the Order Form.
+
+     License Grant and Scope. Subject to and conditioned upon
+     Licensee’s payment of all amounts owed to Tormach and Licensee’s
+     strict compliance with all terms and conditions set forth in this
+     Agreement, Tormach hereby grants to Licensee a non-exclusive,
+     non-transferable, non-sublicensable, limited license during the
+     Term to use, solely by and through its Authorized Users, the
+     Software and Documentation, solely as set forth in this Section 2
+     and subject to all conditions and limitations set forth in
+     Section 4 or elsewhere in this Agreement. This license grants
+     Licensee the right, exercisable solely by and through Licensee’s
+     Authorized Users, to:
+
+         Use in accordance with the Documentation only as many copies
+         of the Software as are required for proper operation on each
+         of the designated computers set forth on the Order Form. All
+         such computers must be owned or leased, and controlled by,
+         Licensee. In addition to the foregoing, Licensee has the
+         right to make one copy of the Software solely for archival
+         purposes and one copy of the Software solely for backup
+         purposes, provided that Licensee will not, and will not allow
+         any person to, install or use any such copy other than if and
+         for so long as any copy installed in accordance with the
+         preceding sentence is inoperable and, provided, further, that
+         Licensee uninstalls and otherwise deletes such inoperable
+         copy(ies). All copies of the Software made by the Licensee:
+         (i) will be the exclusive property of Tormach; (ii) will be
+         subject to the terms and conditions of this Agreement; and
+         (iii) must include all trademark, copyright, patent, and
+         other Intellectual Property Rights notices contained in the
+         original.
+
+         Use and run the Software in accordance with this Agreement
+         and the Documentation, solely as set forth in the
+         Documentation.
+
+         Download or otherwise make one (1) copy of the Documentation
+         and use such Documentation, solely in support of its licensed
+         use of the Software in accordance herewith. All copies of the
+         Documentation made by Licensee: (i) will be the exclusive
+         property of Tormach; (ii) will be subject to the terms and
+         conditions of this Agreement; and (iii) must include all
+         trademark, copyright, patent, and other Intellectual Property
+         Rights notices contained in the original.
+
+     Open-Source Licenses. The Software may include one or more
+     software components subject to an open-source license
+     (“Open-Source Components”). Your use of the Open-Source
+     Components is governed by, and subject to, the terms and
+     conditions of the applicable open-source and public licenses. You
+     understand and acknowledge that the Open-Source Components are
+     not licensed to you pursuant to the provisions of this Agreement
+     and that this Agreement may not be construed to grant any such
+     right and/or license. You will have only such rights and/or
+     licenses, if any, to use the Open-Source Components as set forth
+     in the applicable open-source and public licenses. Applicable
+     open-source and public licenses may include, but are not limited
+     or restricted to, Apache License 2.0, BSD 3-Clause “New” or
+     “Revised” license, BSD 20-Clause “Simplified” or “FreeBSD”
+     license, GNU General Public License, GNU Library or “Lesser”
+     General Public License, MIT License, Mozilla Public License 2.0,
+     Common Development and Distribution License, Eclipse Public
+     License, and any other obligations, restrictions, or license
+     agreements that substantially conform to the “Open Source
+     Definition” as prescribed by the Open Source Initiative.
+
+     Use Restrictions. Licensee will not, and will require its
+     Authorized Users not to, directly or indirectly:
+
+         use (including make any copies of) the Software or
+         Documentation beyond the scope of the license granted under
+         Section 2;
+
+         modify, translate, adapt, or otherwise create derivative
+         works or improvements, whether or not patentable, of the
+         Software or Documentation or any part thereof;
+
+         combine the Software or any part thereof with, or incorporate
+         the Software or any part thereof in, any other programs;
+
+         reverse engineer, disassemble, decompile, decode, or
+         otherwise attempt to derive or gain access to the source code
+         of the Software or any part thereof;
+
+         remove, delete, alter, or obscure any trademarks or any
+         copyright, trademark, patent, or other intellectual property
+         or proprietary rights notices provided on or with the
+         Software or Documentation, including any copy thereof;
+
+         except as expressly set forth in Section 2(a) and Section
+         2(c), copy the Software or Documentation, in whole or in
+         part;
+
+         rent, lease, lend, sell, sublicense, assign, distribute,
+         publish, transfer, or otherwise make available the Software,
+         or any features or functionality of the Software, to any
+         Third Party for any reason, whether or not over a network or
+         on a hosted basis, including in connection with the internet
+         or any web hosting, wide area network (WAN), virtual private
+         network (VPN), virtualization, time-sharing, service bureau,
+         software as a service, cloud, or other technology or service;
+
+         use the Software or Documentation in, or in association with,
+         the design, construction, maintenance, or operation of any
+         hazardous environments or systems, including:
+
+             power generation systems;
+
+             aircraft navigation or communication systems, air traffic
+             control systems, or any other transport management
+             systems;
+
+             safety-critical applications, including medical or
+             life-support systems, vehicle operation applications, or
+             any police, fire, or other safety response systems; and
+
+             military or aerospace applications, weapons systems, or
+             environments;
+
+         use the Software or Documentation in violation of any
+         applicable law, regulation, or rule; or
+
+         use the Software or Documentation for purposes of competitive
+         analysis of the Software, the development of a competing
+         software product or service, or any other purpose that is to
+         Tormach’s commercial disadvantage.
+
+     Responsibility for Use of Software. Licensee is responsible and
+     liable for all uses of the Software and Documentation through
+     access thereto provided by Licensee, directly or
+     indirectly. Specifically, and without limiting the generality of
+     the foregoing, Licensee is responsible and liable for all actions
+     and failures to take required actions with respect to the
+     Software and Documentation by its Authorized Users or by any
+     other person to whom Licensee or an Authorized User may provide
+     access to or use of the Software and/or Documentation, whether
+     such access or use is permitted by or in violation of this
+     Agreement.
+
+     Maintenance and Support.
+
+         Subject to Section 6(c), the license granted hereunder
+         entitles Licensee to the basic software maintenance and
+         support services described from time to time on Tormach’s
+         website located at www.tormach.com:
+
+             for one (1) year following the date set forth on the
+             Order Form; and
+
+             thereafter, solely if Licensee purchases additional
+             support services.
+
+         Such support services will be provided on the terms and
+         conditions set forth https://tormach.com/terms-and-conditions
+
+         Maintenance and support services will include provision of
+         such updates, upgrades, bug fixes, patches, and other error
+         corrections (collectively, “Updates”) as Tormach makes
+         generally available free of charge to all licensees of the
+         Software then entitled to maintenance and support
+         services. Tormach may develop and provide Updates in its sole
+         discretion, and Licensee agrees that Tormach has no
+         obligation to develop any Updates at all or for particular
+         issues. Licensee further agrees that all Updates will be
+         deemed Software, and related documentation will be deemed
+         Documentation, all subject to all terms and conditions of
+         this Agreement. Licensee acknowledges that Tormach may
+         provide some or all Updates via download from a website
+         designated by Tormach and that Licensee’s receipt thereof
+         will require an internet connection, which connection is
+         Licensee’s sole responsibility. Tormach has no obligation to
+         provide Updates via any other media. Maintenance and support
+         services do not include any new version or new release of the
+         Software that Tormach may issue as a separate or new product,
+         and Tormach may determine whether any issuance qualifies as a
+         new version, new release, or Update in its sole discretion.
+
+         Tormach has no obligation to provide maintenance and support
+         services, including Updates: (i) for any but the most current
+         version or release of the Software; (ii) for any copy of
+         Software for which all previously issued Updates have not
+         been installed; (iii) if Licensee is in breach of this
+         Agreement; or (iv) for any Software that has been modified
+         other than by Tormach, or that is being used with any
+         hardware, software, configuration, or operating system not
+         specified in the Documentation.
+
+     Collection and Use of Information.
+
+         Licensee acknowledges that Tormach may, directly or
+         indirectly, collect and store information regarding use of
+         the Software and about equipment on which the Software is
+         installed or through which it otherwise is accessed and used.
+
+         Licensee agrees that Tormach may use such information for any
+         purpose related to any use of the Software by Licensee or on
+         Licensee’s equipment, including but not limited to: (i)
+         improving the performance of the Software or developing
+         Updates; and (ii) verifying Licensee’s compliance with the
+         terms of this Agreement and enforcing Tormach’s rights,
+         including all Intellectual Property Rights in and to the
+         Software.
+
+     Intellectual Property Rights. Licensee acknowledges and agrees
+     that the Software and Documentation are provided under license,
+     and not sold, to Licensee. Licensee does not acquire any
+     ownership interest in the Software or Documentation under this
+     Agreement, or any other rights thereto, other than to use the
+     same in accordance with the license granted and subject to all
+     terms, conditions, and restrictions under this Agreement. Tormach
+     reserves and will retain its entire right, title, and interest in
+     and to the Software and all Intellectual Property Rights arising
+     out of or relating to the Software, except as expressly granted
+     to Licensee in this Agreement. Licensee will safeguard all
+     Software (including all copies thereof) from infringement,
+     misappropriation, theft, misuse, or unauthorized access. Licensee
+     will promptly notify Tormach if Licensee becomes aware of any
+     infringement of Tormach’s Intellectual Property Rights in the
+     Software and fully cooperate with Tormach in any legal action
+     taken by Tormach to enforce its Intellectual Property Rights.
+
+     Term and Termination.
+
+         This Agreement and the license granted hereunder will remain
+         in effect until terminated as set forth herein (the “Term”).
+
+         Licensee may terminate this Agreement by ceasing to use and
+         destroying all copies of the Software and Documentation.
+
+         Tormach may terminate this Agreement, effective upon written
+         notice to Licensee, if Licensee, breaches this Agreement.
+
+         Tormach may terminate this Agreement, effective immediately,
+         if Licensee files, or has filed against it, a petition for
+         voluntary or involuntary bankruptcy or pursuant to any other
+         insolvency law, makes or seeks to make a general assignment
+         for the benefit of its creditors or applies for, or consents
+         to, the appointment of a trustee, receiver, or custodian for
+         a substantial part of its property.
+
+         Upon expiration or earlier termination of this Agreement, the
+         license granted hereunder will also terminate, and Licensee
+         will cease using all copies of the Software and
+         Documentation. No expiration or termination will affect
+         Licensee’s obligation to pay all amounts due to Tormach or
+         that may have become due before such expiration or
+         termination, or entitle Licensee to any refund.
+
+     Warranty disclaimer.
+
+     The software and documentation are provided to licensee “as is”
+     and with all faults and defects without warranty of any kind. To
+     the maximum extent permitted under applicable law, Tormach, on
+     its own behalf and on behalf of its affiliates and its and their
+     respective licensors and service providers, expressly disclaims
+     all warranties, whether express, implied, statutory, or
+     otherwise, with respect to the software and documentation,
+     including all implied warranties of merchantability, fitness for
+     a particular purpose, title, and non-infringement, and warranties
+     that may arise out of course of dealing, course of performance,
+     usage, or trade practice. Without limitation to the foregoing,
+     Tormach provides no warranty or undertaking, and makes no
+     representation of any kind that the licensed software will meet
+     the licensee’s requirements, achieve any intended results, be
+     compatible, or work with any other software, applications,
+     systems, or services, operate without interruption, meet any
+     performance or reliability standards or be error free, or that
+     any errors or defects can or will be corrected.
+
+     Limitation of Liability.
+
+     To the fullest extent permitted under applicable law:
+
+         in no event will Tormach or its affiliates, or any of its or
+         their respective licensors or service providers, be liable to
+         licensee or any third party for personal injury, property
+         damage; any use, interruption, delay, or inability to use the
+         software; lost revenues or profits; delays, interruption, or
+         loss of services, business, or goodwill; loss or corruption
+         of data; loss resulting from system or system service
+         failure, malfunction, or shutdown; failure to accurately
+         transfer, read, or transmit information; failure to update or
+         provide correct information; system incompatibility or
+         provision of incorrect compatibility information; or breaches
+         in system security; or for any consequential, incidental,
+         indirect, exemplary, special, or punitive damages, whether
+         arising out of or in connection with this agreement, breach
+         of contract, tort (including negligence), or otherwise,
+         regardless of whether such damages were foreseeable and
+         whether or not Tormach was advised of the possibility of such
+         damages.
+
+         In no event will Tormach’s and its affiliates’, including any
+         of its or their respective Tormachs’ and service providers’,
+         collective aggregate liability under or in connection with
+         this agreementor its subject matter, under any legal or
+         equitable theory, including breach of contract, tort
+         (including negligence), strict liability, and otherwise,
+         exceed the total amount paid to tormach pursuant to this
+         agreement.
+
+         The limitations set forth in section 11(a) and section 11(b)
+         shall apply even if the licensee’s remedies under this
+         agreement fail of their essential purpose.
+
+     Indemnification. Licensee agrees to indemnify, defend, and hold
+     harmless Tormach and its officers, directors, employees, agents,
+     affiliates, successors, and assigns from and against any and all
+     losses, damages, liabilities, deficiencies, claims, actions,
+     judgments, settlements, interest, awards, penalties, fines,
+     costs, or expenses of whatever kind, including attorneys’ fees,
+     arising from or relating to Licensee’s use or misuse of the
+     Software or your breach of this Agreement, including but not
+     limited to the content Licensee submits or makes available
+     through the Software.
+
+     Export Regulation. The Software and Documentation may be subject
+     to US export control laws, including the Export Control Reform
+     Act and its associated regulations. Licensee will not, directly
+     or indirectly, export, re-export, or release the Software or
+     Documentation to, or make the Software or Documentation
+     accessible from, any jurisdiction or country to which export,
+     re-export, or release is prohibited by law, rule, or
+     regulation. Licensee will comply with all applicable federal
+     laws, regulations, and rules, and complete all required
+     undertakings (including obtaining any necessary export license or
+     other governmental approval), prior to exporting, re-exporting,
+     releasing, or otherwise making the Software or Documentation
+     available outside the US.
+
+     US Government Rights. The Software is commercial computer
+     software, as such term is defined in 48
+     C.F.R. §2.101. Accordingly, if Licensee is the US Government or
+     any contractor therefor, Licensee will receive only those rights
+     with respect to the Software and Documentation as are granted to
+     all other end users under license, in accordance with (a) 48
+     C.F.R. §227.7201 through 48 C.F.R. §227.7204, with respect to the
+     Department of Defense and their contractors, or (b) 48
+     C.F.R. §12.212, with respect to all other US Government licensees
+     and their contractors.
+
+     Miscellaneous.
+
+         All matters arising out of or relating to this Agreement will
+         be governed by and construed in accordance with the internal
+         laws of the State of Wisconsin without giving effect to any
+         choice or conflict of law provision or rule. Any legal suit,
+         action, or proceeding arising out of or relating to this
+         Agreement or the transactions contemplated hereby will be
+         instituted in the federal courts of the United States of
+         America or the courts of the State of Wisconsin in each case
+         located in the City of Madison and County of Dane, and each
+         party irrevocably submits to the exclusive jurisdiction of
+         such courts in any such legal suit, action, or
+         proceeding. Service of process, summons, notice, or other
+         document by mail to such party’s address set forth herein
+         will be effective service of process for any suit, action, or
+         other proceeding brought in any such court.
+
+         Tormach will not be responsible or liable to Licensee, or
+         deemed in default or breach hereunder by reason of any
+         failure or delay in the performance of its obligations
+         hereunder where such failure or delay is due to strikes,
+         labor disputes, civil disturbances, riot, rebellion,
+         invasion, epidemic, hostilities, war, terrorist attack,
+         embargo, natural disaster, acts of God, flood, fire,
+         sabotage, fluctuations or non-availability of electrical
+         power, heat, light, air conditioning, or Licensee equipment,
+         loss and destruction of property, or any other circumstances
+         or causes beyond Tormach’s reasonable control.
+
+         All notices, requests, consents, claims, demands, waivers,
+         and other communications hereunder will be in writing and
+         will be deemed to have been given: (i) when delivered by hand
+         (with written confirmation of receipt); (ii) when received by
+         the addressee if sent by a nationally recognized overnight
+         courier (receipt requested); (iii) on the date sent by
+         facsimile or email (with confirmation of transmission) if
+         sent during normal business hours of the recipient, and on
+         the next business day if sent after normal business hours of
+         the recipient; or (iv) on the third day after the date
+         mailed, by certified or registered mail, return receipt
+         requested, postage prepaid. Such communications must be sent
+         to the respective parties at the addresses set forth on the
+         Order Form (or to such other address as may be designated by
+         a party from time to time in accordance with this Section
+         15(c)).
+
+         This Agreement, together with the Order Form, and all other
+         documents that are incorporated by reference herein,
+         constitutes the sole and entire agreement between Licensee
+         and Tormach with respect to the subject matter contained
+         herein, and supersedes all prior and contemporaneous
+         understandings, agreements, representations, and warranties,
+         both written and oral, with respect to such subject matter.
+
+         Licensee will not assign or otherwise transfer any of its
+         rights, or delegate or otherwise transfer any of its
+         obligations or performance, under this Agreement, in each
+         case whether voluntarily, involuntarily, by operation of law,
+         or otherwise, without Tormach’s prior written consent, which
+         consent Tormach may give or withhold in its sole
+         discretion. No delegation or other transfer will relieve
+         Licensee of any of its obligations or performance under this
+         Agreement. Any purported assignment, delegation, or transfer
+         in violation of this Section 15(e) is void. Tormach may
+         freely assign or otherwise transfer all or any of its rights,
+         or delegate or otherwise transfer all or any of its
+         obligations or performance, under this Agreement without
+         Licensee’s consent. This Agreement is binding upon and inures
+         to the benefit of the parties hereto and their respective
+         permitted successors and assigns.
+
+         This Agreement is for the sole benefit of the parties hereto
+         and their respective successors and permitted assigns and
+         nothing herein, express or implied, is intended to or will
+         confer on any other person any legal or equitable right,
+         benefit, or remedy of any nature whatsoever under or by
+         reason of this Agreement.
+
+         This Agreement may only be amended, modified, or supplemented
+         by an agreement in writing signed by each party hereto. No
+         waiver by any party of any of the provisions hereof will be
+         effective unless explicitly set forth in writing and signed
+         by the party so waiving. Except as otherwise set forth in
+         this Agreement, no failure to exercise, or delay in
+         exercising, any right, remedy, power, or privilege arising
+         from this Agreement will operate or be construed as a waiver
+         thereof; nor will any single or partial exercise of any
+         right, remedy, power, or privilege hereunder preclude any
+         other or further exercise thereof or the exercise of any
+         other right, remedy, power, or privilege.
+
+         If any term or provision of this Agreement is invalid,
+         illegal, or unenforceable in any jurisdiction, such
+         invalidity, illegality, or unenforceability will not affect
+         any other term or provision of this Agreement or invalidate
+         or render unenforceable such term or provision in any other
+         jurisdiction.
+
+         The headings in this Agreement are for reference only and do
+         not affect the interpretation of this Agreement.

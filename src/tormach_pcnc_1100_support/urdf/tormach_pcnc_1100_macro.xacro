@@ -1,0 +1,104 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+  <xacro:macro name="tormach_pcnc_1100_macro" params="prefix">
+    <material name="${prefix}DarkGray">
+      <color rgba="0.5 0.5 0.5 1.0"/>
+    </material>
+
+    <!-- link list -->
+    <link name="${prefix}frame">
+      <visual>
+        <geometry>
+          <mesh filename="package://tormach_pcnc_1100_support/meshes/frame.stl"/>
+        </geometry>
+        <origin rpy="0.0 0 0.0" xyz="0 0 0"/>
+        <material name="${prefix}DarkGray"/>
+      </visual>
+    </link>
+    <link name="${prefix}y_axis">
+      <visual>
+        <geometry>
+          <mesh filename="package://tormach_pcnc_1100_support/meshes/y_slide.stl"/>
+        </geometry>
+        <origin rpy="0.0 0 0.0" xyz="0 0 0"/>
+        <material name="${prefix}DarkGray"/>
+      </visual>
+      <collision>
+        <geometry>
+          <mesh filename="package://tormach_pcnc_1100_support/meshes/y_slide.stl"/>
+        </geometry>
+        <origin rpy="0.0 0 0.0" xyz="0 0 0"/>
+      </collision>
+      <inertial>
+        <mass value="100"/>
+        <inertia ixx="1.0" ixy="0.0" ixz="0.0" iyy="1.0" iyz="0.0" izz="1.0"/>
+      </inertial>
+    </link>
+
+    <link name="${prefix}x_axis">
+      <visual>
+        <geometry>
+          <mesh filename="package://tormach_pcnc_1100_support/meshes/x_slide.stl"/>
+        </geometry>
+        <origin rpy="0.0 0 0.0" xyz="0 0 0"/>
+        <material name="${prefix}DarkGray"/>
+      </visual>
+      <collision>
+        <geometry>
+          <mesh filename="package://tormach_pcnc_1100_support/meshes/x_slide.stl"/>
+        </geometry>
+        <origin rpy="0.0 0 0.0" xyz="0 0 0"/>
+      </collision>
+      <inertial>
+        <mass value="100"/>
+        <inertia ixx="1.0" ixy="0.0" ixz="0.0" iyy="1.0" iyz="0.0" izz="1.0"/>
+      </inertial>
+    </link>
+
+    <link name="${prefix}z_axis">
+      <visual>
+        <geometry>
+          <mesh filename="package://tormach_pcnc_1100_support/meshes/z_slide.stl"/>
+        </geometry>
+        <origin rpy="0.0 0 0.0" xyz="0 0 0"/>
+        <material name="${prefix}DarkGray"/>
+      </visual>
+      <collision>
+        <geometry>
+          <mesh filename="package://tormach_pcnc_1100_support/meshes/z_slide.stl"/>
+        </geometry>
+        <origin rpy="0.0 0 0.0" xyz="-0 0 0"/>
+      </collision>
+      <inertial>
+        <mass value="100"/>
+        <inertia ixx="1.0" ixy="0.0" ixz="0.0" iyy="1.0" iyz="0.0" izz="1.0"/>
+      </inertial>
+    </link>
+
+    <!-- joint list -->
+    <joint name="${prefix}y_joint" type="prismatic">
+      <limit effort="1000.0" lower="-0.12065" upper="0.12065" velocity="0.5"/>
+      <parent link="${prefix}frame"/>
+      <child link="${prefix}y_axis"/>
+      <axis xyz="0 1 0"/>
+      <origin rpy="0.0 0.0 0.0" xyz="0 0 0.820"/>
+    </joint>
+
+    <joint name="${prefix}x_joint" type="prismatic">
+      <limit effort="1000.0" lower="-0.2286" upper="0.2286" velocity="0.5"/>
+      <parent link="${prefix}y_axis"/>
+      <child link="${prefix}x_axis"/>
+      <axis xyz="1 0 0"/>
+      <origin xyz="0 0 0.075"/>
+    </joint>
+
+    <joint name="${prefix}z_joint" type="prismatic">
+      <limit effort="1000.0" lower="-0.41275" upper="0" velocity="0.5"/>
+      <parent link="${prefix}frame"/>
+      <child link="${prefix}z_axis"/>
+      <axis xyz="0 0 1"/>
+      <origin xyz="0.0 0.304 1.783"/>
+    </joint>
+
+  </xacro:macro>
+</robot>

@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<launch>
+  <arg name="namespace" default="user_frames"/>
+  <arg name="publish_interval_s" default="0.5"/>
+  <arg name="pose_reference_frame" default="world"/>
+  <arg name="cache_tfs" default="false"/>
+
+  <node pkg="robot_frame" type="frame_node" name="frame_node_$(arg namespace)" output="screen">
+    <param name="namespace" value="$(arg namespace)"/>
+    <param name="publish_interval_s" value="$(arg publish_interval_s)"/>
+    <param name="pose_reference_frame" value="$(arg pose_reference_frame)"/>
+    <param name="cache_tfs" value="$(arg cache_tfs)"/>
+  </node>
+</launch>

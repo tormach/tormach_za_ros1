@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Name=PathPilot Robot Edition
+Exec=${CMAKE_INSTALL_FULL_BINDIR}/launch-pathpilot-launcher -b
+Terminal=false
+Categories=Science;Education;
+Icon=pathpilot

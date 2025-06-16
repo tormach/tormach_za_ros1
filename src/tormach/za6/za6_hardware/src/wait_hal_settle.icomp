@@ -1,0 +1,15 @@
+component wait_hal_settle """Wait for a number of HAL cycles""";
+license "Tormach internal license";
+
+pin io u32 wait_cycles=0;
+
+function _;
+
+;;
+
+FUNCTION(_) {
+    if (wait_cycles > 0 ) {
+        wait_cycles = wait_cycles - 1;
+    }
+    return 0;
+}

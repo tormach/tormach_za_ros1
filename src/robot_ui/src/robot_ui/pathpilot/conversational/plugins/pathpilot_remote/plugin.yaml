@@ -1,0 +1,6 @@
+name: pathpilot_remote
+title: PathPilot
+description: PathPilot interface
+type: conversational
+priority: 5
+tooltip: msg_pathpilot_tab

@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<launch>
+  <arg name="sim" default="false"/>
+  <arg name="mode" default="udp"/>
+
+  <!-- Start tool/gripper nodes -->
+  <node pkg="gr60_gripper" type="gripper" name="gripper" output="screen" unless="$(arg sim)">
+    <!-- udp or usb -->
+    <param name="~mode" value="$(arg mode)"/>
+    <param name="~baud" value="115200"/>
+    <param name="~auto_calibrate_on_startup" value="true"/>
+    <param name="~auto_calibrate_on_reconnect" value="true"/>
+    <rosparam param="grippers">{main:[1]}</rosparam>
+    <!-- for udp -->
+    <param name="~host_ip" value="10.9.0.42"/>
+    <param name="~target_ip" value="10.9.0.51"/>
+    <!-- for usb -->
+    <param name="~port" value="hwgrep://1a86:7523"/>
+  </node>
+
+  <node pkg="gr60_gripper" type="gripper_sim" name="gripper" output="screen" if="$(arg sim)">
+    <rosparam param="grippers">{main:[1]}</rosparam>
+  </node>
+
+</launch>

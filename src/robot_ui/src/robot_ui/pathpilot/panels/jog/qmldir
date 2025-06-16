@@ -1,0 +1,8 @@
+JogPanel 1.0 JogPanel.qml
+JogPanelControl 1.0 JogPanelControl.qml
+TwoAxesJoyStick 1.0 TwoAxesJoyStick.qml
+SingleAxisJoyStick 1.0 SingleAxisJoyStick.qml
+CartesianJog 1.0 CartesianJog.qml
+JointJog 1.0 JointJog.qml
+JogWarningIndicator 1.0 JogWarningIndicator.qml
+MarkerOperations 1.0 MarkerOperations.qml

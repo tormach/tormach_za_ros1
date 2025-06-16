@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+  <xacro:macro name="za6_macro" params="robotprefix tool stand">
+
+    <xacro:if value="${stand == 'none'}">
+      <xacro:include filename="$(find za6_description)/urdf/za6_stand_none_macro.xacro"/>
+      <xacro:za6_stand_none_macro prefix="${robotprefix}"/>
+    </xacro:if>
+
+    <xacro:if value="${stand == 'prototype'}">
+      <xacro:include filename="$(find za6_description)/urdf/za6_stand_prototype_macro.xacro"/>
+      <xacro:za6_stand_prototype_macro robotprefix="${robotprefix}" standprefix="${robotprefix}"/>
+    </xacro:if>
+
+    <xacro:include filename="$(find za6_description)/urdf/za6_robot_macro.xacro"/>
+    <xacro:za6_robot_macro prefix="${robotprefix}"/>
+
+    <xacro:if value="${tool == 'none'}">
+      <xacro:include filename="$(find za6_description)/urdf/za6_tool_none_macro.xacro"/>
+      <xacro:za6_tool_none_macro prefix="${robotprefix}"/>
+    </xacro:if>
+
+    <xacro:if value="${tool == 'hand_e'}">
+      <xacro:include filename="$(find za6_description)/urdf/za6_tool_hand_e_macro.xacro"/>
+      <xacro:za6_tool_hand_e_macro prefix="${robotprefix}"/>
+    </xacro:if>
+
+  </xacro:macro>
+</robot>

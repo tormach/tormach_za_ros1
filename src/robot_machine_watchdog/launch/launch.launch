@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<launch>
+  <!-- Load default parameters -->
+  <arg name="initial_torque_threshold" default="20.0" />
+  <arg name="watchdog_rate" default="50" />
+
+  <!-- Launch the watchdog node -->
+  <node name="robot_machine_watchdog" pkg="robot_machine_watchdog" type="watchdog_node.py" output="screen">
+    <param name="torque_threshold" value="$(arg initial_torque_threshold)" />
+    <param name="rate" value="$(arg watchdog_rate)" />
+  </node>
+
+</launch>

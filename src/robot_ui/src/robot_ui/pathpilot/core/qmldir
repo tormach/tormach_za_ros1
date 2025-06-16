@@ -1,0 +1,6 @@
+singleton Icons 1.0 Icons.qml
+singleton Fonts 1.0 Fonts.qml
+singleton Colors 1.0 Colors.qml
+singleton Sizes 1.0 Sizes.qml
+ApplicationArguments 1.0 ApplicationArguments.qml
+IconObject 1.0 IconObject.qml

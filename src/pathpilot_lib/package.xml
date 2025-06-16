@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>pathpilot_lib</name>
+  <version>0.1.0</version>
+  <description>
+    Shared PathPilot library package
+  </description>
+  <maintainer email="alex@machinekoder.com">Alexander Rössler</maintainer>
+  <license>TODO</license>
+
+  <url>TODO</url>
+  <author>Alexander Rössler</author>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <depend>python3-tzlocal</depend>
+
+  <test_depend>rostest</test_depend>
+  <test_depend>ros_pytest</test_depend>
+  <test_depend>python-pytest-dependency-pip</test_depend>
+
+</package>

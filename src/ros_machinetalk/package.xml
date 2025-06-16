@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>ros_machinetalk</name>
+  <version>0.0.0</version>
+  <description>Connect to CNC machines over Machinetalk protocol</description>
+
+  <maintainer email="john@zultron.com">John Morris</maintainer>
+  <license>BSD</license>
+  <!-- <url type="website">http://wiki.ros.org/ros_machinetalk</url> -->
+  <author email="john@zultron.com">John Morris</author>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <build_depend>rospy</build_depend>
+
+  <build_export_depend>rospy</build_export_depend>
+
+  <exec_depend>rospy</exec_depend>
+  <exec_depend>machinetalk-protobuf</exec_depend>
+  <exec_depend>pymachinetalk</exec_depend>
+  <exec_depend>protobuf-pip</exec_depend>
+  <exec_depend>avahi-daemon</exec_depend>
+  <exec_depend>python3-avahi</exec_depend>
+  <exec_depend>python3-numpy</exec_depend>
+  <exec_depend>python3-pyassimp</exec_depend>
+  <exec_depend>python3-attrs</exec_depend>
+
+  <depend>ros_machinetalk_msgs</depend>
+
+  <test_depend>rostest</test_depend>
+  <test_depend>ros_pytest</test_depend>
+
+</package>

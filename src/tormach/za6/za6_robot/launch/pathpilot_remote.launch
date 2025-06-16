@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<launch>
+
+  <rosparam param="machine_scene_sync/machine_urdfs"
+    file="$(find za6_robot)/config/machine_urdfs.yaml"
+    subst_value="true" command="load"
+    />
+
+  <include file="$(find ros_machinetalk)/launch/machinetalk_manager.launch"/>
+  <include file="$(find robot_scene)/launch/machine_scene_sync.launch"/>
+
+</launch>

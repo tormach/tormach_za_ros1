@@ -1,0 +1,92 @@
+<?xml version="1.0"?>
+<launch>
+  <!--
+      This .launch file brings up the za6 controller
+  -->
+
+  <!-- ++++++++++++++++++++++++++++++ PUBLIC INTERFACE ++++++++++++++++++++++++++++++ -->
+  <!-- Arguments passed to other launch files -->
+  <arg name="dev_mode" doc="Launch interface in development mode" />
+  <arg name="tool" doc="Connected tool to the robot flange" />
+  <!-- - Run in simulated hardware mode -->
+  <arg name="sim" default="$(eval optenv('HARDWARE_MODE', 'sim') == 'sim')"/>
+  <!-- HAL debug output -->
+  <!-- - Output HAL debug messages to screen (console) -->
+  <arg name="hal_debug_output" doc="Print MK-HAL debug messages to the console" />
+  <!-- - Set HAL debug level, 0-5 -->
+  <arg name="hal_debug_level" doc="MK-HAL debug level limiter (0-5)" />
+  <arg name="mastering" doc="Overload settings with mastering values" />
+
+  <!-- ++++++++++++++++++++++++++++++ END PUBLIC INTERFACE ++++++++++++++++++++++++++++++ -->
+
+  <!-- Determine drive type (non-sim), IS620 or SV660 -->
+  <!-- - Ugliness to import inside eval; see -->
+  <!-- https://alspitz.github.io/blog/roslaunch_import.html -->
+  <!-- Runs drive_type() from hal_402_mgr/params/drive_type.py -->
+  <!-- python3 -c "from hal_402_device_mgr.params.drive_type import drive_type; print(drive_type())" -->
+  <arg name="imp" value="eval('_' + '_import_' + '_')"/>
+  <arg name="imp_args"
+       value="'hal_402_device_mgr.params.drive_type', fromlist=('drive_type',)"
+       />
+  <arg name="drive_type"
+       value="$(eval eval(imp + '(' + imp_args + ')').drive_type())"
+       />
+
+  <!-- Plumb EtherCAT config file -->
+  <!-- Basic, default configuration with no connected tool -->
+  <arg
+      name="lcec_config_file"
+      value="ethercat-za6-$(arg drive_type).xml"
+      if="$(eval arg('tool') in ['none', 'None', None, '', false] and not arg('sim'))"
+      />
+  <arg
+      name="lcec_config_file"
+      value="ethercat-za6-$(arg drive_type)-robotiq.xml"
+      if="$(eval arg('tool') == 'hand_e' and not arg('sim'))"
+      />
+
+
+  <rosparam command="load" file="$(find za6_hardware)/config/hal_hw_interface.yaml" />
+  <rosparam command="load" file="$(find za6_hardware)/config/hal_io.yaml" />
+  <rosparam command="load" file="$(find za6_hardware)/config/hardware_settings.yaml" />
+  <param name="hal_hardware/sim_mode" value="$(arg sim)"/>
+  <param name="hal_hardware/tool" value="$(arg tool)"/>
+
+  <!-- RT CPUs and cgroup name are set in entrypoint and passed
+       through docker-dev.sh -->
+  <param name="hal_mgr/rt_cpus" value="$(optenv RT_CPUS)" />
+  <param name="hal_mgr/rt_cgname" value="$(optenv RT_CGNAME)" />
+
+  <param name="hal_mgr/hal_file_dir" value="$(find za6_hardware)/halfiles" />
+  <param name="hal_mgr/lcec_config_file" value="$(arg lcec_config_file)" unless="$(arg sim)" />
+
+  <!-- EtherCAT drive configuration params -->
+  <param name="hal_mgr/drive_type" value="$(arg drive_type)" unless="$(arg sim)" />
+  <rosparam file="$(find za6_hardware)/config/ethercat_drive_params_$(arg drive_type).yaml" unless="$(arg sim)" />
+
+  <!-- parameters being used by hal_402_drive_mgr -->
+  <rosparam file="$(find za6_hardware)/config/hal_402_device_mgr_$(arg drive_type).yaml" unless="$(arg sim)" />
+  <rosparam file="$(find za6_hardware)/config/hal_402_device_mgr_sim.yaml" if="$(arg sim)" />
+  <rosparam file="$(find za6_hardware)/config/fault_codes_$(arg drive_type).yaml" unless="$(arg sim)" />
+
+  <include file="$(find hal_hw_interface)/launch/hal_hw_interface.launch">
+    <arg name="hal_debug_output" value="$(arg hal_debug_output)"/>
+    <arg name="hal_debug_level" value="$(arg hal_debug_level)"/>
+  </include>
+
+  <!-- For Virtual PathPilot run we are presuming simple single standing Docker environment-->
+  <!-- As such there is no DBus present and we cannot use Avahi announcement even in loopback -->
+  <node
+    name="sim_ui"
+    pkg="za6_hardware"
+    type="run_sim_ui.py"
+    if="$(eval optenv('VIRTUAL_PATHPILOT', '0') != '1' and arg('sim'))"
+  />
+
+  <!-- Gripper support -->
+  <include file="$(find za6_hardware)/launch/gripper_support.launch">
+    <arg name="sim" value="$(arg sim)"/>
+    <arg name="tool" value="$(arg tool)"/>
+  </include>
+
+</launch>

@@ -1,0 +1,12 @@
+<!DOCTYPE Menu PUBLIC "-//freedesktop//DTD Menu 1.0//EN"
+            "http://www.freedesktop.org/standards/menu-spec/menu-1.0.dtd">
+<Menu>
+    <Name>Applications</Name>
+    <Menu>
+        <Name>Tormach</Name>
+        <Directory>tormach.directory</Directory>
+        <Include>
+            <Filename>robot-launcher.desktop</Filename>
+        </Include>
+    </Menu>
+</Menu>

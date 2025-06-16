@@ -1,0 +1,111 @@
+#!/usr/bin/env python
+import rospy
+import sys
+from functools import partial
+
+from pymachinetalk.dns_sd import ServiceDiscovery, ServiceDiscoveryFilter
+
+from ros_machinetalk.command import CommandServer
+from ros_machinetalk.error import ErrorPublisher
+from ros_machinetalk.status import StatusPublisher
+from ros_machinetalk.connected import ConnectedPublisher
+
+
+class MachinetalkNode:
+    _connected_topic = 'connected'
+
+    def __init__(self):
+        # Start ROS node
+        rospy.init_node("machinetalk_node")
+        rospy.loginfo("Initializing Machinetalk node")
+
+        # Debugging
+        self.debug = rospy.get_param('debug', False)
+
+        # Publisher update rate in Hz
+        self.update_rate = rospy.get_param('update_rate', 10)
+        rospy.loginfo("Publish update rate = %.1f Hz" % self.update_rate)
+
+        # Set up discovery
+        self.uuid = rospy.get_param('uuid', None)
+        if self.uuid is None:
+            rospy.logfatal("Unable to find UUID in machinetalk/uuid parameter")
+            rospy.signal_shutdown(
+                "Unable to find UUID in machinetalk/uuid parameter"
+            )
+        sd_filter = ServiceDiscoveryFilter(txt_records={'uuid': self.uuid})
+        self.sd = ServiceDiscovery(filter_=sd_filter)
+
+        # Set up connected publisher
+        self.connected = ConnectedPublisher(['status', 'command', 'error'])
+
+        # Set up status publisher
+        self.status = StatusPublisher(
+            self.sd,
+            timer_interval=1.0 / self.update_rate,
+            # _update_cb=self._update_cb,
+            status_cb=partial(self._status_cb, service='status'),
+            debug=self.debug,
+        )
+
+        # Set up command action server
+        self.command = CommandServer(
+            self.sd,
+            status_cb=partial(self._status_cb, service='command'),
+            debug=self.debug,
+        )
+
+        # Set up error publisher
+        self.error = ErrorPublisher(
+            self.sd,
+            status_cb=partial(self._status_cb, service='error'),
+            debug=self.debug,
+        )
+
+    def _status_cb(self, status, service):
+        self.connected.set_status(status, service)
+
+    def _update_cb(self):
+        sys.stdout.write(
+            'Command: %s %s\n\n'
+            % (str(self.command.connected), self.command.command_uri)
+        )
+
+        sys.stdout.write(
+            'Error: {} {}\n'.format(
+                str(self.error.connected), self.error.error_uri
+            )
+        )
+        sys.stdout.write('Notifications:\n    ')
+        self.messages += self.error.get_messages()
+        for message in self.messages:
+            for note in message['notes']:
+                sys.stdout.write(str(note) + "\n  ")
+        sys.stdout.write('\n')
+
+    def start(self):
+        rospy.loginfo("MachinetalkNode starting")
+        rospy.on_shutdown(self.stop)
+        self.connected.start()
+        self.sd.start()
+
+    def stop(self):
+        self.connected.stop()
+        self.status.stop()
+        self.command.stop()
+        self.sd.stop()
+
+
+def main():
+    # Init and start node
+    MachinetalkNode().start()
+
+    # Wait
+    rospy.spin()
+
+    # Exit
+    sys.exit(0)
+
+
+if __name__ == "__main__":
+    main()

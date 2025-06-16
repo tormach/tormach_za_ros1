@@ -1,0 +1,744 @@
+# Copied from ../../tormach/za6_hardware/config/fault_codes_SV660N.yaml
+sim_mode:  True
+device_fault_code_list:
+  inovance_sv660n:
+    '0x0101':
+      display: E101.0
+      description: System parameter error
+      type: 1
+      resettable: false
+    '0x1101':
+      display: E101.1
+      description: Parameters in group 2000h/2001h being abnormal
+      type: 1
+      resettable: false
+    '0x0102':
+      display: E102.0
+      description: Logic configuration fault
+      type: 1
+      resettable: false
+    '0x8102':
+      display: E102.8
+      description: Software version mismatch
+      type: 1
+      resettable: false
+    '0x1104':
+      display: E104.1
+      description: MCU running timeout
+      type: 1
+      resettable: false
+    '0x2104':
+      display: E104.2
+      description: Current loop running timeout
+      type: 1
+      resettable: false
+    '0x4104':
+      display: E104.4
+      description: Reference update timeout
+      type: 1
+      resettable: false
+    '0x0105':
+      display: E105.0
+      description: Internal program error
+      type: 1
+      resettable: false
+    '0x0108':
+      display: E108.0
+      description: Parameter write timeout
+      type: 1
+      resettable: true
+    '0x1108':
+      display: E108.1
+      description: Parameter read timeout
+      type: 1
+      resettable: true
+    '0x2108':
+      display: E108.2
+      description: Invalid check on data written in EEPROM
+      type: 1
+      resettable: true
+    '0x3108':
+      display: E108.3
+      description: Invalid check on data read in EEPROM
+      type: 1
+      resettable: true
+    '0x0120':
+      display: E120.0
+      description: Unknown encoder type
+      type: 1
+      resettable: false
+    '0x1120':
+      display: E120.1
+      description: Unknown motor model
+      type: 1
+      resettable: false
+    '0x2120':
+      display: E120.2
+      description: Unknown drive model
+      type: 1
+      resettable: false
+    '0x5120':
+      display: E120.5
+      description: Mismatch of the motor current and drive current
+      type: 1
+      resettable: false
+    '0x6120':
+      description: Mismatch of FPGA and motor model
+      type: 1
+      resettable: false
+    '0x0122':
+      display: E122.0
+      description: Multi-turn absolute encoder setting error
+      type: 2
+      resettable: true
+    '0x1122':
+      display: E122.1
+      description: Different DIs allocated with the same function
+      type: 2
+      resettable: true
+    '0x3122':
+      display: E122.3
+      description: Upper limit invalid
+      type: 2
+      resettable: true
+    '0x0136':
+      display: E136.0
+      description: Encoder parameter error
+      type: 1
+      resettable: false
+    '0x1136':
+      display: E136.1
+      description: Encoder communication error
+      type: 1
+      resettable: false
+    '0x0150':
+      display: E150.0
+      description: STO signal input protection activated
+      type: 1
+      resettable: true
+    '0x1150':
+      display: E150.1
+      description: STO signal input error
+      type: 1
+      resettable: true
+    '0x2150':
+      display: E150.2
+      description: Abnormal voltage detected
+      type: 1
+      resettable: true
+    '0x3150':
+      display: E150.3
+      description: STO upstream optocoupler detection failure
+      type: 1
+      resettable: true
+    '0x4150':
+      display: E150.4
+      description: PWM Buffer detection failure
+      type: 1
+      resettable: true
+    '0x0201':
+      display: E201.0
+      description: Phase-P overcurrent
+      type: 1
+      resettable: false
+    '0x1201':
+      display: E201.1
+      description: Phase-U overcurrent
+      type: 1
+      resettable: false
+    '0x2201':
+      display: E201.2
+      description: Phase-V overcurrent
+      type: 1
+      resettable: false
+    '0x4201':
+      display: E201.4
+      description: Phase-N overcurrent
+      type: 1
+      resettable: false
+    '0x0208':
+      display: E208.0
+      description: MCU position reference updated frequently
+      type: 1
+      resettable: true
+    '0x2208':
+      display: E208.2
+      description: Encoder communication timeout
+      type: 1
+      resettable: true
+    '0x3208':
+      display: E208.3
+      description: Current sampling fault
+      type: 1
+      resettable: true
+    '0x4208':
+      display: E208.4
+      description: FPGA current loop operation timeout
+      type: 1
+      resettable: true
+    '0x0210':
+      display: E210.0
+      description: Output shorted to ground
+      type: 1
+      resettable: false
+    '0x0234':
+      display: E234.0
+      description: Runaway protection
+      type: 1
+      resettable: false
+    '0x0400':
+      display: E400.0
+      description: Main circuit overvoltage
+      type: 1
+      resettable: true
+    '0x0410':
+      display: E410.0
+      description: Main circuit undervoltage
+      type: 1
+      resettable: true
+    '0x0420':
+      display: E420.0
+      description: Phase loss
+      type: 2
+      resettable: true
+    '0x1420':
+      display: E420.1
+      description: PL signal error
+      type: 2
+      resettable: true
+    '0x0500':
+      display: E500.0
+      description: Motor overspeed
+      type: 1
+      resettable: true
+    '0x1500':
+      display: E500.1
+      description: Speed feedback overflow
+      type: 1
+      resettable: true
+    '0x0602':
+      display: E602.0
+      description: Angle auto-tuning error
+      type: 1
+      resettable: true
+    '0x2602':
+      display: E602.2
+      description: Wrong UVW phase sequence detected during angle auto-tuning
+      type: 1
+      resettable: true
+    '0x0620':
+      display: E620.0
+      description: Motor overload
+      type: 1
+      resettable: true
+    '0x0630':
+      display: E630.0
+      description: Locked rotor
+      type: 1
+      resettable: true
+    '0x0640':
+      display: E640.0
+      description: IGBT over-temperature
+      type: 1
+      resettable: true
+    '0x0650':
+      display: E650.0
+      description: Heatsink over-temperature
+      type: 1
+      resettable: true
+    '0x0661':
+      display: E661.0
+      description: Auto-tuned gain values too low
+    '0x0731':
+      display: E731.0
+      description: Encoder battery failure
+      type: 2
+      resettable: true
+    '0x0733':
+      display: E733.0
+      description: Encoder multi-turn counting error
+      type: 2
+      resettable: true
+    '0x0735':
+      display: E735.0
+      description: Encoder multi-turn counting overflow
+      type: 2
+      resettable: true
+    '0x2740':
+      display: E740.2
+      description: Absolute encoder error
+      type: 1
+      resettable: false
+    '0x3740':
+      display: E740.3
+      description: Absolute encoder single-turn calculation error
+      type: 1
+      resettable: false
+    '0x6740':
+      display: E740.6
+      description: Encoder write error
+      type: 1
+      resettable: false
+    '0x0B00':
+      display: EB00.0
+      description: Encoder read/write check error
+      type: 2
+      resettable: true
+    '0x0A33':
+      display: EA33.0
+      description: Position deviation too large
+      type: 1
+      resettable: false
+    '0x1B00':
+      display: EB00.1
+      description: Position deviation overflow
+      type: 2
+      resettable: true
+    '0x1B01':
+      display: EB01.1
+      description: Position reference increment too large for once
+      type: 2
+      resettable: true
+    '0x2B01':
+      display: EB01.2
+      description: Position reference increment too large continuously
+      type: 2
+      resettable: true
+    '0x3B01':
+      display: EB01.3
+      description: Reference overflow
+      type: 2
+      resettable: true
+    '0x4B01':
+      display: EB01.4
+      description: Reference value beyond the single-turn position limits in the absolute mode
+      type: 2
+      resettable: true
+    '0x0E09':
+      display: EE09.0
+      description: Software limit setting error
+      type: 2
+      resettable: true
+    '0x1E09':
+      display: EE09.1
+      description: Home setting error
+      type: 2
+      resettable: true
+    '0x2E09':
+      display: EE09.2
+      description: Gear ratio over the limit
+      type: 2
+      resettable: true
+    '0x3E09':
+      display: EE09.3
+      description: No synchronization signal
+      type: 2
+      resettable: true
+    '0x5E09':
+      display: EE09.5
+      description: PDO mapping over the limit
+      type: 2
+      resettable: true
+    '0x0E08':
+      display: EE08.0
+      description: Synchronization loss
+      type: 2
+      resettable: true
+    '0x1E08':
+      display: EE08.1
+      description: Network status switchover error
+      type: 2
+      resettable: true
+    '0x2E08':
+      display: EE08.2
+      description: IRQ loss
+      type: 2
+      resettable: true
+    '0x0E11':
+      display: EE11.0
+      description: ESI check error
+      type: 2
+      resettable: true
+    '0x1E11':
+      display: EE11.1
+      description: Unsuccessful reading of EEPROM
+      type: 2
+      resettable: true
+    '0x2E11':
+      display: EE11.2
+      description: Unsuccessful update of EEPROM
+      type: 2
+      resettable: true
+    '0x0E12':
+      display: EE12.0
+      description: External devices of EtherCAT being abnormal
+      type: 1
+      resettable: false
+    '0x0E13':
+      display: EE13.0
+      description: Synchronization cycle setting error
+      type: 2
+      resettable: true
+    '0x0E15':
+      display: EE15.0
+      description: Synchronization cycle error too large
+      type: 2
+      resettable: true
+    '0x0121':
+      display: E121.0
+      description: Invalid S-ON command
+      type: 3
+      resettable: true
+    '0x0600':
+      display: E600.0
+      description: Inertia auto-tuning failure
+      type: 3
+      resettable: true
+    '0x0601':
+      display: E601.0
+      description: Homing warning
+      type: 3
+      resettable: true
+    '0x1601':
+      display: E601.1
+      description: Home switch error
+      type: 3
+      resettable: true
+    '0x0730':
+      display: E730.0
+      description: Encoder battery warning
+      type: 3
+      resettable: true
+    '0x0900':
+      display: E900.0
+      description: Emergency stop
+      type: 3
+      resettable: true
+    '0x0902':
+      display: E902.0
+      description: Invalid DI setting
+      type: 1
+      resettable: true
+    '0x1902':
+      display: E902.1
+      description: Invalid DO setting
+      type: 1
+      resettable: true
+    '0x2902':
+      display: E902.2
+      description: Invalid torque reached setting
+      type: 1
+      resettable: true
+    '0x0908':
+      display: E908.0
+      description: Invalid check byte of model identification
+      type: 1
+      resettable: true
+    '0x0909':
+      display: E909.0
+      description: Motor overload
+      type: 1
+      resettable: true
+    '0x0920':
+      display: E920.0
+      description: Regenerative resistor overload
+      type: 1
+      resettable: true
+    '0x0922':
+      display: E922.0
+      description: Resistance of external regenerative resistor too small
+      type: 1
+      resettable: true
+    '0x0924':
+      display: E924.0
+      description: Braking transistor over-temperature
+      type: 1
+      resettable: true
+    '0x0941':
+      display: E941.0
+      description: Parameter modifications not activated
+      type: 1
+      resettable: true
+    '0x0942':
+      display: E942.0
+      description: Parameter saved frequently
+      type: 1
+      resettable: true
+    '0x0950':
+      display: E950.0
+      description: Forward overtravel
+      type: 1
+      resettable: true
+    '0x0952':
+      display: E952.0
+      description: Reverse overtravel
+      type: 1
+      resettable: true
+    '0x4E09':
+      display: EE09.4
+      description: Homing method setting error
+      type: 1
+      resettable: true
+
+# Copied from za6_hardware/config/hal_402_device_mgr.yaml
+hal_402_device_mgr:
+  ethercat_drive_params_group:  joints
+  drives:
+      drive_1:
+        instance: 1
+        slave_number: 0
+        hal_name: lcec.0.0
+        type: inovance_is620n
+      drive_2:
+        instance: 2
+        slave_number: 1
+        hal_name: lcec.0.1
+        type: inovance_is620n
+      drive_3:
+        instance: 3
+        slave_number: 2
+        hal_name: lcec.0.2
+        type: inovance_is620n
+      drive_4:
+        instance: 4
+        slave_number: 3
+        hal_name: lcec.0.3
+        type: inovance_is620n
+      drive_5:
+        instance: 5
+        slave_number: 4
+        hal_name: lcec.0.4
+        type: inovance_is620n
+      drive_6:
+        instance: 6
+        slave_number: 5
+        hal_name: lcec.0.5
+        type: inovance_is620n
+
+
+ethercat_drive_params:
+  # Joint drives:  Inovance SV660N
+  joints:
+    device_description_xml:
+      # - See launch/hal_hardware.launch
+      ros_package:  za6_hardware
+      path:  config/SV660_EOE_1Axis_V9.12.xml
+
+    device_id:
+      vendor_id:  0x00100000
+      product_code:  0x000C010D
+
+    # Ethercat master and positions this configuration applies to
+    master: 0
+    positions: [0, 1, 2, 3, 4, 5]
+
+    # Parameter settings
+    param_values:
+      # *** Servo Motor Parameters ***
+      #
+      # Motor code:
+      # 14101:  Inovance 23-bit absolute encoder
+      2000-01h: 14101
+
+      # *** Basic control ***
+      #
+      # Absolute system selection:  def. 0
+      # 1:  Absolute position linear mode (encoder retains value on power down)
+      2002-02h: 1
+
+      # *** 2003h Terminal input parameters ***
+      # Values for DI "function selection" parameters:
+      # 0: No definition
+      # 1: S-ON
+      # 2: Fault reset
+      # 14: Positive limit switch
+      # 15: Negative limit switch
+      # 31: Home switch
+      # 34: Emergency stop
+      # 38: Touch probe 1
+      # 39: Touch probe 2
+      #
+      # DI1-DI3 function selection
+      2003-03h:  0
+      2003-05h:  0
+      2003-07h:  0
+
+      # *** 2004h Output terminal Parameters ***
+      # Values for DO "function selection" parameters:
+      # 0: No definition
+      # 1: Servo ready
+      # 2: Motor rotating
+      # 9: Brake output
+      # 10: Warning
+      # 11: Fault
+      # 25: Comparison output
+      # 32: STO EDM
+      # Values for DO "logic selection" parameters:
+      # 0: Normally open
+      # 1: Normally closed
+      #
+      # DO1 function selection:
+      # - Brake output
+      2004-01h: 9
+      # DO2, DO3 function selection:
+      # - None
+      2004-03h: 0
+      2004-05h: 0
+      #
+      # DO1-DO3 logic selection
+      # - 0:  Enabled on DO low
+      # - 1:  Enabled on DI high
+      2004-02h: 1
+      2004-04h: 1
+      2004-06h: 1
+
+
+      # *** Position Control Parameters ***
+      #
+      # Speed feedforward control selection
+      # - 0: No speed feedforward
+      # - 1: Internal speed feedforward
+      # - 2: 60B1h as speed feedforward
+      # - 3: Zero phase control
+      # - Use 60B1h as source of speed feedforward signal in CSP mode
+      2005-14h: 2
+
+      # *** 2008h Gain Parameters ***
+      #
+      # Gain switchover condition
+      # - 0: Fixed at 1st gain (PS)
+      # - 1: Switchover through bit26 of 60FEh
+      # - 2: Torque reference too large (PS)
+      # - 3: Speed reference too large (PS)
+      # - 4: Speed reference change ratio too large (PS)
+      # - 5: Speed reference high/low-speed threshold (PS)
+      # - 6: Position deviation too large (P)
+      # - 7: Position reference available (P)
+      # - 8: Positioning unfinished (P)
+      # - 9: Actual speed (P)
+      # - 10: Position reference existed + Actual speed (P)
+      # - No difference between gains in motion and gains when positioning
+      2008-0Ah: 0
+      #
+      # Load inertia ratio
+      # - Range 0–12000, default 100
+      # - Commented out due to issues getting beta units ready to ship
+      # 2008-10h: [150, 300, 700, 490, 900, 450]
+      2008-10h: 100
+      #
+      # Speed feedforward gain:
+      # - Range 0-1000; units 0.1%; default 0
+      # - Feedforward gain set to minimize following error - max value
+      #   produces best results
+      2008-14h: 1000
+      #
+      # Torque feedforward gain
+      # - Range 0-2000; units 0.1%;  default 0
+      # - High levels of torque feedforward produce gravelly sounds -
+      #   more investigation required
+      2008-16h: 0
+
+      # *** 2009h Gain auto-tuning parameters ***
+      # Gain auto-tuning mode
+      # - Default 0, range 0-7
+      # - 0: Invalid, gain parameters adjusted manually
+      # - 1: Standard gain auto-tuning mode
+      # - 2: Positioning mode
+      # - 3: Interpolation mode + Inertia auto-tuning
+      # - 4: Normal mode + Inertia auto-tuning
+      # - 6: Quick positioning mode + Inertia auto-tuning
+      # - Use automatic gain tuning so we don't have to worry about
+      #   individual gain settings for now
+      2009-01h: 1
+      #
+      # Stiffness level selection 0-31
+      # - Default 15, range 0-41
+      # - Higher -> stronger gain and quicker response
+      2009-02h: [14, 16, 16, 12, 12, 18]
+      #
+      # Online inertia auto-tuning mode
+      # - 0: Online auto-tuning turned off
+      # - 1: Online auto-tuning turned on, changing slowly
+      # - 2: Online auto-tuning turned on, changing normally
+      # - 3: Online auto-tuning turned on, changing quickly
+      2009-04h: 0
+
+      # *** Error and Protection Parameter ***
+      # Power input phase loss protection
+      # 1:  Enable faults and warnings
+      # - Enable voltage fluctuation alarm faults and warnings
+      200A-01h: 1
+
+      # *** 200Bh Monitoring parameters ***
+      # - FIXME Grab some of these parameters after a drive fault
+
+      # *** 200Dh Auxiliary function parameters ***
+      #
+      # Forced DI/DO selection switch
+      # - 0: No operation
+      # - 1: Forced DI enabled, forced DO disabled
+      # - 2: Forced DI disabled, forced DO enabled
+      # - 3: Forced DI and DO enabled
+      # - 4: EtherCAT forced DO enabled
+      200D-12h: 4
+
+      # *** 200Eh Auxiliary function parameters ***
+      #
+      # Node address
+      # - Normally configured on keypad; noted here FYI
+      # 200E-01h:  [0, 1, 2, 3, 4, 5]
+      #
+      # Save objects written through communication
+      # - This gets set in drive init; noted here FYI
+      # - 0:  All setting not saved/volatile
+      # - 3:  Save everything to EEPROM/non-volatile
+      # 200E-02h:  0
+      #
+      # EtherCAT synchronization error threshold
+      # - Unit uS; range 100-4000; default 3000
+      200E-21h:  3000
+
+      # *** Standard Device Profile Parameters ***
+      #
+      # Quick stop mode
+      # CSP mode:
+      # 3:  Stop at emergency stop torque in 2007-10h; brake & power off
+      605A-00h: 3
+      #
+      # Position window:  (reference units) def. 734
+      # - goal position threshold
+      6067-00h: 5872
+      #
+      # Position window time:  0-65535 (ms)
+      # - FIXME - better servo tuning should help us narrow this window
+      6068-00h: 65535
+      #
+      # Max Torque
+      # - Sets the maximum torque permitted by the servo drive.
+      #   This parameter is set based on the setting of 2007-08h.
+      # 6072-00h:  ???
+      #
+      # Home offset:  (ref. units) def. 0
+      # - J3 home offset is -90 deg, home arm vertically
+      # FIXME
+      # load_parameters: unable to set parameters (last param was [/tool_scene_sync/tool_attach_link=flange]): int exceeds XML-RPC limits
+      # 607C-00h: [0, 0, 0xf6000001, 0, 0, 0]
+      #
+      # 6091h Gear Ratio
+      # Sichen sets gear ratio to 6000, but we set it to 1 and handle it in HAL
+      # Motor revolutions
+      6091-01h: 1
+      #
+      # Shaft revolutions
+      6091-02h: 1
+      #
+      # Homing method
+      # 35:  Home on current position
+      6098-00h: 35
+      #
+      # Digital output:  Bit mask
+      # - Bits 16, 17, 18 correspond to DO1, DO2, DO3
+      # - When high, output may be forced high via 60FE-01h
+      # - Also see 200D-12h
+      # - Reserve DO1 for brake (may be forced separately)
+      60FE-02h: 0x00060000

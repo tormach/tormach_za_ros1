@@ -1,0 +1,6 @@
+# Request
+int32 id              # Optional: set to -1 to use pose-based targeting instead
+geometry_msgs/Pose pose   # Used to find closest object when id is -1
+---
+# Response
+bool success

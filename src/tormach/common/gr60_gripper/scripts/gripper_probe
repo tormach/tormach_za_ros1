@@ -1,0 +1,85 @@
+#!/usr/bin/env python
+import argparse
+from enum import Enum
+
+
+from gr60_gripper.feetech import USB2FeetechDevice
+from gr60_gripper.feetech.udp_feetech_device import UDPFeetechDevice
+from gr60_gripper.feetech.exceptions import CommunicationError
+from gr60_gripper.feetech import FeetechServo
+
+
+class ConnectionMode(Enum):
+    USB = 1
+    UDP = 2
+
+
+def main():
+    # get the command line arguments
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "--udp",
+        action="store_true",
+        help="Use UDP mode"
+    )
+    parser.add_argument(
+        "--usb",
+        action="store_true",
+        help="Use USB mode"
+    )
+    parser.add_argument(
+        "--host-ip",
+        type=str,
+        default="10.9.0.42",
+        help="IP address of the host computer"
+    )
+    parser.add_argument(
+        "--target-ip",
+        type=str,
+        default="10.9.0.51",
+        help="IP address of the target computer"
+    )
+    parser.add_argument(
+        "--port",
+        type=str,
+        default="/dev/ttyUSB0",
+        help="Port name"
+    )
+    parser.add_argument(
+        "--baud",
+        type=int,
+        default=115200,
+        help="Baud rate"
+    )
+    parser.add_argument(
+        "--servo-id", type=int, default=1, help="Servo ID"
+        )
+    args = parser.parse_args()
+
+    if args.udp:
+        mode = ConnectionMode.UDP
+    elif args.usb:
+        mode = ConnectionMode.USB
+    else:
+        raise ValueError("Must specify either --udp or --usb to select mode")
+
+    if mode == ConnectionMode.UDP:
+        try:
+            device = UDPFeetechDevice(args.host_ip, args.target_ip, baudrate=args.baud)
+        except CommunicationError as e:
+            print(f"No gripper detected: {str(e)}")
+            exit(-1)
+    elif mode == ConnectionMode.USB:
+        device = USB2FeetechDevice(args.port, baudrate=args.baud)
+
+    try:
+        FeetechServo(device, args.servo_id, exception_on_error_response=False)
+        print("Gripper detected")
+        exit(0)
+    except CommunicationError:
+        print("No gripper detected")
+        exit(-1)
+
+
+if __name__ == "__main__":
+    main()

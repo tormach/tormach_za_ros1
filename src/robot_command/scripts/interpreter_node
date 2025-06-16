@@ -1,0 +1,133 @@
+#!/usr/bin/env python
+import shlex
+from psutil import Popen
+
+import rospy
+
+import robot_command_msgs.srv as srv
+
+
+class InterpreterNode:
+    """Interpreter ROS node providing interpreter services."""
+
+    NODE_NAME = 'interpreter_node'
+    RELOAD_INTERPRETER_SERVICE = '/robot_command/reload_interpreter'
+    LOAD_PROGRAM_SERVICE = '/robot_command/load_program'
+    UNLOAD_PROGRAM_SERVICE = '/robot_command/unload_program'
+    WORKER_LOAD_PROGRAM_SERVICE = '/robot_command/worker/load_program'
+    WORKER_UNLOAD_PROGRAM_SERVICE = '/robot_command/worker/unload_program'
+    CHECK_RELOAD_REQUIRED_SERVICE = '/robot_command/check_reload_required'
+    DEFAULT_WAIT_TIMEOUT_S = 10.0
+
+    def __init__(self):
+        rospy.init_node(self.NODE_NAME)
+        self._current_program_path = ""
+        self._worker_process = None
+        self._reload_interpreter_srv = None
+        self._load_program_srv = None
+        self._unload_program_srv = None
+        self._worker_load_program_srv = None
+        self._worker_unload_program_srv = None
+        self._worker_check_reload_required_srv = None
+
+    def start(self):
+        self._reload_interpreter_srv = rospy.Service(
+            self.RELOAD_INTERPRETER_SERVICE,
+            srv.ReloadInterpreter,
+            self._reload_interpreter,
+        )
+        self._load_program_srv = rospy.Service(
+            self.LOAD_PROGRAM_SERVICE,
+            srv.LoadProgram,
+            self._load_program,
+        )
+        self._unload_program_srv = rospy.Service(
+            self.UNLOAD_PROGRAM_SERVICE,
+            srv.UnloadProgram,
+            self._unload_program,
+        )
+
+        self._start_worker_process()
+
+    @staticmethod
+    def spin():
+        rospy.spin()
+
+    def stop(self):
+        self._stop_worker_process()
+        self._reload_interpreter_srv.shutdown()
+        self._load_program_srv.shutdown()
+        self._unload_program_srv.shutdown()
+
+    def _start_worker_process(self):
+        self._worker_process = Popen(
+            shlex.split('rosrun robot_command worker_node')
+        )
+        self._worker_load_program_srv = rospy.ServiceProxy(
+            self.WORKER_LOAD_PROGRAM_SERVICE,
+            srv.LoadProgram,
+        )
+        self._worker_unload_program_srv = rospy.ServiceProxy(
+            self.WORKER_UNLOAD_PROGRAM_SERVICE,
+            srv.UnloadProgram,
+        )
+        self._worker_load_program_srv.wait_for_service(
+            timeout=self.DEFAULT_WAIT_TIMEOUT_S
+        )
+        self._worker_unload_program_srv.wait_for_service(
+            timeout=self.DEFAULT_WAIT_TIMEOUT_S
+        )
+        self._worker_check_reload_required_srv = rospy.ServiceProxy(
+            self.CHECK_RELOAD_REQUIRED_SERVICE,
+            srv.CheckReloadRequired,
+        )
+
+    def _stop_worker_process(self):
+        if not self._worker_process:
+            return
+        self._worker_load_program_srv = None
+        self._worker_unload_program_srv = None
+        self._worker_check_reload_required_srv = None
+        self._worker_process.terminate()
+        self._worker_process = None
+
+    def _load_program(self, req: srv.LoadProgramRequest):
+        rospy.loginfo("Loading program")
+        self._worker_load_program_srv(req)
+        self._current_program_path = req.path
+        return srv.LoadProgramResponse(success=True)
+
+    def _unload_program(self, req: srv.UnloadProgramRequest):
+        rospy.loginfo("Unloading program")
+        self._worker_unload_program_srv(req)
+        self._current_program_path = ""
+        return srv.UnloadProgramResponse(success=True)
+
+    def _reload_interpreter(self, req: srv.ReloadInterpreterRequest):
+        if req.only_if_required:
+            res = self._worker_check_reload_required_srv()
+            if not res.success:
+                rospy.logerr("Failed to check interpreter reload required")
+                return srv.ReloadInterpreterResponse(success=False)
+            if not res.reload_required:
+                rospy.loginfo("Interpreter reload not required")
+                return srv.ReloadInterpreterResponse(success=True)
+            else:
+                rospy.loginfo("Interpreter reload required")
+        rospy.loginfo("Reloading interpreter")
+        self._stop_worker_process()
+        self._start_worker_process()
+        if req.reload_program and self._current_program_path:
+            self._worker_load_program_srv(
+                srv.LoadProgramRequest(path=self._current_program_path)
+            )
+        else:
+            self._current_program_path = ""
+        return srv.ReloadInterpreterResponse(success=True)
+
+
+if __name__ == '__main__':
+    node = InterpreterNode()
+    node.start()
+    node.spin()
+    node.stop()

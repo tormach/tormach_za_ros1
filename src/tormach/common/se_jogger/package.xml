@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>se_jogger</name>
+  <version>0.0.1</version>
+  <description>Shuttle Express Jogger for TPPR</description>
+
+  <maintainer email="jakub.fiser@eryaf.com">Jakub Fišer</maintainer>
+
+  <license>GPL2</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <depend>rospy</depend>
+  <depend>python3-hidapi</depend>
+
+</package>

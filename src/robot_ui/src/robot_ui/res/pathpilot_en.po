@@ -1,0 +1,761 @@
+msgid "gcode_options_button_text"
+msgstr "G-code Options"
+
+msgid "gcode_options_button_tooltip"
+msgstr "<b>@@</b> allows selection of options for the G-code window to the left. (Same as right-clicking in the G-code window)<span color='#0012da'>\n    <b>Set Start Line</b>\n    <b>Show/Hide Line</b>\n    <b>Show/Hide G-code color high-lighting</b></span>"
+
+msgid "conv_edit_job_duplicate_button_tooltip"
+msgstr "<b>@@:</b> creates a duplicate of the selected <i>step</i> in the conversational list and places it one row below. If a <i>file</i> row is selected, the file and all its steps will be duplicated below.\n <span color='#16861f'>Note: The <i><b>duplicated icon</b></i> will appear next to the title of the duplicated step. Duplicating is handy when the same step is needed but with minor changes.</span> <img>1</img>"
+
+msgid "msg_cycle_start_text"
+msgstr "Cycle Start"
+
+msgid "msg_cycle_start_tooltip"
+msgstr "The Cycle Start button is used to start a program. While running a program, the LED in the upper right-hand corner of the button is illuminated. <span color='#16861f'><i>Note: The LED will flash during Feedhold and optional pauses.</i></span>"
+
+msgid "msg_reset_text"
+msgstr "Reset"
+
+msgid "msg_reset_tooltip"
+msgstr "Reset brings the machine <font color='#16861f'><b>out of an E-stop condition</b></font>, <font color='#16861f'><b>resets the robot program</b></font> and <font color='#16861f'><b>rewinds the TRPL program</b></font>.\n\nThe Reset text flashes when the machine is first powered on, or after an emergency stop. When flashing and after the machine has been powered on again, clicking <font color='#16861f'><b>Reset starts and verifies communication between the machine and the controller</b></font>."
+
+msgid "msg_single_block_text"
+msgstr "Execute Single Block"
+
+msgid "msg_single_block_tooltip"
+msgstr "<b>@@:</b> When active (LED - on), modifies the behavior of Cycle Start to executes <b><i>one line (or command)</i></b> of the robot program. Program execution is then paused, the Cycle Start LED will flash, prompting the user to execute the next (single) line. This feature may be turned on or off before running a program or during program execution. <span color='#16861f'><i>NOTE: Non-motion lines are ignored by single block mode: the interface will skip comment lines and non-motion commands.</i></span>"
+
+msgid "msg_optional_pause_text"
+msgstr "Optional Pause Execution"
+
+msgid "msg_optional_pause_tooltip"
+msgstr "<b>@@:</b> When active (LED - on), program execution will stop at an Optional Pause in the robot program. The machine stops at the Optional Pause line and the Cycle Start LED flashes. Cycle Start will resume program execution."
+
+msgid "msg_feedhold_text"
+msgstr "Feedhold"
+
+msgid "msg_feedhold_tooltip"
+msgstr "When active (LED - on), pauses machine motion, the Cycle Start LED will begin flashing. To turn Feedhold off, click Cycle Start. The Feedhold button works during program execution or during manual data input (MDI) moves. Feedhold has no effect when the machine is not moving."
+
+msgid "msg_stop_text"
+msgstr "Instant Stop"
+
+msgid "msg_stop_tooltip"
+msgstr "Stops all machine motion. If clicked while running a program or during an MDI move, the machine stops. Stop doesn’t change the current state of the machine's digital outputs."
+
+msgid "add_new_waypoint_from_current_position_text"
+msgstr "Create a new waypoint from the robot's current position"
+
+msgid "add_new_waypoint_from_current_position_tooltip"
+msgstr "Creates a new waypoint corresponding to the robot's current position.  The waypoint may be defined as either <b>global</b>, (accessible to all robot programs) or <b>program</b>, (accessible only to the current robot program).  Furthermore, the waypoint can be recorded as a pose type (affected by coordinate system offsets) or a joint type (unaffected by offsets)."
+
+msgid "conv_move_type_radio_text"
+msgstr "Move Type"
+
+msgid "conv_move_type_radio_tooltip"
+msgstr "Linear moves cause the robot to move along a straight line between waypoints.  Joint moves allow the robot to move more quickly but along an arbitrary path - the end effector will not travel a straight line.  Unless controlled path planning (e.g. for welding, glue deposition, etc.) is required, joint moves are usually faster/more efficient."
+
+msgid "conv_move_add_to_program_text"
+msgstr "Add Move to Selected Waypoint"
+
+msgid "conv_move_add_to_program_tooltip"
+msgstr "The Add Move to Selected Waypoint to Program button adds a move command to the currently loaded program.  The move command will cause the robot to move to the waypoint that was selected when the button was pressed.  The move will be either a Linear or Joint move (depending on the radio button selected on the Move tab of the conversational notebook) and will use the velocity and acceleration settings on that screen."
+
+msgid "conv_move_pose_waypoints_radio_text"
+msgstr "Pose Waypoints"
+
+msgid "conv_move_pose_waypoints_radio_tooltip"
+msgstr "Pose waypoints use the Cartesian position of the robot's end effector to define the waypoint.  The Cartesian position is defined by x, y, z position as well as the three Euler angles (think of pitch, roll, and yaw).   Pose waypoints are affected by work offsets.  If a \"pose\"-type waypoint is defined in one work offset system, and that offset is subsequently modified, or a different offset system is made active, the robot will move to a different physical position when it next moves to that waypoint.  A typical use for a program waypoint would be the pick position near the vise of a milling machine.  If the milling machine vise is repositioned, the machinist would need to adjust the (for example) G54 work offset on the mill as well as the work offset on the robot in order for the mill to machine the part correctly and the robot to pick the workpiece up correctly.  Using pose waypoints and work offsets means that the operator doesn't need to rewrite robot programs when a reference position (such as a vise) is moved - the operator simply needs to change the work offset.  For more information on pose and joint waypoint types, please see this video: www.youtube.com/xxxxx"
+
+msgid "conv_move_joint_waypoints_radio_text"
+msgstr "Joint Waypoints"
+
+msgid "conv_move_joint_waypoints_radio_tooltip"
+msgstr "Joint waypoints use the robot's joint angles to define the waypoint.  Waypoints of this type are not affected by work offset coordinate systems.  Changing work offset systems or work offset values will not change the behavior of the robot when moving between \"joint\" waypoints.  For users familiar with CNC machines, joint waypoints are analogous to G53 (machine coordinate) positions.  For more information on joint and pose waypoint types, please see Tormach's YouTube channel."
+
+msgid "conv_move_program_waypoints_radio_text"
+msgstr "Program Waypoints"
+
+msgid "conv_move_program_waypoints_radio_tooltip"
+msgstr "Program waypoints are defined only within a program and aren't available when a different program is loaded.  When this button is selected, the waypoint list shows all waypoints that have been defined in the currently loaded program.  Loading a different program will cause the list of program waypoints to change.  The list of program waypoints will  be empty when a new program is created until the user creates program waypoints for that new program.  For more information on waypoint types, please see www.youtube.com/xxxxx"
+
+msgid "conv_move_global_waypoints_radio_text"
+msgstr "Global Waypoints"
+
+msgid "conv_move_global_waypoints_radio_tooltip"
+msgstr "Global waypoints are defined system-wide, are available to all programs.  When this button is selected, the waypoint list shows all global waypoint.  For more information on waypoint types, please see Tormach's YouTube channel."
+
+msgid "uniform_velocity_slider_combo_text"
+msgstr "Limit maximum velocity"
+
+msgid "uniform_velocity_slider_combo_tooltip"
+msgstr "The Uniform Velocity Override slider changes the velocity of all robot motion (including jogging) by a specified percentage. The Max Vel 100% button restores the velocity setting to the maximum velocity allowed by jogging or by the robot program."
+
+msgid "feedrate_override_slider_combo_text"
+msgstr "Limit programmed velocity"
+
+msgid "feedrate_override_slider_combo_tooltip"
+msgstr "The Velocity Scale Override slider changes the programmed velocity of linear moves by a specified percentage.  The Vel Scale 100% button will restore the feed rate to 100% of the commanded velocity."
+
+msgid "jograte_slider_text"
+msgstr "Limit jogging velocity"
+
+msgid "jograte_slider_tooltip"
+msgstr "Jog speed is affected by both the Jog Speed slider and is further limited by the Maximum Velocity (in the Persistent Controls section) if the Maximum Velocity slider is set to a lower speed than the Jog Speed slider."
+
+msgid "jog_type_switch_text"
+msgstr "Switch jog type"
+
+msgid "jog_type_switch_tooltip"
+msgstr "Jog behavior is affected by the Cont/Incr button, and either occurs as a continuous move for as long as the jog button is held down, or as an incremental move whose distance is equal to the currently selected Step Size button. The Cont/Incr button switches between those two modes, and that button’s LED indicates whether the robot is in continuous or incremental mode.   *Note: *Clicking a Step Size button selects incremental mode if the current mode is continuous, and dragging the Jog Velocity slider selects continuous mode if the current mode is incremental."
+
+msgid "jog_step_size_0.100_text"
+msgstr "Set step size to 0.100"
+
+msgid "jog_step_size_0.100_tooltip"
+msgstr "Use this button to set the step size for incremental jogging to 0.100.\n\n<font color='#16861f'><b>Note</b></font>: Clicking a Step Size button selects incremental mode if the current mode is continuous, and dragging the Jog Velocity slider selects continuous mode if the current mode is incremental."
+
+msgid "jog_step_size_1.000_text"
+msgstr "Set step size to 1.000"
+
+msgid "jog_step_size_1.000_tooltip"
+msgstr "Use this button to set the step size for incremental jogging to 1.000.\n\n<font color='#16861f'><b>Note</b></font>: Clicking a Step Size button selects incremental mode if the current mode is continuous, and dragging the Jog Velocity slider selects continuous mode if the current mode is incremental."
+
+
+msgid "jog_step_size_10.00_text"
+msgstr "Set step size to 10.00"
+
+msgid "jog_step_size_10.00_tooltip"
+msgstr "Use this button to set the step size for incremental jogging to 10.00.\n\n<font color='#16861f'><b>Note</b></font>: Clicking a Step Size button selects incremental mode if the current mode is continuous, and dragging the Jog Velocity slider selects continuous mode if the current mode is incremental."
+
+
+msgid "jog_step_size_100.0_text"
+msgstr "Set step size to 100.0"
+
+msgid "jog_step_size_100.0_tooltip"
+msgstr "Use this button to set the step size for incremental jogging to 100.0.\n\n<font color='#16861f'><b>Note</b></font>: Clicking a Step Size button selects incremental mode if the current mode is continuous, and dragging the Jog Velocity slider selects continuous mode if the current mode is incremental."
+
+msgid "dro_zero_x_text"
+msgstr "Zero <font color='#16861f'><b>X</b></font> DRO"
+
+msgid "dro_zero_x_tooltip"
+msgstr "Click and hold the Zero X button to set the robot's current X position to zero in the currently active user frame.  If no user frame is active, this button generates an error."
+
+msgid "dro_zero_y_text"
+msgstr "Zero <font color='#16861f'><b>Y</b></font> DRO"
+
+msgid "dro_zero_y_tooltip"
+msgstr "Click and hold the Zero Y button to set the robot's current Y position to zero in the currently active user frame.  If no user frame is active, this button generates an error."
+
+msgid "dro_zero_z_text"
+msgstr "Zero <font color='#16861f'><b>Z</b></font> DRO"
+
+msgid "dro_zero_z_tooltip"
+msgstr "Click and hold the Zero Z button to set the robot's current Z position to zero in the currently active user frame.  If no user frame is active, this button generates an error."
+
+msgid "dro_zero_a_text"
+msgstr "Zero <font color='#16861f'><b>A</b></font> DRO"
+
+msgid "dro_zero_a_tooltip"
+msgstr "Click and hold the Zero A button to set the robot's current A position to zero in the currently active user frame.  If no user frame is active, this button generates an error."
+
+msgid "dro_zero_b_text"
+msgstr "Zero <font color='#16861f'><b>B</b></font> DRO"
+
+msgid "dro_zero_b_tooltip"
+msgstr "Click and hold the Zero B button to set the robot's current B position to zero in the currently active user frame.  If no user frame is active, this button generates an error."
+
+msgid "dro_zero_c_text"
+msgstr "Zero <font color='#16861f'><b>C</b></font> DRO"
+
+msgid "dro_zero_c_tooltip"
+msgstr "Click and hold the Zero C button to set the robot's current C position to zero in the currently active user frame.  If no user frame is active, this button generates an error."
+
+msgid "add_user_frame_text"
+msgstr "Create new user frame"
+
+msgid "add_user_frame_tooltip"
+msgstr "Select Add Frame to create a new user frame. In the window that displays, you can name the new frame.\n\n<font color='#16861f'><b>Note:</b></font> Creating a new frame doesn't automatically apply that frame. You must either select the frame in the User Frame drop-down menu on the “Position Status Readout” group of the persistent controls, or use the change_user_frame() command in a robot program."
+
+msgid "set_command_conversational_notebook_text"
+msgstr "Set digital output states"
+
+msgid "set_command_conversational_notebook_tooltip"
+msgstr "The <font color='#16861f'><b>Set tab</b></font> allows you to add commands that change the state of digital outputs to the robot program. You can rename the digital outputs on the Status tab of the main notebook, which could make robot programs easier to read or understand.\n\nFor example, you could rename digital output 1 to <i>gripper_one</i>."
+
+msgid "subprogram_conversational_notebook_text"
+msgstr "Create sub programs"
+
+msgid "subprogram_conversatisonal_notebook_tooltip"
+msgstr "Sub programs allow you to organize robot programs into small, logical blocks of code that may be called one or more times during the main program. The <font color='#16861f'><b>Sub Program tab</b></font> allows you to create and call sub programs conversationally (without writing Python robot code <i>“by hand”</i>)."
+
+msgid "add_waypoint_popup_close_singularity_text"
+msgstr "Close to singularity"
+
+msgid "add_waypoint_popup_close_singularity_tooltip"
+msgstr "Current cartesian pose is close to singularity. Consider using joint goal instead."
+
+msgid "run_subprogram_text"
+msgstr "Run subprogram"
+
+msgid "run_subprogram_tooltip"
+msgstr "Click to run a subprogram from your loaded program. Subprograms will only appear if they require no parameters or all parameters have a default value. This control can help you quickly execute small, logical blocks of robot actions."
+
+
+msgid "msg_frame_user_or_tool_toggle_text"
+msgstr "Jogging with respect to user or tool frame coordinates"
+
+msgid "msg_frame_user_or_tool_toggle_tooltip"
+msgstr "When jogging the robot via the cartesian jog buttons on the Jog tab or by using keyboard shortcuts, this button will determine whether the cartesian jog directions align with the active user frame or tool frame.  If no user or tool frame is active, all cartesian jogging motions will be relative to the base frame of the robot and this button has no effect."
+
+msgid "msg_jog_ignore_probe_text"
+msgstr "Ignore probe input while jogging"
+
+msgid "msg_jog_ignore_probe_tooltip"
+msgstr "Digital input 1 is reserved for a touch probe.  By default the robot will not move when the touch probe signal is present in order to prevent users from damaging the probe.  If the robot is jogged and the probe input changes state, the robot will stop its motion.  To jog away from the object that triggered the probe this button can be used to allow motion with the probe in a triggered state.  Touch probes can be active high or active low, make sure to set the setting on the settings tab appropriately before using a touch probe."
+
+msgid "msg_exit_text"
+msgstr "Exit"
+
+msgid "msg_exit_tooltip"
+msgstr "The exit button will close the PathPilot user interface.  Make sure to E-stop or turn off the robot's power supply before exiting the user interface."
+
+msgid "msg_main_tab_text"
+msgstr "Main Tab"
+
+msgid "msg_main_tab_tooltip"
+msgstr "Monitor runing code and robot movements."
+
+msgid "msg_file_tab_text"
+msgstr "File Tab"
+
+msgid "msg_file_tab_tooltip"
+msgstr "View and manage files, as well as sign in and connect to PathPilot Hub for remote file transfer."
+
+msgid "msg_frames_tab_text"
+msgstr "Frames Tab"
+
+msgid "msg_frames_tab_tooltip"
+msgstr "Manage User/Tool/Machine frames."
+
+msgid "msg_settings_tab_text"
+msgstr "Settings Tab"
+
+msgid "msg_setting_tab_tooltip"
+msgstr "Manage Pathpilot software settings."
+
+msgid "msg_conversation_tab_text"
+msgstr "Conversational Tab"
+
+msgid "msg_conversation_tab_tooltip"
+msgstr "Conversational program editor."
+
+msgid "msg_jog_tab_text"
+msgstr "Jog Tab"
+
+msgid "msg_jog_tab_tooltip"
+msgstr "Jog tab contains all jogging controls (cartesian jogging, joint jogging, interactive marker jogging)."
+
+msgid "msg_status_tab_text"
+msgstr "Status tab"
+
+msgid "msg_status_tab_tooltip"
+msgstr "View program error status and manage digital input/output pins."
+
+msgid "msg_back_text"
+msgstr "Back"
+
+msgid "msg_back_tooltip"
+msgstr "From current directory move back/up to parent directory."
+
+msgid "msg_home_text"
+msgstr "Home"
+
+msgid "msg_home_tooltip"
+msgstr "Move to root directory."
+
+msgid "msg_load_program_text"
+msgstr "Load Program"
+
+msgid "msg_load_program_tooltip"
+msgstr "Load selected program."
+
+msgid "msg_usb_or_hub_text"
+msgstr "USB/Hub toggle"
+
+msgid "msg_usb_or_hub_tooltip"
+msgstr "Toggle external file source, either USB or PathPilot Hub. Users must be logged into PathPilot Hub to see files."
+
+msgid "msg_hub_home_text"
+msgstr "Hub Home"
+
+msgid "msg_hub_home_tooltip"
+msgstr "Move to root directory of Hub."
+
+msgid "msg_reload_text"
+msgstr "Reload"
+
+msgid "msg_reload_tooltip"
+msgstr "Reloads current directory to fetch any changes from Hub."
+
+msgid "msg_log_out_text"
+msgstr "Log Out"
+
+msgid "msg_log_out_tooltip"
+msgstr "Log out from PathPilot Hub."
+
+msgid "msg_copy_external_to_pp_text"
+msgstr "Copy"
+
+msgid "msg_copy_external_to_pp_tooltip"
+msgstr "Copy file from Hub or USB to PathPilot."
+
+msgid "msg_copy_pp_to_external_text"
+msgstr "Copy"
+
+msgid "msg_copy_pp_to_external_tooltip"
+msgstr "Copy file from PathPilot to Hub or USB."
+
+msgid "msg_create_new_folder_text"
+msgstr "New"
+
+msgid "msg_create_new_folder_tooltip"
+msgstr "Create new folder"
+
+msgid "msg_raname_file_text"
+msgstr "Rename"
+
+msgid "msg_raname_file_tooltip"
+msgstr "Rename file"
+
+msgid "msg_delete_file_text"
+msgstr "Delete"
+
+msgid "msg_delete_file_tooltip"
+msgstr "Delete file"
+
+msgid "msg_search_for_file_text"
+msgstr "Search"
+
+msgid "msg_search_for_file_tooltip"
+msgstr "Search for file"
+
+msgid "msg_conv_edit_text"
+msgstr "Conv.Edit"
+
+msgid "msg_conv_edit_tooltip"
+msgstr "Edit selected program file in conversational editor"
+
+msgid "msg_edit_program_text"
+msgstr "Edit Program"
+
+msgid "msg_conv_edit_tooltip"
+msgstr "Edit selected program file in code editor"
+
+msgid "msg_remove_frame_text"
+msgstr "Remove Frame"
+
+msgid "msg_remove_frame_tooltip"
+msgstr "Deletes selected frame"
+
+msgid "msg_update_frame_from_current_position_text"
+msgstr "Update Frame From Current Position"
+
+msgid "msg_update_frame_from_current_position_tooltip"
+msgstr "This will update the frame based on the current position of the robot."
+
+msgid "msg_update_frame_using_wizard_text"
+msgstr "Update Frame Using Wizard"
+
+msgid "msg_update_frame_using_wizard_tooltip"
+msgstr "This will enable you to update the frame using the Wizard. The Wizard guides a user through 3 and 4-methods that can be used to configure a frame.  For more information (and a video) click on the "discuss online" icon on this tooltip."
+
+msgid "msg_user_frames_tab_text"
+msgstr "User Frames Tab"
+
+msgid "msg_user_frames_tab_tooltip"
+msgstr "Manage User frames."
+
+msgid "msg_tool_frames_tab_text"
+msgstr "Tool Frames Tab"
+
+msgid "msg_tool_frames_tab_tooltip"
+msgstr "Manage Tool frames."
+
+msgid "msg_machine_frames_tab_text"
+msgstr "Machine Frames Tab"
+
+msgid "msg_machine_frames_tab_tooltip"
+msgstr "Manage Machine frames."
+
+msgid "msg_add_pp_cnc_instance_text"
+msgstr "Add"
+
+msgid "msg_add_pp_cnc_instance_tooltip"
+msgstr "Add a PathPilot CNC machine instance.  If the Tormach robot is on the same local area network as a PathPilot/Tormach CNC machine, that machine will show up on the list of available instances.  Select the desired instance and click "Add".  You will be able to name this instance.  Multiple PathPilot machines may be selected.  For more information, see https://tormach.atlassian.net/wiki/spaces/ROBO/pages/1930690719/Tormach+Robot+Programming+Language#TormachRobotProgrammingLanguage-PathPilotRemote"
+
+msgid "msg_remove_pp_cnc_instance_text"
+msgstr "Remove"
+
+msgid "msg_remove_pp_cnc_instance_tooltip"
+msgstr "Remove a PathPilot CNC machine instance."
+
+msgid "msg_zero_all_joints_text"
+msgstr "Zero All Joints"
+
+msgid "msg_zero_all_joints_tooltip"
+msgstr "This button is used for mastering the robot and should not be used unless the robot needs to be remastered.  ZA6 robots are mastered at the factory and this button should not be used in normal robot operation."
+
+msgid "msg_power_off_text"
+msgstr "Power Off"
+
+msgid "msg_power_off_tooltip"
+msgstr "Removes power from drives and applies brakes to joints.  "
+
+msgid "msg_enable_preview_text"
+msgstr "Enable Preview"
+
+msgid "msg_enable_preview_tooltip"
+msgstr "Toggle the robot preview off and on. "
+
+msgid "msg_create_from_default_text"
+msgstr "Create From Default "
+
+msgid "msg_create_from_default_tooltip"
+msgstr "Creates a new RViz Config file with default settings in the user directory for preview customization."
+
+msgid "msg_edit_in_rviz_text"
+msgstr "Edit In Rviz"
+
+msgid "msg_edit_in_rviz_tooltip"
+msgstr "Opens the RViz Preview config file in RViz for configuration by the user."
+
+msgid "msg_rviz_config_name_input_text"
+msgstr "Rviz Config Name Input"
+
+msgid "msg_rviz_config_name_input_tooltip"
+msgstr "File path of the custom rviz config file, leave empty to use the default (no customization)."
+
+msgid "msg_code_editor_name_inpute_text"
+msgstr "Code Editor Name Input"
+
+msgid "msg_code_editor_name_inpute_tooltip"
+msgstr "Override the default code editor when "Edit Program" is selected. Editor must already be installed on controller."
+
+msgid "msg_probe_setting_toggle_text"
+msgstr "Probe Setting Active/Passive toggle"
+
+msgid "msg_probe_setting_toggle_tooltip"
+msgstr "Digital input #1 is reserved for a touch probe (for more information on probing commands, see documentation here: https://tormach.atlassian.net/wiki/spaces/ROBO/pages/1930690719/Tormach+Robot+Programming+Language#TormachRobotProgrammingLanguage-Probing).  Probes may either be "active" - probe is normally outputing 24V, grounded when triggered, or "passive" - probe is normally outputting 0 volts, 24V when triggered.  This setting allows the user to choose which type of probe is connected to input 1.  If no probe is connected, leave this setting to "active""
+
+msgid "msg_enable_main_loop_warning_text"
+msgstr "Enable Main Loop Warning"
+
+msgid "msg_enable_main_loop_warning_tooltip"
+msgstr "Toggles the warning when you try to run a program that will run infinitely or until the program is interrupted."
+
+msgid "msg_reload_text"
+msgstr "Reload"
+
+msgid "msg_reload_tooltip"
+msgstr "Force the robot program interpretter to reload. This can be useful if dependencies are not updating automatically for your actively loaded robot program."
+
+msgid "msg_tools_hal_scope_text"
+msgstr "HAL Scope "
+
+msgid "msg_tools_hal_scope_tooltip"
+msgstr "HAL Scope is a digital software oscilloscope that can monitor (over time) any signals or pins available in the robot's hardware abstraction layer."
+
+msgid "msg_tools_hal_meter_text"
+msgstr "HAL Meter"
+
+msgid "msg_tools_hal_meter_tooltip"
+msgstr "HAL Meter is a digital software multimeter that can inspect the current value of any pin or signal available in the robot's hardware abstraction layer."
+
+msgid "msg_tools_rviz_text"
+msgstr "Rviz"
+
+msgid "msg_tools_rviz_tooltip"
+msgstr ""
+
+msgid "msg_tools_rqt_gui_text"
+msgstr "RQT GUI"
+
+msgid "msg_tools_rqt_gui_tooltip"
+msgstr ""
+
+msgid "msg_new_waypoint_from_current_position_text"
+msgstr "New Waypoint From Current Position"
+
+msgid "msg_new_waypoint_from_current_position_tooltip"
+msgstr "Creates a new waypoint based on the current position of the robot.  User will have the choice of creating this waypoint as a "joints" type (recording of the current joint angles) or "pose" type (recording of the robot's tool control point cartesian positions.  User also can create the waypoint as "global" (accessible all the time) or "program" (defined within the currently loaded robot program)."
+
+msgid "msg_hold_to_move_to_marker_text"
+msgstr "Hold To Move To Marker "
+
+msgid "msg_hold_to_move_to_marker_tooltip"
+msgstr "The "marker" is the green sphere attached to the tool control point of the orange (target pose) robot on the Jog screen.  It represents the target cartesian pose for the robot, in both XYZ space and ABC rotations.  The marker can be moved by clicking and dragging with the mouse, or by entering XYZ/ABC values on the Marker Ops portion of the Jog screen.  When you click and hold this button the physical robot will move to the marker's target position."
+
+msgid "msg_cartesian_jog_marker_ops"
+msgstr "Cartesian Jog Marker OPS"
+
+msgid "msg_cartesian_jog_marker_ops_tooltip"
+msgstr "This button toggles between "Cartesian" and "Marker Operations" jogging controls.  Cartesian controls allow the user to click X, Y, Z, A, B, or C buttons to jog the robot in X, Y, or Z directions or A, B, or C rotations.  Jogging will be either incremental (at the currently selected step size) or continuous, depending on the Jog Step/Cont button setting.  The Marker Operations controls allow the user to position the marker (green sphere at the tool control point of the orange represenation of the robot's target pose).  The user is offered convenience buttons (Top, Back, Left, etc) that align the marker with the current user frame, and with digital read outs that accept target XYZABC positions.  When the marker is positioned to the user's satisfaction, the Hold to Move to Marker button can be used to move the physical robot to the target pose represented by the orange robot image on the Jog screen."
+
+msgid "msg_left_text"
+msgstr "Left"
+
+msgid "msg_left_tooltip"
+msgstr "The Left marker operation button will align the tool control point's Z axis with the Y axis of the current user frame.  With no tool or user frame active, the Left button moves the robot's tool flange to the "left of the marker" as observed by a user facing the robot."
+
+msgid "msg_top_text"
+msgstr "Top"
+
+msgid "msg_top_tooltip"
+msgstr "The Top marker operation button will align the tool contol point's Z axis with the Z axis of the current user frame.  With no tool frame or user frame active, this button will move the tool flange "on top of" the marker.  "
+
+msgid "msg_bottom_text"
+msgstr "Bottom"
+
+msgid "msg_bottom_tooltip"
+msgstr "The Bottom marker operation button will align the tool contol point's Z axis with the Z axis of the current user frame.  With no tool frame or user frame active, this button will move the tool flange "under" the marker, facing up.  "
+
+msgid "msg_right_text"
+msgstr "Right"
+
+msgid "msg_right_tooltip"
+msgstr "The Right marker operation button will align the tool control point's Z axis with the Y axis of the current user frame.  With no tool or user frame active, the Right button moves the robot's tool flange to the "right of the marker" as observed by a user facing the robot."
+
+msgid "msg_front_text"
+msgstr "Front"
+
+msgid "msg_front_tooltip"
+msgstr "The Front marker operation button aligns the tool control point's Z axis with the X axis of the current user frame.  With no tool or user frame active, the Front button moves the robots tool flange "in front of" the marker as observed by a user facing the robot."
+
+msgid "msg_back_text"
+msgstr "Back"
+
+msgid "msg_back_tooltip"
+msgstr "The Back marker operation button aligns the tool control point's Z axis with the X axis of the current user frame.  With no tool or user frame active, the Back button moves the robots tool flange "behind" or to the "back" of the marker as observed by a user facing the robot."
+
+msgid "msg_basic_advanced_text"
+msgstr "Toggle Marker Operations"
+
+msgid "msg_basic_advanced_tooltip"
+msgstr "The Basic/Advance marker operations button toggles between the basic (Left/Right/Front/Back/Top/Bottom) buttons and an advanced page that allows the user to move the marker to arbitrarily align tool frame and user frame axes."
+
+msgid "msg_reset_text"
+msgstr "Reset"
+
+msgid "msg_reset_tooltip"
+msgstr "Reset marker operations button will reset the marker to the last position it was in prior to using any other marker operation button."
+
+msgid "msg_current_text"
+msgstr "Current"
+
+msgid "msg_current_tooltip"
+msgstr "The Current marker operation button will align the marker with the physical robot's current tool control point."
+
+msgid "msg_pose_reachable_text"
+msgstr "Pose Reachable"
+
+msgid "msg_pose_reachable_tooltip"
+msgstr "Indicates whether the motion planner can successful plan the robot motion to the target jog position. Green: Successfully planned. Yellow: Cannot plan path."
+
+msgid "msg_clear_messages_text"
+msgstr "Clear Messages"
+
+msgid "msg_clear_messages_tooltip"
+msgstr "Removes all status messages from the status table."
+
+msgid "msg_log_data_text"
+msgstr "Log Data"
+
+msgid "msg_log_data_tooltip"
+msgstr "Create a .zip of system information for debugging and technical support.  After creation this zip file can be found in the home directory on the file tab."
+
+msgid "msg_log_level_text"
+msgstr "Log Level"
+
+msgid "msg_log_level_tooltip"
+msgstr "Filter status messages to the specified message severity."
+
+msgid "msg_update_waypoint_from_current_position_text"
+msgstr "Update Waypoint From Current Position"
+
+msgid "msg_update_waypoint_from_current_position_tooltip"
+msgstr "This will update the frame based on the current position of the robot."
+
+msgid "msg_remove_waypoint_text"
+msgstr "Remove Waypoint"
+
+msgid "msg_remove_waypoint_tooltip"
+msgstr "Deletes selected waypoint."
+
+msgid "msg_go_to_waypoint_text"
+msgstr "Go To Waypoint"
+
+msgid "msg_go_to_waypoint_tooltip"
+msgstr "Move the robot to the selected waypoint."
+
+msgid "msg_add_change_frame_to_active_frame_to_program_text"
+msgstr "Add Change Frame To Active Frame To Program"
+
+msgid "msg_add_change_frame_to_active_frame_to_program_tooltip"
+msgstr "Add changing the user frame to your current active user frame as an action in the robot program."
+
+msgid "msg_add_move_to_selected_waypoint_to_program_text"
+msgstr "Add Move To Selected waypoint To Program"
+
+msgid "msg_add_move_to_selected_waypoint_to_program_tooltip"
+msgstr "Add a move to the selected waypoint as an action in the robot program."
+
+msgid "msg_add_to_program_text"
+msgstr "Add To Program"
+
+msgid "msg_add_to_program_tooltip"
+msgstr "Adds the instruction to the program."
+
+msgid "msg_move_tab_text"
+msgstr "Move Tab"
+
+msgid "msg_move_tab_tooltip"
+msgstr "Add moves of various types (linear, joint, free) to waypoints to a robot program.  Displays a lists of both global and program waypoints."
+
+msgid "msg_wait_tab_text"
+msgstr "Wait Tab"
+
+msgid "msg_wait_tab_tooltip"
+msgstr "Adds commands to pause robot motion to a robot program."
+
+msgid "msg_notify_tab_text"
+msgstr "Notify Tab"
+
+msgid "msg_notify_tab_tooltip"
+msgstr "Adds commands to create a user notification popup to a robot program"
+
+msgid "msg_pathpilot_tab_text"
+msgstr "PathPilot Tab"
+
+msgid "msg_pathpilot_tab_tooltip"
+msgstr "Adds commands to control a connected CNC machine to a robot program"
+
+msgid "control_structure_tab_text"
+msgstr "Control Structure Tab"
+
+msgid "control_structure_tab_tooltip"
+msgstr "Offers options to add if/then/else or loop commands to a robot program"
+
+msgid "msg_comment_tab_text"
+msgstr "Comment Tab"
+
+msgid "msg_comment_tab_tooltip"
+msgstr "Adds comments to a robot program"
+
+msgid "msg_assignment_tab_text"
+msgstr "Assignment Tab"
+
+msgid "msg_assignment_tab_tooltip"
+msgstr "Adds commands that assign values to variables to a robot program"
+
+msgid "msg_if_then_else_tab_text"
+msgstr "If/Then/Else Tab"
+
+msgid "msg_if_then_else_tab_tooltip"
+msgstr "Adds if/then/else clauses to a robot program"
+
+msgid "msg_loop_tab_text"
+msgstr "Loop Tab"
+
+msgid "msg_loop_tab_tooltip"
+msgstr "Adds loops to a robot program."
+
+msgid "msg_subprogram_tab_text"
+msgstr "Sub Program Tab"
+
+msgid "msg_subprogram_tab_tooltip"
+msgstr "Creates or calls subprograms in the currently loaded robot program."
+
+msgid "msg_save_text"
+msgstr "Save"
+
+msgid "msg_save_tooltip"
+msgstr ""
+
+msgid "msg_save_as_text"
+msgstr "Save As"
+
+msgid "msg_save_as_tooltip"
+msgstr ""
+
+msgid "msg_new_program_text"
+msgstr "New Program"
+
+msgid "msg_new_program_tooltip"
+msgstr ""
+
+msgid "msg_undo_text"
+msgstr "Undo"
+
+msgid "msg_undo_tooltip"
+msgstr ""
+
+msgid "msg_redo_text"
+msgstr "Redo"
+
+msgid "msg_redo_tooltip"
+msgstr ""
+
+msgid "msg_copy_text"
+msgstr "Copy"
+
+msgid "msg_copy_tooltip"
+msgstr ""
+
+msgid "msg_cut_text"
+msgstr "Cut"
+
+msgid "msg_cut_tooltip"
+msgstr ""
+
+msgid "msg_paste_text"
+msgstr "Paste"
+
+msgid "msg_paste_tooltip"
+msgstr ""
+
+msgid "msg_move_up_text"
+msgstr "Move Up"
+
+msgid "msg_move_up_tooltip"
+msgstr ""
+
+msgid "msg_move_down_text"
+msgstr "Move Down"
+
+msgid "msg_move_down_tooltip"
+msgstr ""
+
+msgid "msg_toggle_active_text"
+msgstr "Toggle Active"
+
+msgid "msg_toggle_active_tooltip"
+msgstr ""
+
+msgid "msg_delete_text"
+msgstr "Delete"
+
+msgid "msg_delete_tooltip"
+msgstr ""
+
+msgid "msg_toggle_global_waypoints_text"
+msgstr "Toggle Global Waypoints"
+
+msgid "msg_toggle_global_waypoints_tooltip"
+msgstr "Hide or show global waypoints in the robot preview."
+
+msgid "msg_toggle_program_waypoints_text"
+msgstr "Toggle Program Waypoints"
+
+msgid "msg_toggle_program_waypoints_tooltip"
+msgstr "Hide or show program waypoints from your loaded program in the robot preview."

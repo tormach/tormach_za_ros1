@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<launch>
+  <!-- This .launch file starts the Machinekit ROS log bridge -->
+
+  <!-- Launcher args -->
+  <arg name="debug" default="false"/>
+
+  <!-- Launch Machinekit ROS log bridge -->
+  <node name="machinekit_ros_log_bridge" pkg="ros_machinetalk" type="machinekit_ros_log_bridge" required="true">
+    <param name="debug" value="$(arg debug)"/>
+  </node>
+</launch>

@@ -1,0 +1,102 @@
+#!/usr/bin/env python
+import time
+
+import rospy
+from geometry_msgs.msg import Point
+
+from robot_benchmark import (
+    IkBenchmark,
+    PclPublisher,
+    PoseStore,
+)
+from robot_benchmark.generators import (
+    BoxPoseGenerator,
+    RandomPoseGenerator,
+    SpherePoseGenerator,
+    Generators,
+)
+
+
+class IkBenchmarkNode:
+    NODE_NAME = 'ik_benchmark_node'
+
+    def __init__(self):
+        rospy.init_node(self.NODE_NAME)
+
+    @staticmethod
+    def start():
+        group_name = 'manipulator'
+        tool_frame = 'tool0'
+        base_frame = 'world'
+        generator = Generators.SPHERE
+        generate = True
+        store_poses = False
+
+        ik_benchmark = IkBenchmark(
+            group_name=group_name,
+            tool_frame=tool_frame,
+        )
+        pcl_publisher = PclPublisher(base_frame=base_frame)
+        store = PoseStore()
+
+        if generate:
+            rospy.loginfo("Generating test poses")
+
+            if generator == Generators.BOX:
+                pose_generator = BoxPoseGenerator(base_frame=base_frame)
+                start_point = Point(x=-1, y=-1, z=0.0)
+                end_point = Point(x=1, y=1, z=1.0)
+                step_size = 0.1
+                poses = pose_generator.generate_poses(
+                    start_point, end_point, step_size
+                )
+            elif generator == Generators.SPHERE:
+                pose_generator = SpherePoseGenerator(base_frame=base_frame)
+                center_point = Point(x=0, y=0, z=0.5)
+                radius = 0.7
+                step_size = 0.05
+                poses = pose_generator.generate_poses(
+                    center_point, radius, step_size
+                )
+            elif generator == Generators.RANDOM:
+                pose_generator = RandomPoseGenerator(
+                    group_name=group_name, tool_frame=tool_frame
+                )
+
+                poses = pose_generator.generate_poses(5000)
+            else:
+                raise RuntimeError('Unknown Generator')
+
+            if store_poses:
+                store.dump(poses)
+
+            pose_generator.shutdown()
+        else:
+            rospy.loginfo("Loading test poses")
+            poses = store.load()
+
+        rospy.loginfo("Computing IK")
+        start_time = time.time()
+        results = ik_benchmark.run(poses)
+        total = len(results)
+        successful = sum(r[1] for r in results)
+        total_time = time.time() - start_time
+        average_time = total_time / total * 1000
+
+        rate = successful / total * 100
+
+        print(
+            f"Total requests {total} successful {successful} rate {rate}%\n"
+            f"Total time {total_time:.3f}s average time {average_time:.3f}ms"
+        )
+        pcl_publisher.publish(results, publish_succeeded=False)
+
+        rospy.sleep(0.5)  # wait for results to be published
+
+        ik_benchmark.shutdown()
+        pcl_publisher.shutdown()
+
+
+if __name__ == '__main__':
+    node = IkBenchmarkNode()
+    node.start()

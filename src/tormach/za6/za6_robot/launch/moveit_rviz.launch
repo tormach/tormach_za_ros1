@@ -1,0 +1,20 @@
+<launch>
+
+  <!-- Override settings in
+       ../../za6_moveit_config/launch/moveit_rviz.launch -->
+
+  <arg name="debug" default="false" />
+  <arg name="config" default="false" />
+  <arg name="mastering" default="false" />
+
+  <include
+      file="$(find za6_moveit_config)/launch/moveit_rviz.launch"
+      pass_all_args="true"
+      />
+
+  <!-- Load local custom settings -->
+  <include file="$(find za6_robot)/launch/overrides.launch">
+    <arg name="mastering" value="$(arg mastering)"/>
+  </include>
+
+</launch>

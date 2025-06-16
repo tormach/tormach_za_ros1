@@ -1,0 +1,14 @@
+#!/usr/bin/env python
+
+import argparse
+from hal_402_device_mgr.hal_402_mgr import Hal402Mgr
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--name', default='hal_402_mgr', help='Component name')
+    parser.add_argument('--no-sim', action='store_true', help='Simulation mode')
+    args = parser.parse_args()
+
+    hal_402_drives_mgr = Hal402Mgr(compname=args.name, sim=not args.no_sim)
+    hal_402_drives_mgr.init()
+    hal_402_drives_mgr.run()

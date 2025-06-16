@@ -1,0 +1,19 @@
+#                                                        -*-conf-*-
+# From this directory:
+# astyle --options=.astylerc -r "src/*.cpp"
+
+# Use Google style braces: this is the recommendation by ROS
+style=google
+
+# 2-space indent
+indent=spaces=2
+
+# Wrap code at 80 chars
+max-code-length=80
+
+# Force LF after file endings
+lineend=linux
+
+# Don't format these sub-repos
+exclude=ros-rviz
+exclude=ros_control_boilerplate

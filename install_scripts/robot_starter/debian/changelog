@@ -1,0 +1,62 @@
+tormachpathpilotrobotstarter (0.1.8) unstable; urgency=medium
+
+  * Remove flag from 'launch-pathpilot-launcher' for requesting simulated hardware mode
+  * Add flag to 'launch-pathpilot-launcher' for requesting to signal the failure to start Launcher
+  * Do not show the red triangle failure to start Launcher report as default
+
+ -- Jakub Fišer <jakub.fiser@eryaf.com>  Tue, 3 Jan 2023 01:00:00 +0200
+
+tormachpathpilotrobotstarter (0.1.7) unstable; urgency=medium
+
+  * Add flag to 'launch-pathpilot-launcher' for requesting Secret Service
+
+ -- Jakub Fišer <jakub.fiser@eryaf.com>  Wed, 9 Mar 2022 20:00:00 +0200
+
+tormachpathpilotrobotstarter (0.1.6) unstable; urgency=medium
+
+  * Add explicit sorting of available Docker images by publication date
+
+ -- Jakub Fišer <jakub.fiser@eryaf.com>  Thu, 10 Feb 2022 00:50:00 +0200
+
+tormachpathpilotrobotstarter (0.1.5) unstable; urgency=medium
+
+  * Make the launcher proces aware of possibility of multiple release channels
+  * Add better logging to the 'launch-pathpilot-launcher' executable
+  * Remove the fallback to old 'tormach/ros_public' images
+
+ -- Jakub Fišer <jakub.fiser@eryaf.com>  Wed, 31 Jan 2022 06:00:00 +0200
+
+tormachpathpilotrobotstarter (0.1.4) unstable; urgency=medium
+
+  * Change the mount type propagation of the USB (and other) media devices
+  * Propagate only the user specific path, not the whole '/media' mount-point
+
+ -- Jakub Fišer <jakub.fiser@eryaf.com>  Wed, 29 Dec 2021 16:00:00 +0200
+
+tormachpathpilotrobotstarter (0.1.3) unstable; urgency=medium
+
+  * Modify the packaging for PathPilot 3 OS based on Linux Mint Uma
+  * Make the Desktop file trusted
+
+ -- Jakub Fišer <jakub.fiser@eryaf.com>  Tue, 7 Dec 2021 15:00:00 +0200
+
+tormachpathpilotrobotstarter (0.1.2) unstable; urgency=medium
+
+  * Raise the wait time for starter_splash to report error
+
+ -- Jakub Fišer <jakub.fiser@eryaf.com>  Wed, 20 Oct 2021 01:00:00 +0200
+
+tormachpathpilotrobotstarter (0.1.1) unstable; urgency=medium
+
+  * Replace '/bin/env' path in shebang with '/usr/bin/env' one
+  * Change default image reference ro 'docker.pathpilot.com/ros_public'
+  * Add fallback image reference to 'tormach/ros_public'
+  * Add 'DOCKER_REGISTRY' environment variable
+
+ -- Jakub Fišer <jakub.fiser@eryaf.com>  Sun, 12 Sep 2021 15:00:00 +0200
+
+tormachpathpilotrobotstarter (0.1.0) unstable; urgency=medium
+
+  * Initial debianization of 'pathpilot-robot-launcher' suite of tools
+
+ -- Jakub Fišer <jakub.fiser@eryaf.com>  Tue, 15 Jun 2021 20:00:00 +0200

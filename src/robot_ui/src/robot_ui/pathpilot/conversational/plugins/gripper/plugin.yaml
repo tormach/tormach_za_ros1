@@ -1,0 +1,6 @@
+name: gripper
+title: Gripper
+description: Opens or closes the robots gripper
+type: conversational
+enabled: True
+priority: 10

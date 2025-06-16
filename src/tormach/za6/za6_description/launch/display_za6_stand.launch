@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<launch>
+  <include file="$(find za6_description)/launch/display_za6.launch">
+    <arg name="stand" value="prototype"/>
+    <arg name="rvizconfig" value="$(find za6_description)/rviz/za6_stand.rviz" />
+  </include>
+</launch>

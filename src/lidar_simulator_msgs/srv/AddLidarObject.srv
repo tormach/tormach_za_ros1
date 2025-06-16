@@ -1,0 +1,8 @@
+# Request
+geometry_msgs/Pose pose
+float64 size_x
+float64 size_y
+---
+# Response
+bool success
+string message

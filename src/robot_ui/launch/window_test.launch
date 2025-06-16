@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<launch>
+
+  <node name="window_test" pkg="robot_ui" type="window_test" args="" output="screen" required="true"/>
+
+</launch>

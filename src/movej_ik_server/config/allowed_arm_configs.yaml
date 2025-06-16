@@ -1,0 +1,12 @@
+# specify at least one of:
+# NUT NDT NUB NDB FUT FDT FUB FDB
+# if empty, all configurations will be allowed
+allowed_arm_configs:
+  - NUT
+  - FUT
+  - NUB
+  - FUB
+  - NDT
+  - FDT
+  - NDB
+  - FDB

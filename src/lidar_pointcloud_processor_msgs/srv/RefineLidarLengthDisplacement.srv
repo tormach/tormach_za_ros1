@@ -1,0 +1,16 @@
+# Request
+float32 min_z
+float32 max_z
+
+float32 object_length
+float32 search_direction
+geometry_msgs/Pose initial_object_pose
+float32 cluster_eps
+
+bool enable_plotting_data
+bool save_figure_to_bitmap_headless
+bool purge_after_processing
+---
+# Response
+geometry_msgs/Pose refined_object_pose
+bool success

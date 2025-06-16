@@ -1,0 +1,117 @@
+#!/usr/bin/env python3
+import rospy
+from std_srvs.srv import SetBool
+from std_msgs.msg import Bool
+import hal
+
+from redis_store import ConfigClient
+
+from hal_plumber import (
+    HALHwInterfacePlumber,
+    HALIoPlumberSim,
+    HALIoPlumberEtherCAT,
+)
+
+
+class DryRunSwitcher:
+    DRY_RUN_PARAM = 'user_config/dry_run_mode'
+
+    def __init__(self):
+        self.hw_prefix = ""
+        self.dry_run_prefix = ""
+        self._io_plumbers = {}
+        self._hw_interface_plumber = None
+        self._dry_run_mode = False
+        self._config = None
+        self._comp = None
+        self._hal_pin = None
+
+        self._init_ros()
+        self._init_hal()
+        self._init_plumbers()
+        self._set_mode_initial()
+
+    def _set_mode_initial(self, _=None):
+        dry_run = self._config.get_param(self.DRY_RUN_PARAM)
+        self.set_dry_run_mode(dry_run)
+
+    def _init_ros(self):
+        rospy.init_node('dry_run_switcher')
+        rospy.loginfo("Starting dry run switcher")
+        self._config = ConfigClient(subscribe=True)
+        self._config.on_update_received.append(self._on_config_update_received)
+
+    def _init_hal(self):
+        self._comp = hal.component("dry_run_switcher")
+        self._hal_pin = self._comp.newpin(
+            "dry_run_mode", hal.HAL_BIT, hal.HAL_IO
+        )
+        self._comp.ready()
+
+    def _init_plumbers(self):
+        sim_mode = rospy.get_param('/hal_hardware/sim_mode', True)
+        if not sim_mode:
+            drive_type = rospy.get_param('/hal_mgr/drive_type')
+            hw_hp = HALIoPlumberEtherCAT(prefix='hw_', drive_type=drive_type)
+        else:
+            hw_hp = HALIoPlumberSim(prefix='sm_', create_rcomp=True)
+        hw_hp.reset_douts = True
+
+        dry_run_hp = HALIoPlumberSim(prefix='dr_', create_rcomp=False)
+        dry_run_hp.propagate_state_cmd = True
+
+        self._io_plumbers = {p.prefix: p for p in [hw_hp, dry_run_hp]}
+
+        jconfig_raw = rospy.get_param("/hardware_settings")
+        self._hw_interface_plumber = HALHwInterfacePlumber(
+            prefixes=[hw_hp.prefix, dry_run_hp.prefix],
+            num_joints=len(jconfig_raw.keys()),
+        )
+
+        self.hw_prefix = hw_hp.prefix
+        self.dry_run_prefix = dry_run_hp.prefix
+
+    def _on_config_update_received(self, key, value):
+        if key == self.DRY_RUN_PARAM:
+            self.set_dry_run_mode(value)
+
+    def _activate_prefix(self, prefix):
+        rospy.loginfo(f"Activating HAL prefix {prefix}")
+        self._io_plumbers[prefix].activate()
+        self._hw_interface_plumber.activate(prefix)
+
+    def set_dry_run_mode(self, enable):
+        rospy.loginfo(f"Setting dry run mode to {enable}")
+        if enable:
+            self._activate_prefix(self.dry_run_prefix)
+            self._dry_run_mode = True
+        else:
+            self._activate_prefix(self.hw_prefix)
+            self._dry_run_mode = False
+
+        self._hal_pin.set(self._dry_run_mode)
+
+    def _check_hal_pin(self):
+        pin_value = self._hal_pin.get()
+        if pin_value is not self._dry_run_mode:
+            self.set_dry_run_mode(pin_value)
+
+    def run(self):
+        r = rospy.Rate(10)
+        while not rospy.is_shutdown():
+            self._check_hal_pin()
+            r.sleep()
+
+    def stop(self):
+        rospy.loginfo("Stopping dry run switcher")
+        self._config.stop()
+
+
+if __name__ == '__main__':
+    dry_run_switcher = DryRunSwitcher()
+    try:
+        dry_run_switcher.run()
+    except rospy.ROSInterruptException:
+        pass
+    finally:
+        dry_run_switcher.stop()

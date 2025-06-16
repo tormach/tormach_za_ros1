@@ -1,0 +1,5 @@
+<launch>
+  <!-- Launch the lidar_simulator_wrapper_node -->
+  <node name="lidar_simulator_wrapper" pkg="lidar_simulator" type="lidar_simulator_wrapper_node" output="screen">
+  </node>
+</launch>

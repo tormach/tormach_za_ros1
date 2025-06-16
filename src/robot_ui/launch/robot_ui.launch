@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<launch>
+  <arg name="tool" />
+  <arg name="debug" default="false" />
+  <arg unless="$(arg debug)" name="launch_prefix" value="" />
+  <arg     if="$(arg debug)" name="launch_prefix" value="gdb --ex run --args python3" />
+
+  <arg name="robot_ui_settings" default="$(find robot_ui)/config/robot_ui_settings.yaml" />
+
+  <rosparam command="load" file="$(arg robot_ui_settings)" subst_value="true" />
+
+  <arg name="live_coding" default="false" />
+  <arg unless="$(arg live_coding)" name="live_coding_args" value="" />
+  <arg     if="$(arg live_coding)" name="live_coding_args" value="-l" />
+  <arg name="dev_mode" default="false" />
+  <arg unless="$(arg dev_mode)" name="dev_mode_args" value="" />
+  <arg     if="$(arg dev_mode)" name="dev_mode_args" value="--dev-mode" />
+  <arg name="mastering" default="false" />
+  <arg unless="$(arg mastering)" name="mastering_args" value="" />
+  <arg     if="$(arg mastering)" name="mastering_args" value="--mastering" />
+
+  <arg name="dro_update_rate" default="20" />
+  <node name="$(anon joint_state_throttle)" pkg="topic_tools" type="throttle"
+        args="messages joint_states $(arg dro_update_rate)" required="true"/>
+
+  <node name="robot_ui" launch-prefix="$(arg launch_prefix)" pkg="robot_ui" type="robot_ui"
+        args="$(arg live_coding_args) $(arg dev_mode_args) $(arg mastering_args)" output="screen" required="true">
+    <rosparam param="joint_states_source_list">["joint_states_throttle"]</rosparam>
+    <rosparam param="pose_states_source_list">["pose_states_throttle"]</rosparam>
+    <rosparam param="world_pose_states_source_list">["world_pose_states_throttle"]</rosparam>
+    <rosparam param="tool" subst_value="true">$(arg tool)</rosparam>
+  </node>
+</launch>

@@ -1,0 +1,649 @@
+# Copied from za6_hardware/config/fault_codes_IS620N.yaml (or so)
+sim_mode:  True
+device_fault_code_list:
+  inovance_is620n:
+    '0x0101':
+      description: Parameter abnormal
+      type: 1
+      resettable: false
+      display:  101
+      error_code: 0x6320
+      auxiliary_code: 0x01010101
+    '0x0102':
+      description: Programmable logic configuration fault
+      type: 1
+      resettable: false
+      display:  102
+      error_code: 0x7500
+      auxiliary_code: 0x01020102
+    '0x0103':
+      description: FPGA software version too early
+      type: 1
+      resettable: false
+      display:  103
+      error_code: 0x7500
+      auxiliary_code: 0x01030103
+    '0x0104':
+      description: Programmable logic interruption fault
+      type: 1
+      resettable: false
+      display:  104
+      error_code: 0x7500
+      auxiliary_code: 0x01040104 0x01000104 0x0E940104
+    '0x0105':
+      description: Internal program abnormal
+      type: 1
+      resettable: false
+      display:  105
+      error_code: 0x6320
+      auxiliary_code: 0x01050105
+    '0x0108':
+      description: Parameter storage fault
+      type: 1
+      resettable: false
+      display:  108
+      error_code: 0x5530
+      auxiliary_code: 0x01080108
+    '0x0111':
+      description: Group 2000h/2001h parameter abnormal
+      type: 1
+      resettable: false
+      display:  111
+      error_code: 0x6320
+      auxiliary_code: 0x01110111
+    '0x0120':
+      description: Product model matching fault
+      type: 1
+      resettable: false
+      display:  120
+      error_code: 0x7122
+      auxiliary_code: 0x01200120
+    '0x0121':
+      description: Invalid S-ON command
+      type: 2
+      resettable: true
+      display:  121
+      error_code: 0x5441
+      auxiliary_code: 0x01210121
+    '0x0122':
+      description: Product matching fault in absolute position mode
+      type: 1
+      resettable: false
+      display:  122
+      error_code: 0x7122
+      auxiliary_code: 0x01220122
+    '0x0130':
+      description: Different DIs allocated with the same function
+      type: 1
+      resettable: true
+      display:  130
+      error_code: 0x6320
+      auxiliary_code: 0x01300130
+    '0x0131':
+      description: DO function No. exceeding the number of functions
+      type: 1
+      resettable: true
+      display:  131
+      error_code: 0x6320
+      auxiliary_code: 0x01310131
+    '0x0136':
+      description: Data check error or no parameter stored in the motor ROM
+      type: 1
+      resettable: false
+      display:  136
+      error_code: 0x7305
+      auxiliary_code: 0x01360136
+    '0x0200':
+      description: Overcurrent 1
+      type: 1
+      resettable: false
+      display:  200
+      error_code: 0x2311
+      auxiliary_code: 0x02000200
+    '0x0201':
+      description: Overcurrent 2
+      type: 1
+      resettable: false
+      display:  201
+      error_code: 0x2312
+      auxiliary_code: 0x02010201
+    '0x0207':
+      description: Shaft D/Q current overflow
+      type: 1
+      resettable: true
+      display:  207
+      error_code: 0x0FFF
+      auxiliary_code: 0x02070207
+    '0x0208':
+      description: FPGA sampling operation timeout
+      type: 1
+      resettable: false
+      display:  208
+      error_code: 0x0FFF
+      auxiliary_code: 0x02080208
+    '0x0210':
+      description: Output short-circuit to ground
+      type: 1
+      resettable: false
+      display:  210
+      error_code: 0x2330
+      auxiliary_code: 0x02100210
+    '0x0220':
+      description: Phase sequence incorrect
+      type: 1
+      resettable: false
+      display:  220
+      error_code: 0x0FFF
+      auxiliary_code: 0x02200220
+    '0x0234':
+      description: Runaway
+      type: 1
+      resettable: false
+      display:  234
+      error_code: 0x0FFF
+      auxiliary_code: 0x02340234
+    '0x0400':
+      description: Main circuit overvoltage
+      type: 1
+      resettable: true
+      display:  400
+      error_code: 0x3210
+      auxiliary_code: 0x04000400
+    '0x0410':
+      description: Main circuit undervoltage
+      type: 1
+      resettable: true
+      display:  410
+      error_code: 0x3220
+      auxiliary_code: 0x04100410
+    '0x0420':
+      description: Main circuit phase loss
+      type: 2
+      resettable: true
+      display:  420
+      error_code: 0x3130
+      auxiliary_code: 0x04200420
+    '0x0430':
+      description: Control power undervoltage
+      type: 1
+      resettable: false
+      display:  430
+      error_code: 0x3120
+      auxiliary_code: 0x04300430
+    '0x0500':
+      description: Motor overspeed
+      type: 1
+      resettable: true
+      display:  500
+      error_code: 0x8400
+      auxiliary_code: 0x05000500
+    '0x0510':
+      description: Pulse output overspeed
+      type: 2
+      resettable: true
+      display:  510
+      error_code: 0x0FFF
+      auxiliary_code: 0x05100510
+    '0x0602':
+      description: Angle auto-tuning failure
+      type: 1
+      resettable: true
+      display:  602
+      error_code: 0x0FFF
+      auxiliary_code: 0x06020602
+    '0x0610':
+      description: Servo drive overload
+      type: 2
+      resettable: true
+      display:  610
+      error_code: 0x3230
+      auxiliary_code: 0x06100610
+    '0x0620':
+      description: Motor overload
+      type: 2
+      resettable: true
+      display:  620
+      error_code: 0x3230
+      auxiliary_code: 0x06200620
+    '0x0630':
+      description: Motor rotor locked
+      type: 2
+      resettable: true
+      display:  630
+      error_code: 0x7121
+      auxiliary_code: 0x06300630
+    '0x0650':
+      description: Heatsink overheat
+      type: 2
+      resettable: true
+      display:  650
+      error_code: 0x4210
+      auxiliary_code: 0x06500650
+    '0x0731':
+      description: Encoder battery failed
+      type: 2
+      resettable: true
+      display:  731
+      error_code: 0x7305
+      auxiliary_code: 0x07300731
+    '0x0732':
+      description: Encoder multi-turn counting error
+      type: 2
+      resettable: true
+      display:  733
+      error_code: 0x7305
+      auxiliary_code: 0x07300732
+    '0x0733':
+      description: Encoder multi-turn counting overflow
+      type: 2
+      resettable: true
+      display:  735
+      error_code: 0x7305
+      auxiliary_code: 0x07300733
+    '0x0740':
+      description: Encoder interference
+      type: 1
+      resettable: false
+      display:  740
+      error_code: 0x7305
+      auxiliary_code: 0x07400740
+      solution: Caused by spurious inputs on the encoder Z wire. Can be caused by drive logic power-off (not an error), encoder wire damage, electromagnetic interference, or a bad encoder.
+    '0x0770':
+      description: External encoder scale fault
+      type: 1
+      resettable: true
+      display:  770
+      error_code: 0x7305
+      auxiliary_code: 0x07700770
+    '0x0A33':
+      description: Encoder data abnormal
+      type: 1
+      resettable: false
+      display:  A33
+      error_code: 0x7305
+      auxiliary_code: 0x0A330A33
+    '0x0A34':
+      description: Encoder communication check abnormal
+      type: 1
+      resettable: false
+      display:  A34
+      error_code: 0x7305
+      auxiliary_code: 0x0A340A34
+    '0x0A35':
+      description: Z signal lost
+      type: 1
+      resettable: false
+      display:  A35
+      error_code: 0x7305
+      auxiliary_code: 0x0A350A35
+    '0x0b00':
+      description: Position deviation excess
+      type: 2
+      resettable: true
+      display:  B00
+      error_code: 0x8611
+      auxiliary_code: 0x0b000b00
+    '0x0b01':
+      description: Position reference excess
+      type: 2
+      resettable: YES
+      display:  B01
+      error_code: 0x0FFF
+      auxiliary_code: 0x0b010b01
+    '0x0b02':
+      description: Position deviation exceeding threshold in fully closed-loop
+      type: 2
+      resettable: true
+      display:  B02
+      error_code: 0x8611
+      auxiliary_code: 0x0b020b02
+    '0x0b03':
+      description: Electronic gear ratio setting exceeding limit
+      type: 2
+      resettable: true
+      display:  B03
+      error_code: 0x6320
+      auxiliary_code: 0x0b030b03
+    '0x0B04':
+      description: Parameter setting error with fully closed-loop function
+      type: 2
+      resettable: true
+      display:  B04
+      error_code: 0x6320
+      auxiliary_code: 0x0B040B04
+    '0x0d09':
+      description: Software upper/lower limit setting incorrect*
+      type: 2
+      resettable: true
+      display:  D09
+      error_code: 0x6320
+      auxiliary_code: 0x0d090d09
+    '0x0d10':
+      description: Home offset setting incorrect*
+      type: 2
+      resettable: true
+      display:  D10
+      error_code: 0x6320
+      auxiliary_code: 0x0d100d10
+    '0x0E07':
+      description: Network state abnormal switchover
+      type: 2
+      resettable: true
+      display:  E07
+      error_code: 0x0FFF
+      auxiliary_code: 0x0E070E07
+    '0x0E08':
+      description: Synchronization loss*
+      type: 2
+      resettable: true
+      display:  E08
+      error_code: 0x0FFF
+      auxiliary_code: 0x0E080E08
+    '0x0E11':
+      description: XML configuration file not burnt
+      type: 2
+      resettable: true
+      display:  E11
+      error_code: 0x0FFF
+      auxiliary_code: 0x0E110E11
+    '0x0E12':
+      description: Network initialization failure*
+      type: 2
+      resettable: true
+      display:  E12
+      error_code: 0x0E12
+      auxiliary_code: 0x0E120E12
+    '0x0E13':
+      description: Synchronization cycle setting incorrect*
+      type: 2
+      resettable: true
+      display:  E13
+      error_code: 0x0E13
+      auxiliary_code: 0x0E130E13
+    '0x0E15':
+      description: Synchronization cycle error being large*
+      type: 2
+      resettable: true
+      display:  E15
+      error_code: 0x0E15
+      auxiliary_code: 0x0E150E15
+    '0x0110':
+      description: Setting error of frequency-division pulse output
+      type: 3
+      resettable: true
+      display:  110
+      error_code: 0x6320
+      auxiliary_code: 0x01100110
+    '0x0601':
+      description: Homing timeout
+      type: 3
+      resettable: true
+      display:  601
+      error_code: 0x0FFF
+      auxiliary_code: 0x06010601
+    '0x0730':
+      description: Encoder battery warning
+      type: 3
+      resettable: true
+      display:  730
+      error_code: 0x7305
+      auxiliary_code: 0x07300730
+    '0x0900':
+      description: DI emergency braking
+      type: 3
+      resettable: true
+      display:  900
+      error_code: 0x5442
+      auxiliary_code: 0x09000900
+    '0x0909':
+      description: Motor overload warning
+      type: 3
+      resettable: true
+      display:  909
+      error_code: 0x3230
+      auxiliary_code: 0x09090909
+    '0x0920':
+      description: Regenerative resistor overload
+      type: 3
+      resettable: true
+      display:  920
+      error_code: 0x3210
+      auxiliary_code: 0x09200920
+    '0x0922':
+      description: Resistance of external braking resistor too small
+      type: 3
+      resettable: true
+      display:  922
+      error_code: 0x6320
+      auxiliary_code: 0x09220922
+    '0x0939':
+      description: Motor power cable breaking
+      type: 3
+      resettable: true
+      display:  939
+      error_code: 0x3331
+      auxiliary_code: 0x09390939
+    '0x0941':
+      description: Parameter modification taking effect only after power-on again
+      type: 3
+      resettable: true
+      display:  941
+      error_code: 0x6320
+      auxiliary_code: 0x09410941
+    '0x0942':
+      description: Parameter storage too frequent
+      type: 3
+      resettable: true
+      display:  942
+      error_code: 0x7600
+      auxiliary_code: 0x09420942
+    '0x0950':
+      description: Positive limit switch warning
+      type: 3
+      resettable: true
+      display:  950
+      error_code: 0x5443
+      auxiliary_code: 0x09500950
+    '0x0952':
+      description: Negative limit switch warning
+      type: 3
+      resettable: true
+      display:  952
+      error_code: 0x5444
+      auxiliary_code: 0x09520952
+    '0x0980':
+      description: Encoder internal fault
+      type: 3
+      resettable: true
+      display:  980
+      error_code: 0x7305
+      auxiliary_code: 0x09800980
+    '0x0990':
+      description: Power input phase loss warning
+      type: 3
+      resettable: true
+      display:  990
+      error_code: 0x3130
+      auxiliary_code: 0x09900990
+    '0x0998':
+      description: Homing mode setting incorrect
+      type: 3
+      resettable: true
+      display:  998
+      error_code: 0x0FFF
+      auxiliary_code: 0x09980998
+    '0x0A40':
+      description: Parameter auto-tuning failure
+      type: 3
+      resettable: true
+      display:  A40
+      error_code: 0x0FFF
+      auxiliary_code: 0x0A400A40
+
+# Copied from za6_hardware/config/hal_402_device_mgr.yaml
+hal_402_device_mgr:
+  ethercat_drive_params_group:  joints
+  drives:
+      drive_1:
+        instance: 1
+        slave_number: 0
+        hal_name: lcec.0.0
+        type: inovance_is620n
+      drive_2:
+        instance: 2
+        slave_number: 1
+        hal_name: lcec.0.1
+        type: inovance_is620n
+      drive_3:
+        instance: 3
+        slave_number: 2
+        hal_name: lcec.0.2
+        type: inovance_is620n
+      drive_4:
+        instance: 4
+        slave_number: 3
+        hal_name: lcec.0.3
+        type: inovance_is620n
+      drive_5:
+        instance: 5
+        slave_number: 4
+        hal_name: lcec.0.4
+        type: inovance_is620n
+      drive_6:
+        instance: 6
+        slave_number: 5
+        hal_name: lcec.0.5
+        type: inovance_is620n
+
+
+ethercat_drive_params:
+  # Joint drives:  Inovance IS620N
+  joints:
+    device_description_xml:
+      # - See launch/hal_hardware.launch
+      ros_package:  za6_hardware
+      path:  config/IS620N-Ecat_v2.6.7.xml
+
+    device_id:
+      vendor_id:  0x00100000
+      product_code:  0x000C0108
+
+    # Ethercat master and positions this configuration applies to
+    master: 0
+    positions: [0, 1, 2, 3, 4, 5]
+
+    # Parameter settings
+    param_values:
+      # *** Servo Motor Parameters ***
+      # Motor SN:
+      # 14101:  Inovance 23-bit absolute encoder
+      2000-01h: 14101
+
+      # *** Servo Drive Parameters ***
+      # Servo drive SN:
+      # 2:  S1R6 0.2kW
+      # 3:  S2R8 0.4kW
+      # 5:  S5R5 0.75kW
+      2001-03h: [5, 5, 3, 2, 2, 2]
+
+      # *** Basic control ***
+      # Absolute system selection:  def. 0
+      # 1:  Absolute position linear mode (encoder retains value on power down)
+      2002-02h: 1
+
+      # *** Output terminal Parameters ***
+      # DO1 function selection:
+      # 9:  BK (Brake output)
+      # - Maybe only Rob's machine?
+      2004-01h: 9
+      # DO2 function selection:
+      # 9:  BK (Brake output)
+      2004-03h: 9
+
+      # *** Position Control Parameters ***
+      # Speed feedforward control selection
+      # 2: Use 60B1h as source of speed feedforward signal in CSP mode
+      2005-14h: 2
+
+      # *** Gain Parameters ***
+      # NB: parameter values are all integers in drives but are decimals
+      # in manual.  Example: speed loop gain of 800 is equal to 80.0 Hz
+      # in the manual.
+      #
+      # Speed and position loop gains set conservatively to avoid
+      # occasional noise, tics from acceleration
+      2008-01h: 250
+      # 2008-02h:  See below
+      2008-03h: 400
+      # Time constant of speed loop integration:  15 to 51200 (x0.01ms) def. 3183
+      # - Set according to formulae in manual
+      2008-02h: 3183
+      # Gain switchover condition
+      # 0:  Always use first gain
+      2008-0Ah: 0
+      # Feedforward gain set to minimize following error - max value
+      # produces best results
+      # Inertia ratio - still a puzzle; was [150, 300, 700, 490, 900, 450]
+      #
+      2008-10h: 100
+      # Speed feedforward gain:  0-1000 (0.1%) def. 0
+      2008-14h: 1000
+      # Time constant of speed feedforward filter:  0 to 6400 (0.01ms) def. 50
+      2008-15h: 50
+      # Torque feedforward gain 0-2000 (0.1%) def. 0
+      2008-16h: 0
+
+      # *** Auto-adjusting Parameters ***
+      # Automatic gain tuning mode selection
+      # 1:  Automatic gain tuning mode, gain parameters tuned automatically
+      #     based on stiffness table
+      2009-01h: 1
+      # Stiffness level selection 0-31;
+      # higher -> stronger gain and quicker response
+      2009-02h: [14, 16, 16, 12, 12, 18]
+      # Disable inertia ratio autotune
+      2009-04h: 0
+
+      # *** Error and Protection Parameter ***
+      # Power input phase loss protection
+      # 1:  Enable faults and warnings
+      # - enable voltage fluctuation alarm faults and warnings
+      200A-01h: 1
+
+      # *** Communication ***
+      # Update function code values written via communication to EEPROM
+      # 0:  Drive param changes non-persistent
+      # 3:  Drive param changes  persistent
+      200C-0Eh: 0
+      # Synchronization error threshold:  0-2000 (ns); def. 500
+      # - Manual says 2000 max, but we found 3000 default on some drives!
+      200C-2Dh: 3000
+      # Position control buffer:  0 disabled; 1 enabled
+      200C-2Eh: 0
+
+      # *** Standard Device Profile Parameters ***
+      # Quick stop option code
+      # CSP mode:
+      # 3:  Stop at emergency stop torque in 2007-10h; brake & power off
+      605A-00h: 3
+      # Position window:  (reference units) def. 734
+      # - goal position threshold
+      6067-00h: 5872
+      # Position window time:  0-65535 (ms)
+      # - FIXME - better servo tuning should help us narrow this window
+      # 6068-00h: 3000000  # FIXME:  Value out of range!
+      6068-00h: 65535
+      # Home offset:  (ref. units) def. 0
+      # - J3 home offset is -90 deg, home arm vertically
+      # FIXME
+      # load_parameters: unable to set parameters (last param was [/tool_scene_sync/tool_attach_link=flange]): int exceeds XML-RPC limits
+      # 607C-00h: [0, 0, 0xf6000001, 0, 0, 0]
+      # 6091h Gear Ratio
+      # Sichen sets gear ratio to 6000, but we set it to 1 and handle it in HAL
+      # Motor revolutions
+      6091-01h: 1
+      # Shaft revolutions
+      6091-02h: 1
+      # Homing method
+      # 35:  Home on current position
+      6098-00h: 35

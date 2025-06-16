@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<launch>
+  <!-- This .launch file starts the tool scene sync node -->
+
+  <arg name="update_interval_s" default="0.5"/>
+  <arg name="tool_attach_link" default="flange"/>
+  <arg name="tool_touch_links" default="[link_6]"/>
+
+  <node
+    name="tool_scene_sync"
+    pkg="robot_scene"
+    type="tool_scene_sync"
+    output="screen"
+    required="true"
+    >
+    <param name="update_interval_s" value="$(arg update_interval_s)"/>
+    <param name="tool_attach_link" value="$(arg tool_attach_link)"/>
+    <rosparam param="tool_touch_links" subst_value="True">$(arg tool_touch_links)</rosparam>
+  </node>
+
+</launch>

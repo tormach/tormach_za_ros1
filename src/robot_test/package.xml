@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>robot_test</name>
+  <version>0.1.0</version>
+  <description>
+    System test scripts for the robot.
+  </description>
+  <maintainer email="alex@machinekoder.com">Alexander Rössler</maintainer>
+  <license>TODO</license>
+
+  <url>TODO</url>
+  <author>Alexander Rössler</author>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <depend>rospy</depend>
+  <depend>robot_command</depend>
+
+  <test_depend>rostest</test_depend>
+  <test_depend>ros_pytest</test_depend>
+  <test_depend>python-pytest-dependency-pip</test_depend>
+
+</package>

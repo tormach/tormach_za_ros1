@@ -1,0 +1,8 @@
+<launch>
+
+  <node name="$(anon rviz)" pkg="rviz" type="rviz" respawn="false"
+	args="-d $(find robot_benchmark)/rviz/ik_benchmark.rviz" output="screen" />
+
+  <node name="ik_benchmark" pkg="robot_benchmark" type="ik_benchmark" respawn="false" output="screen" />
+
+</launch>

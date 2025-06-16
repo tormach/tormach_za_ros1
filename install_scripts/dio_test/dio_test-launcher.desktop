@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Name=DIO test
+Exec=/home/pathpilot/dio_test/dio_test.sh
+Terminal=true
+Categories=Science;
+Path=/home/pathpilot

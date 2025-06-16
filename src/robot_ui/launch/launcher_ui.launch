@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<launch>
+
+  <arg name="debug" default="false" />
+  <arg unless="$(arg debug)" name="launch_prefix" value="" />
+  <arg     if="$(arg debug)" name="launch_prefix" value="gdb --ex run --args" />
+
+  <rosparam command="load" file="$(find robot_ui)/config/launcher_ui_settings.yaml" />
+
+  <arg name="live_coding" default="false" />
+  <arg unless="$(arg live_coding)" name="live_coding_args" value="" />
+  <arg     if="$(arg live_coding)" name="live_coding_args" value="-l" />
+
+  <node name="launcher_ui" launch-prefix="$(arg launch_prefix)" pkg="robot_ui" type="launcher_ui"
+        args="$(arg live_coding_args)" output="screen" required="true">
+  </node>
+
+</launch>

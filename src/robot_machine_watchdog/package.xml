@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>robot_machine_watchdog</name>
+  <version>0.0.1</version>
+  <description>Monitors joint torques and issues abort commands for robot safety</description>
+  <maintainer email="your_email@example.com">Your Name</maintainer>
+  <license>MIT</license>
+  <buildtool_depend>catkin</buildtool_depend>
+  <build_depend>rospy</build_depend>
+  <build_depend>std_msgs</build_depend>
+  <build_depend>sensor_msgs</build_depend>
+  <build_depend>robot_machine_watchdog_msgs</build_depend>
+  <build_depend>robot_command</build_depend>
+  <build_export_depend>rospy</build_export_depend>
+  <build_export_depend>std_msgs</build_export_depend>
+  <build_export_depend>sensor_msgs</build_export_depend>
+  <build_export_depend>robot_machine_watchdog_msgs</build_export_depend>
+  <build_export_depend>robot_command</build_export_depend>
+  <exec_depend>rospy</exec_depend>
+  <exec_depend>std_msgs</exec_depend>
+  <exec_depend>sensor_msgs</exec_depend>
+  <exec_depend>robot_machine_watchdog_msgs</exec_depend>
+  <exec_depend>robot_command</exec_depend>
+</package>

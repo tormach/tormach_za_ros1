@@ -1,0 +1,5 @@
+<launch>
+  <rosparam command="load" file="$(find cartesian_state)/config/joints_to_pose.yaml" />
+
+  <node name="$(anon joints_to_pose)" pkg="cartesian_state" type="joints_to_pose" output="screen"/>
+</launch>

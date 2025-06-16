@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<launch>
+  <include file="$(find za6_description)/launch/display_za6.launch">
+    <arg name="tool" value="hand_e"/>
+    <arg name="rvizconfig" value="$(find za6_description)/rviz/robotiq_hand_e.rviz" />
+  </include>
+</launch>

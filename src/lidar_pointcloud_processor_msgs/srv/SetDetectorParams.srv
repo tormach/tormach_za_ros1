@@ -1,0 +1,11 @@
+# Request
+int32 scanning_layer
+float32 workpiece_x
+float32 workpiece_y
+float32 workpiece_z
+float32 allowed_deviation
+int32 num_stacks
+
+---
+# Response
+bool success

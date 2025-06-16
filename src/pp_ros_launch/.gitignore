@@ -1,0 +1,6 @@
+/build/
+/dist/
+/src/pp_ros_versions.egg-info/
+/.coverage
+/.eggs/
+/pytest-env/

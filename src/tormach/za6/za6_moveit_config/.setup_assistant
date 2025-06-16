@@ -1,0 +1,11 @@
+moveit_setup_assistant_config:
+  URDF:
+    package: za6_description
+    relative_path: urdf/za6.xacro
+    xacro_args: tool:=none stand:=none
+  SRDF:
+    relative_path: config/za6.srdf
+  CONFIG:
+    author_name: John Morris
+    author_email: john@dovetail-automata.com
+    generated_timestamp: 1680102824

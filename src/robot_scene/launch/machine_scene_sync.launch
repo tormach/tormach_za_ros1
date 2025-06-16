@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<launch>
+  <!-- This .launch file starts the Machine scene sync node -->
+
+  <arg name="update_interval_s" default="0.5"/>
+
+  <node
+    name="machine_scene_sync"
+    pkg="robot_scene"
+    type="machine_scene_sync"
+    output="screen"
+    required="true"
+    >
+    <param name="update_interval_s" value="$(arg update_interval_s)"/>
+  </node>
+
+</launch>

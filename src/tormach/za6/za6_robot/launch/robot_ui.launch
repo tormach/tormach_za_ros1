@@ -1,0 +1,80 @@
+<?xml version="1.0"?>
+<launch>
+  <!-- ++++++++++++++++++++++++++++++ PUBLIC INTERFACE ++++++++++++++++++++++++++++++ -->
+
+  <!-- Whether to run sim or real robot hardware -->
+  <arg name="sim" default="$(eval optenv('HARDWARE_MODE', 'sim') == 'sim')"/>
+  <param name="sim" value="$(arg sim)" />
+
+  <!-- Arguments passed to other launch files -->
+  <arg name="live_coding" default="false" doc="Launch interface in live-coding mode" />
+  <arg name="dev_mode" default="false" doc="Launch interface in development mode" />
+  <arg name="headless" default="false" doc="Launch the robot headless" />
+  <arg name="debug_robot_ui" default="false" doc="Run robot_ui in gdb" />
+  <!-- HAL debug output -->
+  <!-- - Output HAL debug messages to screen (console) -->
+  <arg name="hal_debug_output" default="false" doc="Print MK-HAL debug messages to the console" />
+  <!-- - Set HAL debug level, 0-5 -->
+  <arg name="hal_debug_level" default="1" doc="MK-HAL debug level limiter (0-5)" />
+  <arg name="tool" default="none" doc="Connected tool to the robot flange" />
+  <arg name="mastering" default="false" doc="Overload settings with mastering values" />
+  <!-- set a global wait timeout for services and actions -->
+  <arg name="ros_wait_timeout_s" default="30.0" doc="Timeout for service and instances" />
+
+  <!-- ++++++++++++++++++++++++++++++ END PUBLIC INTERFACE ++++++++++++++++++++++++++++++ -->
+
+  <rosparam command="load" file="$(find za6_robot)/config/moveit_settings.yaml" />
+  <rosparam command="load" file="$(find za6_hardware)/config/io_config.yaml" />
+
+  <include file="$(find ros_machinetalk)/launch/machinekit_ros_log_bridge.launch"/>
+
+  <include file="$(find za6_robot)/launch/moveit_planning_execution.launch">
+    <arg name="sim" value="$(arg sim)"/>
+    <arg name="rviz" value="false" />
+    <arg name="tool" value="$(arg tool)" />
+    <arg name="mastering" value="$(arg mastering)" />
+    <arg name="hal_debug_output" value="$(arg hal_debug_output)"/>
+    <arg name="hal_debug_level" value="$(arg hal_debug_level)"/>
+    <arg name="ros_wait_timeout_s" value="$(arg ros_wait_timeout_s)" />
+  </include>
+
+  <include file="$(find robot_frame)/launch/frame_node.launch">
+    <arg name="namespace" value="user_frames"/>
+    <arg name="pose_reference_frame" value="world"/>
+  </include>
+
+  <rosparam param="default_tool_frames" file="$(find za6_tools)/config/tool_frames.yaml"/>
+
+  <include file="$(find robot_frame)/launch/frame_node.launch">
+    <arg name="namespace" value="tool_frames"/>
+    <arg name="pose_reference_frame" value="tool0"/>
+    <!-- cache_tfs is workaround for problem in move_group throwing warnings
+        when a transform attached to a planning frame is removed
+        see https://github.com/ros-planning/moveit/issues/1398 -->
+    <arg name="cache_tfs" value="true"/>
+  </include>
+
+  <include file="$(find za6_robot)/launch/jogging.launch"/>
+
+  <include file="$(find za6_robot)/launch/joints_to_pose.launch"/>
+
+  <include file="$(find robot_command)/launch/interpreter_node.launch">
+    <arg name="interpreter" value="execution"/>
+  </include>
+
+  <include file="$(find robot_ui)/launch/robot_ui.launch" unless="$(arg headless)">
+    <arg name="live_coding" value="$(arg live_coding)"/>
+    <arg name="dev_mode" value="$(arg dev_mode)"/>
+    <arg name="mastering" value="$(arg mastering)" />
+    <arg name="debug" value="$(arg debug_robot_ui)"/>
+    <arg name="tool" value="$(arg tool)" />
+  </include>
+
+  <include file="$(find za6_robot)/launch/pathpilot_remote.launch" />
+
+  <include file="$(find za6_robot)/launch/tool_support.launch"/>
+
+  <!-- hotfix: disable basic_jogger until jogging problems are resolved
+  <include file="$(find se_jogger)/launch/basic_jogger.launch"/>
+  -->
+</launch>

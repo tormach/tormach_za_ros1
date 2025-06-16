@@ -1,0 +1,9 @@
+#!/usr/bin/env python
+
+from hal_402_device_mgr.params.config_drive import ConfigDrive
+import sys
+
+
+if __name__ == '__main__':
+    cd = ConfigDrive()
+    sys.exit(cd.cli(sys.argv))

@@ -1,0 +1,11 @@
+<launch>
+  <param name="test_module" value="$(find robot_command)/src"/>
+  <include file="$(find redis_store)/launch/redis_store.launch"/>
+
+  <test
+      test-name="test_lib"
+      pkg="ros_pytest"
+      type="ros_pytest_runner"
+      time-limit="180.0"
+      />
+</launch>

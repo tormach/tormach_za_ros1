@@ -1,0 +1,110 @@
+<?xml version="1.0"?>
+<launch>
+  <!-- Override settings in the pristine `za6_moveit_config`
+       package here
+
+       This is included from the `move_group.launch`, `moveit_rviz.launch`
+       and `planning_context.launch` files
+  -->
+  <arg name="load_robot_description" default="false"/>
+  <arg name="robot_description" default="robot_description"/>
+  <arg name="mastering" default="false" />
+  <arg name="tool" default="none" />
+  <arg name="stand" default="none" />
+
+  <!-- Override default
+       `moveit_simple_controller_manager/MoveItSimpleControllerManager`
+
+       The `MoveItControllerManager` auto-detects the
+       `follow_joint_trajectory` action, whereas the
+       `MoveItSimpleControllerManager` requires the `controller_list`
+       to be correctly set up, which `moveit_setup_assistant` has
+       failed to do so far
+  -->
+  <param
+      name="move_group/moveit_controller_manager"
+      value="moveit_ros_control_interface::MoveItControllerManager"
+      />
+
+  <!-- Augment joint and cartesian limits -->
+  <group ns="robot_description_planning">
+    <rosparam
+        command="load"
+        file="$(find za6_robot)/config/joint_limits.yaml"
+        />
+    <rosparam
+        command="load"
+        file="$(find za6_robot)/config/joint_limits_mastering.yaml"
+        if="$(arg mastering)"
+        />
+    <rosparam
+        command="load"
+        file="$(find za6_robot)/config/cartesian_limits.yaml"
+        />
+  </group>
+
+  <!-- Override IK settings defined in
+       ../../za6_moveit_config/config/kinematics.yaml
+
+       Note that some of these must be duplicated, since that file is
+       loaded twice to two separate locations
+  -->
+  <rosparam file="$(find za6_robot)/config/overrides.yaml" command="load"/>
+
+  <!-- Override default planner request adapters; enable only one or
+       zero -->
+  <include ns="move_group/planning_pipelines/chomp" file="$(find za6_robot)/launch/overrides_planning_pipeline.launch"/>
+  <include ns="move_group/planning_pipelines/ompl" file="$(find za6_robot)/launch/overrides_planning_pipeline.launch"/>
+  <include ns="move_group" file="$(find za6_robot)/launch/overrides_planning_pipeline.launch"/>
+  <include file="$(find za6_robot)/launch/overrides_planning_pipeline.launch"/>
+
+  <!-- From ../../za6_moveit_config/launch/trajectory_execution.launch.xml -->
+  <!-- Default was 0.01; causes problems when starting near the end of
+       a trajectory -->
+  <param
+      name="trajectory_execution/allowed_start_tolerance"
+      value="0.00"
+      />
+  <param
+      name="move_group/trajectory_execution/allowed_start_tolerance"
+      value="0.00"
+      />
+
+
+  <!-- From ../../za6_moveit_config/launch/planning_context.launch -->
+  <!-- Load universal robot description format (URDF) -->
+  <param if="$(arg load_robot_description)"
+      name="$(arg robot_description)"
+      command="xacro mastering:=$(arg mastering) tool:=$(arg tool) stand:=$(arg stand) '$(find za6_description)/urdf/za6.xacro'"
+      />
+
+  <!-- The semantic description that corresponds to the URDF -->
+  <param
+    name="$(arg robot_description)_semantic"
+    textfile="$(find za6_robot)/config/za6_$(arg tool)_$(arg stand).srdf"
+  />
+
+  <!-- Override parts of
+       ../../za6_moveit_config/config/ros_controllers.yaml -->
+  <rosparam
+      file="$(find za6_robot)/config/ros_controllers.yaml"
+      ns="move_group"
+      command="load"
+    />
+  <rosparam
+      file="$(find za6_robot)/config/ros_controllers_mastering.yaml"
+      ns="move_group"
+      command="load"
+      if="$(arg mastering)"
+    />
+  <rosparam
+      file="$(find za6_robot)/config/ros_controllers.yaml"
+      command="load"
+    />
+  <rosparam
+      file="$(find za6_robot)/config/ros_controllers_mastering.yaml"
+      command="load"
+      if="$(arg mastering)"
+    />
+
+</launch>

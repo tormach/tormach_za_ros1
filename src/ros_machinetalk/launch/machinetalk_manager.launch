@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<launch>
+  <!-- This .launch file starts the Machinetalk manager node -->
+
+  <node
+    name="machinetalk_manager"
+    pkg="ros_machinetalk"
+    type="machinetalk_manager"
+    output="screen"
+    required="true"
+    />
+
+</launch>

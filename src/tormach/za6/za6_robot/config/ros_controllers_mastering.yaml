@@ -1,0 +1,55 @@
+# This file augments params in
+# ../config/ros_controllers.yaml
+#
+# It is loaded in these places:
+# ../launch/moveit_planning_execution.launch
+# (In the latter, under the `/move_group` namespace)
+
+# Settings for ros_control hardware interface
+hardware_interface:
+  joints:
+    - joint_1
+    - joint_2
+    - joint_3
+    - joint_4
+    - joint_5
+    - joint_6
+    - tcp_lin
+    - tcp_rot
+
+position_trajectory_controller:
+  # For detailed explanations of parameters see
+  # http://wiki.ros.org/joint_trajectory_controller
+  type: pos_vel_controllers/InterruptibleJointTrajectoryController
+  stop_trajectory_duration: 0.02
+  constraints:
+    # More that 0.5 seconds isn't used because MoveIt gives up
+    goal_time: 0.5
+    # 0.0005 rad = 0.028 deg, which is achievable at slow speeds / accelerations
+    stopped_velocity_tolerance: 0.005 # Defaults to 0.01
+    joint_1:
+      # Trajectory position tolerance:  enforce w/in +/- rad. along trajectory
+      trajectory: 0.05
+      # Goal position tolerance:  enforce w/in +/- rad. of final goal
+      goal:       0.0005
+      max_acceleration: 3.0
+    joint_2:
+      trajectory: 0.05
+      goal:       0.0005
+      max_acceleration: 3.0
+    joint_3:
+      trajectory: 0.05
+      goal:       0.0005
+      max_acceleration: 3.0
+    joint_4:
+      trajectory: 0.05
+      goal:       0.0005
+      max_acceleration: 3.0
+    joint_5:
+      trajectory: 0.05
+      goal:       0.0005
+      max_acceleration: 3.0
+    joint_6:
+      trajectory: 0.05
+      goal:       0.0005
+      max_acceleration: 3.0

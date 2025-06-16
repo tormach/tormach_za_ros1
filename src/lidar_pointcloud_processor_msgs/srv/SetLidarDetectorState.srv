@@ -1,0 +1,4 @@
+std_msgs/Int32 state
+---
+geometry_msgs/Pose[] object_poses
+bool success

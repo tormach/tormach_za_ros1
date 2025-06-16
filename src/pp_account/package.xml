@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>pp_account</name>
+  <version>0.0.1</version>
+  <description>Tormach PathPilot Account library</description>
+  <maintainer email="jakub.fiser@eryaf.com">Jakub Fišer</maintainer>
+
+  <license>BSD</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <build_depend>rospy</build_depend>
+
+  <exec_depend>rospy</exec_depend>
+  <exec_depend>python3-aiohttp</exec_depend>
+  <exec_depend>python3-dbus-next</exec_depend>
+  <exec_depend>python3-cryptography</exec_depend>
+  <exec_depend>python3-attrs</exec_depend>
+  <exec_depend>python3-yaml</exec_depend>
+  <exec_depend>python3-semver</exec_depend>
+  <!--  <exec_depend>python3-aiopath</exec_depend> -->
+
+  <build_export_depend>rospy</build_export_depend>
+
+  <test_depend>rostest</test_depend>
+  <test_depend>ros_pytest</test_depend>
+  <test_depend>python3-mock</test_depend>
+  <test_depend>python3-pytest-mock</test_depend>
+  <test_depend>python3-coverage</test_depend>
+
+</package>

@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>robot_benchmark</name>
+  <version>0.1.0</version>
+  <description>
+    Benchmark tools for the robot.
+  </description>
+  <maintainer email="alex@machinekoder.com">Alexander Rössler</maintainer>
+  <license>TODO</license>
+
+  <url>TODO</url>
+  <author>Alexander Rössler</author>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <depend>moveit_commander</depend>
+  <depend>rospy</depend>
+  <depend>robot_command</depend>
+
+  <exec_depend>rviz</exec_depend>
+
+  <test_depend>rostest</test_depend>
+  <test_depend>ros_pytest</test_depend>
+  <test_depend>python-pytest-dependency-pip</test_depend>
+
+</package>

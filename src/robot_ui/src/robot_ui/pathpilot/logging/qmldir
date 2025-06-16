@@ -1,0 +1,3 @@
+LogMessageBrowser 1.0 LogMessageBrowser.qml
+LogLevelComboBox 1.0 LogLevelComboBox.qml
+LogMessagePopup 1.0 LogMessagePopup.qml

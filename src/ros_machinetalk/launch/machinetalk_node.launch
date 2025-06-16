@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<launch>
+  <!-- This .launch file starts the Machinetalk node -->
+
+  <!-- Launcher args -->
+  <arg name="uuid"/>
+  <arg name="update_rate" default="10"/>
+  <arg name="debug" default="false"/>
+
+  <group ns="$(eval 'machinetalk/instance_' + arg('uuid').replace('-', '_'))">
+    <!-- Parameter server keys used by machinetalk node -->
+    <param name="uuid" value="$(arg uuid)"/>
+    <param name="update_rate" value="$(arg update_rate)"/>
+    <param name="debug" value="$(arg debug)"/>
+
+    <!-- Launch Machinetalk node -->
+    <node
+        name="machinetalk"
+        pkg="ros_machinetalk"
+        type="machinetalk_node"
+        output="screen"
+        required="true"
+        />
+  </group>
+
+</launch>

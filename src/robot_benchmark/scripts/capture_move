@@ -1,0 +1,98 @@
+#!/usr/bin/env python
+import os
+import pickle
+from threading import Event
+
+import rospy
+from control_msgs.msg import (
+    FollowJointTrajectoryActionGoal,
+    FollowJointTrajectoryActionResult,
+)
+from moveit_msgs.msg import ExecuteTrajectoryActionGoal
+from sensor_msgs.msg import JointState
+
+
+class CaptureMove:
+    EXECUTE_TRAJECTORY_GOAL = '/execute_trajectory/goal'
+    GOAL_TOPIC = '/position_trajectory_controller/follow_joint_trajectory/goal'
+    RESULT_TOPIC = (
+        '/position_trajectory_controller/follow_joint_trajectory/result'
+    )
+    JOINT_STATE_TOPIC = '/joint_states'
+
+    def __init__(self):
+        rospy.init_node('capture_move')
+
+        self._subs = [
+            rospy.Subscriber(
+                self.GOAL_TOPIC,
+                FollowJointTrajectoryActionGoal,
+                self._on_goal_message_received,
+            ),
+            rospy.Subscriber(
+                self.EXECUTE_TRAJECTORY_GOAL,
+                ExecuteTrajectoryActionGoal,
+                self._on_execute_trajectory_goal_received,
+            ),
+            rospy.Subscriber(
+                self.RESULT_TOPIC,
+                FollowJointTrajectoryActionResult,
+                self._on_result_message_received,
+            ),
+            rospy.Subscriber(
+                self.JOINT_STATE_TOPIC,
+                JointState,
+                self._on_joint_states_message_received,
+            ),
+        ]
+        self._active = Event()
+        self._timer = None
+        self._goal_traj = None
+        self._execute_traj = None
+        self._joint_state_msgs = []
+
+    def spin(self):
+        rospy.spin()
+
+    def stop(self):
+        for sub in self._subs:
+            sub.unregister()
+
+    def _on_goal_message_received(self, msg: FollowJointTrajectoryActionGoal):
+        rospy.loginfo(f"received follow goal id {msg.goal_id.id}")
+        self._goal_traj = msg.goal.trajectory
+        self._active.set()
+
+    def _on_execute_trajectory_goal_received(
+        self, msg: ExecuteTrajectoryActionGoal
+    ):
+        rospy.loginfo(f"received execute goal id {msg.goal_id.id}")
+        self._execute_traj = msg.goal.trajectory.joint_trajectory
+
+    def _on_result_message_received(
+        self, msg: FollowJointTrajectoryActionResult
+    ):
+        rospy.loginfo(f"received result {msg.status.goal_id.id}")
+        self._timer = rospy.Timer(
+            rospy.Duration.from_sec(0.1), self._stop_recording, oneshot=True
+        )
+
+    def _stop_recording(self, _ev):
+        self._active.clear()
+        with open(os.path.expanduser('~/tmp/execute_traj.pickle'), 'wb') as f:
+            pickle.dump(self._execute_traj, f)
+        with open(os.path.expanduser('~/tmp/cmd_traj.pickle'), 'wb') as f:
+            pickle.dump(self._goal_traj, f)
+        with open(os.path.expanduser('~/tmp/joint_states.pickle'), 'wb') as f:
+            pickle.dump(self._joint_state_msgs, f)
+        del self._joint_state_msgs[:]
+
+    def _on_joint_states_message_received(self, msg: JointState):
+        if self._active.is_set():
+            self._joint_state_msgs.append(msg)
+
+
+if __name__ == '__main__':
+    capture_move = CaptureMove()
+    capture_move.spin()
+    capture_move.stop()

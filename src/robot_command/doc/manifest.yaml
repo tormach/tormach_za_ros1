@@ -1,0 +1,37 @@
+actions: []
+authors: "Alexander Rössler"
+brief: ''
+bugtracker: ''
+depends:
+- geometry_msgs
+- robot_command_msgs
+- tf2_geometry_msgs
+- ros_pytest
+- moveit_msgs
+- robot_frame
+- uuid_msgs
+- rospy
+- python3-fysom
+- python-pint
+- moveit_commander
+- python3-catkin-pkg
+- python3-attrs
+- rostest
+- unique_id
+- python-pytest-dependency-pip
+- catkin
+- std_msgs
+- redis_store
+- actionlib_msgs
+- python-parso
+- python3-future
+- ros_machinetalk
+- tf
+description: Robot Command
+license: TODO
+maintainers: "Alexander Rössler <alex@machinekoder.com>"
+msgs: []
+package_type: package
+repo_url: ''
+srvs: []
+url: TODO

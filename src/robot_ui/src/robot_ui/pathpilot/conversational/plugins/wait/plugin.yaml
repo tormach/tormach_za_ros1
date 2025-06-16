@@ -1,0 +1,6 @@
+name: wait
+title: Wait
+description: Select different wait options
+type: conversational
+priority: 3
+tooltip: msg_wait_tab

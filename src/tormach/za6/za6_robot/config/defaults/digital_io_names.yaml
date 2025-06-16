@@ -1,0 +1,5 @@
+io:
+  digital_in_names:
+    enabling_input: 15
+    safety_input: 16
+  digital_out_names: {}

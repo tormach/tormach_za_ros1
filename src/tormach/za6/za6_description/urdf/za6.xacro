@@ -1,0 +1,22 @@
+<?xml version="1.0" ?>
+<robot name="za6" xmlns:xacro="http://www.ros.org/wiki/xacro">
+  <xacro:arg name="tool" default="none"/>
+  <xacro:arg name="stand" default="none"/>
+  <xacro:arg name="prefix" default=""/>
+
+  <xacro:include filename="$(find za6_description)/urdf/za6_macro.xacro"/>
+  <xacro:za6_macro robotprefix="$(arg prefix)" tool="$(arg tool)" stand="$(arg stand)"/>
+
+  <link name="tcp_lin_link" />
+  <joint name="tcp_lin" type="prismatic">
+    <parent link="tool0"/>
+    <child link="tcp_lin_link"/>
+    <limit effort="1000.0" lower="-100.0" upper="100.0" velocity="1.0"/>
+  </joint>
+  <link name="tool0_tcp" />
+  <joint name="tcp_rot" type="prismatic">
+    <parent link="tcp_lin_link"/>
+    <child link="tool0_tcp"/>
+    <limit effort="1000.0" lower="-100.0" upper="100.0" velocity="1.0"/>
+  </joint>
+</robot>

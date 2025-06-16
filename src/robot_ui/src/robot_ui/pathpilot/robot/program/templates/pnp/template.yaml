@@ -1,0 +1,5 @@
+name: simple_pnp
+title: Pick and Place
+description: This template creates a simple pick and place program.
+type: simple
+enabled: False

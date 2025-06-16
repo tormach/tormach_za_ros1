@@ -1,0 +1,54 @@
+<masters>
+  <master idx="0" appTimePeriod="1000000" refClockSyncCycles="1">
+    <slave idx="6" type="generic" vid="00000a09" pid="0000000201">
+      <!-- Mailboxes -->
+      <syncManager idx="0" dir="out">
+        <pdo idx="1600">
+          <pdoEntry idx="7001" subIdx="01" bitLen="8" halType="complex">
+            <complexEntry bitLen="8" halType="bit" halPin="dout"/>
+          </pdoEntry>
+        </pdo>
+      </syncManager>
+      <syncManager idx="1" dir="out">
+        <pdo idx="1601">
+          <pdoEntry idx="7001" subIdx="02" bitLen="8" halType="complex">
+            <complexEntry bitLen="1" halType="bit" halPin="dout-8"/>
+            <complexEntry bitLen="1" halType="bit" halPin="dout-9"/>
+            <complexEntry bitLen="1" halType="bit" halPin="dout-10"/>
+            <complexEntry bitLen="1" halType="bit" halPin="dout-11"/>
+            <complexEntry bitLen="1" halType="bit" halPin="dout-12"/>
+            <complexEntry bitLen="1" halType="bit" halPin="dout-13"/>
+            <complexEntry bitLen="1" halType="bit" halPin="dout-14"/>
+            <complexEntry bitLen="1" halType="bit" halPin="dout-15"/>
+          </pdoEntry>
+        </pdo>
+      </syncManager>
+      <syncManager idx="2" dir="in">
+        <pdo idx="1a00">
+          <pdoEntry idx="6001" subIdx="01" bitLen="8" halType="complex">
+            <complexEntry bitLen="1" halType="bit" halPin="din-0"/>
+            <complexEntry bitLen="1" halType="bit" halPin="din-1"/>
+            <complexEntry bitLen="1" halType="bit" halPin="din-2"/>
+            <complexEntry bitLen="1" halType="bit" halPin="din-3"/>
+            <complexEntry bitLen="1" halType="bit" halPin="din-4"/>
+            <complexEntry bitLen="1" halType="bit" halPin="din-5"/>
+            <complexEntry bitLen="1" halType="bit" halPin="din-6"/>
+            <complexEntry bitLen="1" halType="bit" halPin="din-7"/>
+          </pdoEntry>
+        </pdo>
+        <pdo idx="1a01">
+          <pdoEntry idx="6001" subIdx="02" bitLen="8" halType="complex">
+            <complexEntry bitLen="1" halType="bit" halPin="din-8"/>
+            <complexEntry bitLen="1" halType="bit" halPin="din-9"/>
+            <complexEntry bitLen="1" halType="bit" halPin="din-10"/>
+            <complexEntry bitLen="1" halType="bit" halPin="din-11"/>
+            <complexEntry bitLen="1" halType="bit" halPin="din-12"/>
+            <complexEntry bitLen="1" halType="bit" halPin="din-13"/>
+            <complexEntry bitLen="1" halType="bit" halPin="din-14"/>
+            <complexEntry bitLen="1" halType="bit" halPin="din-15"/>
+          </pdoEntry>
+        </pdo>
+      </syncManager>
+    </slave>
+  </master>
+</masters>

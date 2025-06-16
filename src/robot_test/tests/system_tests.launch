@@ -1,0 +1,4 @@
+<launch>
+  <param name="test_module" value="$(find robot_test)/tests/simulation/" />
+  <test test-name="simulation" pkg="ros_pytest" type="ros_pytest_runner" />
+</launch>

@@ -1,0 +1,54 @@
+#!/usr/bin/env bash
+set -o errexit
+
+# Postinstall script for Tormach PathPilot Robot Launcher starter
+# package 'pathpilotrobotstarter'
+
+#DEBHELPER#
+
+# Not How It Should Be Done(TM), but will suffice for now
+
+readarray -d '' array < <(find /home -maxdepth 1 ! -path /home -type d -print0)
+
+for user_home in "${array[@]}"; do
+    if [[ ! -d ${user_home}/Desktop ]]
+    then
+        continue
+    fi
+
+    user_name="$(getent passwd  | grep "${user_home}" | cut -d: -f1)"
+
+    printf "%b"                                                                    \
+           "Creating symbolic link from "                                          \
+           "@CMAKE_INSTALL_FULL_DATAROOTDIR@/applications/robot-launcher.desktop " \
+           "to ${user_home}/Desktop/robot-launcher.desktop\n"
+
+    cp -f @CMAKE_INSTALL_FULL_DATAROOTDIR@/applications/robot-launcher.desktop \
+        ${user_home}/Desktop/robot-launcher.desktop
+    chown -h ${user_name}:${user_name} ${user_home}/Desktop/robot-launcher.desktop
+
+    printf "%b"                                                                           \
+           "Setting the ${user_home}/Desktop/robot-launcher.desktop file as executable\n"
+
+    chmod u+x ${user_home}/Desktop/robot-launcher.desktop
+done
+
+if command -v gtk-update-icon-cache &> /dev/null
+then
+    if [[ -f @CMAKE_INSTALL_FULL_DATAROOTDIR@/icons/hicolor/index.theme ]]
+    then
+        gtk-update-icon-cache @CMAKE_INSTALL_FULL_DATAROOTDIR@/icons/hicolor
+    else
+        printf "%b"                                                               \
+               "ERROR: "                                                          \
+               "File @CMAKE_INSTALL_FULL_DATAROOTDIR@/icons/hicolor/index.theme " \
+               "does NOT exist. This should not happen!"
+        # Do not fail here!
+    fi
+else
+    printf "%b"                                               \
+           "ERROR: "                                          \
+           "Could not find command 'gtk-update-icon-cache'. " \
+           "This should not happen!"
+    # Do not fail here!
+fi

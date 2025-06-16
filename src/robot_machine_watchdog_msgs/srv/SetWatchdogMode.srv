@@ -1,0 +1,4 @@
+bool active_status
+float32 torque_thresh
+---
+bool success

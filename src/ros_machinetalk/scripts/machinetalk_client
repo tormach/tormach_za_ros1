@@ -1,0 +1,80 @@
+#!/usr/bin/env python
+import rospy
+import sys
+import ast
+
+from ros_machinetalk import CommandClient, StatusSubscriber, InstanceClient
+from ros_machinetalk_msgs.msg import CommandGoal
+
+MACHINETALK_NODES_PARAM = 'machinetalk/nodes'
+
+
+class MachinetalkCLI:
+    def __init__(self):
+        rospy.init_node("machinetalk_client")
+        uuid = InstanceClient.get_default_uuid()
+        if not uuid:
+            rospy.logfatal('No instance selected. Cannot execute command')
+            raise RuntimeError()
+
+        self.cmd_client = CommandClient(uuid)
+        self.stat_sub = StatusSubscriber(uuid)
+        self.cmd_client.wait_for_server()
+
+    @staticmethod
+    def _map_args(data):
+        try:
+            return ast.literal_eval(data)
+        except (ValueError, SyntaxError):  # string
+            if hasattr(CommandGoal, data):  # map constants
+                data = getattr(CommandGoal, data)
+            return data
+
+    def send_cmd(self, *args):
+        args = list(args)  # convert tuples
+        cmd = args.pop(0)
+        args = map(self._map_args, args)
+
+        return getattr(self.cmd_client, cmd)(*args)
+
+    def read_stat(self, attrs):
+        self.stat_sub.wait_for_first_update()
+        res = self.stat_sub.msg
+        for a in attrs.split('.'):
+            res = getattr(res, a)
+        return res
+
+    def read_input(self, cmd, *args):
+        if cmd == "cmd":
+            try:
+                res = self.send_cmd(*args)
+                sys.stderr.write("%s\n" % res)
+            except AttributeError as e:
+                sys.stderr.write("Error:  %s\n" % e.message)
+                return None
+        elif cmd == "stat":
+            res = self.read_stat(*args)
+            sys.stderr.write("%s\n" % res)
+        else:
+            sys.stderr.write(f"unknown command {cmd}\n")
+
+    def loop(self):
+        while True:
+            sys.stderr.write("command cli> ")
+            text = input()
+            args = text.split(' ')
+            self.read_input(*args)
+
+
+def main():
+    cli = MachinetalkCLI()
+    if len(sys.argv) > 1:
+        args = sys.argv[1:]
+        cli.read_input(*args)
+    else:
+        cli.loop()
+    sys.exit(0)
+
+
+if __name__ == "__main__":
+    main()

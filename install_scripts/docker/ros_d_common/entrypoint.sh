@@ -1,0 +1,1322 @@
+#!/usr/bin/env bash
+
+#####################################################################
+# Description:  entrypoint.sh
+#
+#               This file, 'entrypoint.sh', implements general ENTRYPOINT
+#               for use in Tormach PathPilot Robot images. It uses falling
+#               design pattern from the Root user to the passed USER or
+#               to the pre-made virtualpathpilot user.
+#
+# Copyright (C) 2018-       John Morris  <john AT dovetail HYPHEN automata DOT com>
+# Copyright (C) 2018-       Alexander Rössler  <alex AT machinekoder DOT com>
+# Copyright (C) 2021-       Jakub Fišer  <jakub DOT fiser AT eryaf DOT com>
+#
+# Tormach internal license
+#
+######################################################################
+
+# Prohibit use of undefined variables
+set -o nounset
+# Set the exit code of a pipeline to that of the rightmost command to exit
+# with a non-zero status
+set -o pipefail
+
+################################################################################
+# Global Variables Declarations
+################################################################################
+
+IDENTIFY=${IDENTIFY:-0}
+VIRTUAL_PATHPILOT=${VIRTUAL_PATHPILOT:-"0"}
+LAUNCHER=${LAUNCHER:-"0"}
+ROBOT_UI=${ROBOT_UI:-"0"}
+
+ROS_DISTRO=${ROS_DISTRO:-"Unknown ROS distribuiton"}
+IMAGE_TYPE=${IMAGE_TYPE:-"Invalid image"}
+IMAGE_VERSION=${IMAGE_VERSION:-"Unknown image version"}
+GIT_REV=${GIT_REV:-"Unknown git revision"}
+DOCKER_REGISTRY=${DOCKER_REGISTRY:-"No Container registry set"}
+ROBOT_MODEL=${ROBOT_MODEL:-"Unknown robot model"}
+ROBOT_PACKAGE=${ROBOT_PACKAGE:-"Unknow robot package"}
+RELEASE_VERSION=${RELEASE_VERSION:-"Unknown release version"}
+RELEASE_CODENAME=${RELEASE_CODENAME:-"Unofficial release"}
+OS_VENDOR=${OS_VENDOR:-"Unknow OS vendor"}
+DEBIAN_SUITE=${DEBIAN_SUITE:-"No Debian version set"}
+
+ROSLAUNCH_ARGS=${ROSLAUNCH_ARGS:-""}
+LAUNCHER_UI_ARGS=${LAUNCHER_UI_ARGS:-""}
+START_ROBOT_UI=${START_ROBOT_UI:-""}
+GLOBAL_FILES_TO_SOURCE=${GLOBAL_FILES_TO_SOURCE:-""}         # Presumes ':' as file path delimiter
+USER_FILES_TO_SOURCE=${USER_FILES_TO_SOURCE:-""}             # Presumes ':' as file path delimiter
+LOCAL_FILES_TO_SOURCE=${LOCAL_FILES_TO_SOURCE:-""}           # Presumes ':' as file path delimiter
+GLOBAL_FILES_TO_SUBPROCESS=${GLOBAL_FILES_TO_SUBPROCESS:-""} # Presumes ':' as file path delimiter
+USER_FILES_TO_SUBPROCESS=${USER_FILES_TO_SUBPROCESS:-""}     # Presumes ':' as file path delimiter
+LOCAL_FILES_TO_SUBPROCESS=${LOCAL_FILES_TO_SUBPROCESS:-""}   # Presumes ':' as file path delimiter
+XDG_RUNTIME_DIR=${XDG_RUNTIME_DIR:-""}
+ROS_SETUP=${ROS_SETUP:-"/opt/ros/$ROS_DISTRO/setup.bash"}
+ETC_DIR=${ETC_DIR:-"/etc/pathpilot"}
+DOCKER_CONFIG=${DOCKER_CONFIG:-""}
+RT_CPUS=${RT_CPUS:-""}
+
+UID=${UID:-}
+GID=${GID:-}
+USER=${USER:-""}
+HOME=${HOME:-""}
+
+# PPRUSER is environment variable set up during image build
+# If for some reason there is not the PPRUSER env, fail very loundly!
+#PPRUSER=${PPRUSER:-"virtualpathpilot"}
+
+# Commands to run at start-up
+# GLOBAL command is run for every user
+# USER command is run only for the main user (for example 'pathpilot' or 'virtualpathpilot')
+# LOCAL command is run only in this ENTRYPOINT scope
+GLOBAL_PREPROCESS_COMMAND=""
+USER_PREPROCESS_COMMAND=""
+LOCAL_PREPROCESS_COMMAND=""
+
+# Command which was passed as a CMD on container spin-up
+EXECUTE_COMMAND=${@:-""}
+
+################################################################################
+# Maintenance Functions
+################################################################################
+
+NAME=$(basename $0 | sed 's/\(\..*\)$//')
+
+_write_out() {
+    local tag=$1
+    local message="${@:2}"
+
+    printf "%b" \
+        "$tag: $message\n"
+}
+
+log_info() {
+    _write_out "$NAME INFO" "$@"
+} >&2
+log_warning() {
+    _write_out "$NAME WARNING" "$@"
+} >&2
+log_error() {
+    _write_out "$NAME ERROR" "$@"
+} >&2
+
+success() {
+    _write_out "$NAME" "Script $NAME was successful!"
+    exit 0
+} >&2
+failure() {
+    local MSG="${*}"
+    local ERR="${MSG:+: ${MSG}}"
+    _write_out "$NAME" "Script $NAME failed${ERR}"
+    exit 1
+} >&2
+
+################################################################################
+# Program Functions
+################################################################################
+
+identify() {
+    log_info "Self description of Tormach PathPilot Robot image"
+    log_warning "Container will end after execution of this function!"
+
+    log_info "\nVALUES\n" \
+        "ROS distribution: $ROS_DISTRO\n" \
+        "Image type: $IMAGE_TYPE\n" \
+        "Image version:$IMAGE_VERSION\n" \
+        "Git revision: $GIT_REV\n" \
+        "Container registry: $DOCKER_REGISTRY\n" \
+        "Robot model: $ROBOT_MODEL\n" \
+        "Robot package: $ROBOT_PACKAGE\n" \
+        "Release version: $RELEASE_VERSION\n" \
+        "Release codename: $RELEASE_CODENAME\n" \
+        "OS vendor: $OS_VENDOR\n" \
+        "Debian suite: $DEBIAN_SUITE\n" \
+        "Current working directory: $(pwd)\n"
+
+    success
+}
+
+add_hostname_to_hosts() {
+    local hostname="$1"
+    local hosts_file="/etc/hosts"
+
+    echo "127.0.2.1  $hostname" >>${hosts_file}
+    local retval="$?"
+    if ((retval != 0)); then
+        log_error "Cannot add current hostname $hostname to $hosts_file"
+        return ${retval}
+    fi
+
+    log_info "Hostname $hostname added to the $hosts_file file."
+
+    return 0
+}
+
+check_for_file() {
+    local file="$1"
+    test -e $file
+}
+
+add_user() {
+    local new_user_name="$1"
+    local new_user_uid="$2"
+    local new_user_gid="$3"
+    local new_user_home="$4"
+
+    # - Remove stale entries (from `docker commit`)
+    sed -i /etc/passwd -e "/^[^:]*:[^:]*:${new_user_uid}:/ d"
+    local retval="$?"
+    if ((retval != 0)); then
+        log_error "Cannot delete UID $new_user_uid from /etc/passwd"
+        return ${retval}
+    fi
+
+    sed -i /etc/passwd -e "/^${new_user_name}:/ d"
+    local retval="$?"
+    if ((retval != 0)); then
+        log_error "Cannot delete USER $new_user_name from /etc/passwd"
+        return ${retval}
+    fi
+
+    sed -i /etc/shadow -e "/^${new_user_name}:/ d"
+    retval="$?"
+    if ((retval != 0)); then
+        log_error "Cannot delete user $new_user_name from /etc/shadow"
+        return ${retval}
+    fi
+
+    sed -i /etc/group -e "/^[^:]*:[^:]*:${new_user_gid}:/ d"
+    retval="$?"
+    if ((retval != 0)); then
+        log_error "Cannot delete GID $new_user_gid from /etc/group"
+        return ${retval}
+    fi
+
+    sed -i /etc/group -e "/^${new_user_gid}:/ d"
+    retval="$?"
+    if ((retval != 0)); then
+        log_error "Cannot delete GROUP $new_user_name from /etc/group"
+        return ${retval}
+    fi
+
+    sed -i /etc/gshadow -e "/^${new_user_name}:/ d"
+    retval="$?"
+    if ((retval != 0)); then
+        log_error "Cannot delete user $new_user_name from /etc/gshadow"
+        return ${retval}
+    fi
+
+    # - (Re)create the user
+    echo "${new_user_name}:x:${new_user_uid}:${new_user_gid}::${new_user_home}:/bin/bash" >>/etc/passwd
+    local retval="$?"
+    if ((retval != 0)); then
+        log_error "Cannot write user $new_user_uid with UID $new_user_uid, " \
+            "GID $new_user_gid and HOME $new_user_home to /etc/passwd"
+        return ${retval}
+    fi
+
+    echo "${new_user_name}:*:18488:0:99999:7:::" >>/etc/shadow
+    retval="$?"
+    if ((retval != 0)); then
+        log_error "Cannot write user $new_user_name to /etc/shadow"
+        return ${retval}
+    fi
+
+    echo "${new_user_name}:x:${new_user_gid}:" >>/etc/group
+    retval="$?"
+    if ((retval != 0)); then
+        log_error "Cannot write user $new_user_name with " \
+            "GID $new_user_gid from /etc/group"
+        return ${retval}
+    fi
+
+    echo "${new_user_name}:*::" >>/etc/gshadow
+    retval="$?"
+    if ((retval != 0)); then
+        log_error "Cannot write user $new_user_name to /etc/gshadow"
+        return ${retval}
+    fi
+
+    log_info "New user created:\n" \
+        "  USERNAME           : $new_user_name\n" \
+        "  USER ID            : $new_user_uid\n" \
+        "  USER GROUP ID      : $new_user_gid\n" \
+        "  USER HOME DIRECTORY: $new_user_home"
+
+    return ${retval}
+}
+
+add_user_to_groups() {
+    local user_name="$1"
+    local -a user_groups=("${@:2}")
+    local retval="-1"
+
+    for grp in "${user_groups[@]}"; do
+        adduser ${user_name} ${grp} >&/dev/null
+        retval="$?"
+        if ((retval != 0)); then
+            log_error "Cannot add user $user_name to group $grp"
+            return ${retval}
+        fi
+
+        log_info "User $user_name added to the group $grp."
+    done
+
+    return 0
+}
+
+check_user_and_home() {
+    if [[ "$USER" == "" ]]; then
+        failure "USER environment variable has to be set and not empty!"
+    else
+        check_for_file "$HOME" ||
+            failure "Specified HOME directory '$HOME' for USER $USER does not exist!"
+    fi
+
+    log_info "Check for USER and HOME environment variables successful."
+
+    return 0
+}
+
+set_machinekit_hal_remote() {
+    local remote=${1:-"0"}
+
+    sed -i /etc/machinekit/machinekit.ini \
+        -e "\$a ANNOUNCE_IPV4=${remote}\nANNOUNCE_IPV6=${remote}" \
+        -e '/^ANNOUNCE_IPV/ d'
+    local retval="$?"
+    if ((retval != 0)); then
+        log_error "Cannot set Machinekit-HAL remote in " \
+            "/etc/machinekit/machinekit.ini to $remote"
+        return ${retval}
+    fi
+
+    log_info "Remote communication of Machinekit-HAL set to $remote."
+
+    return 0
+}
+
+# Ensure ethercat and docker group IDs match device node/socket groups
+fix_gid_for_device() {
+    local device=$1
+    local wanted_group=$2
+
+    local original_group="$(stat -c %G $device)"
+    local retval="$?"
+
+    if ((retval != 0)); then
+        log_error "Querying for group name of device $device failed!"
+        return ${retval}
+    fi
+
+    if [[ "$original_group" == "$wanted_group" ]]; then
+        log_info "Device $device already has the wanted access group " \
+            "$wanted_group. Nothing to do!"
+        return 0
+    fi
+
+    # Renumber group
+    local original_gid="$(stat -c %g $device)"
+    retval="$?"
+    if ((retval != 0)); then
+        log_error "Querying for group ID of device $device failed!"
+        return ${retval}
+    fi
+
+    if [[ "$original_group" != "UNKNOWN" ]]; then
+        # Conflict; find free GID and renumber other group
+        for FREEGID in $(seq 99); do
+            result=$(getent group $FREEGID) >&/dev/null || true
+            test "${result}" != "" || break
+        done
+        log_info "$device:  Renumbering conflicting group owner $original_group" \
+            "from $original_gid to $FREEGID"
+        sed -i "s/^\([^:]*:[^:]*:\)${original_gid}\(:[^:]*\)\$/\1${FREEGID}\2/" \
+            /etc/group
+        retval="$?"
+        if ((retval != 0)); then
+            log_error "Renumbering conflicting group owner $original_group failed!"
+            return ${retval}
+        fi
+    fi
+    log_info "$device:  Renumbering $wanted_group GID to $original_gid"
+    sed -i "s/^${wanted_group}:x:[0-9]*:\([^:]*\)\$/${wanted_group}:x:${original_gid}:\1/" \
+        /etc/group
+    retval="$?"
+    if ((retval != 0)); then
+        log_error "Renumbering $wanted_group GID to $original_gid failed!"
+        return ${retval}
+    fi
+
+    return 0
+}
+
+propagate_ethercat_device() {
+    local retval="-1"
+
+    check_for_file /dev/EtherCAT0
+    retval="$?"
+
+    if ((retval != 0)); then
+        log_warning "EtherCAT character device 0 not found! Connection to physical robot will not be possible."
+        return 0
+    fi
+
+    fix_gid_for_device /dev/EtherCAT0 ethercat
+    retval="$?"
+    if ((retval != 0)); then
+        log_error "Propagating EtherCAT device failed!"
+    fi
+
+    return ${retval}
+}
+
+create_rt_cgroup() {
+    # Create the isolcpu cgroup for Machinekit-HAL realtime thread(or threads)
+    # execution.
+    #
+    # The selected system CPUs already have to be isolated via the 'isolcpus='
+    # kernel command line option from the Linux scheduler. (Thus this presumes
+    # no other running processes on the CPU range and do not shuffle processes
+    # out to other cores.)
+    #
+    # Sets the memory nodes to which a cgroup has access to '0' and disables
+    # the load balancing on selected CPUs.
+    #
+    # Unsuccessful attempt to set any of the values will result in FAILURE!
+    #
+    # Arguments:
+    #   rt_cpus:    Number or range of system CPUs
+    local rt_cpus="$1"
+
+    export RT_CGNAME="/rt"
+
+    local isolcpus_file="/sys/devices/system/cpu/isolated"
+
+    local output=$(<"$isolcpus_file")
+    local retval="$?"
+    if ((retval != 0)); then
+        log_error "Could not read the file '$isolcpus_file'!"
+        return ${retval}
+    fi
+    if [[ "$output" != "$rt_cpus" ]]; then
+        log_error "The isolated CPU(s) via 'isolcpus=' kernel" \
+            "commandline command is not equal to passed environment" \
+            "variable value '$rt_cpus'!"
+        return -1
+    fi
+
+    output="$(lscgroup -g cpuset:${RT_CGNAME})"
+    retval="$?"
+    if ((retval != 0)); then
+        log_error "Querying for of cpuset group $RT_CGNAME failed!"
+        return ${retval}
+    fi
+    if [[ $output =~ cpuset:${RT_CGNAME}/ ]]; then
+        log_warning "The cpuset group $RT_CGNAME already exists!" \
+            "This should not normally happen. Your system may be" \
+            "configured wrong!"
+    else
+        # ---> NORMAL STATE <---
+        # Create the wanted cgroup:cpuset ${RT_CGNAME} here
+        cgcreate -g cpuset:${RT_CGNAME}
+        retval="$?"
+        if ((retval != 0)); then
+            log_error "Cgcreate of cpuset $RT_CGNAME failed!"
+            return ${retval}
+        fi
+    fi
+
+    cgset -r cpuset.mems=0 ${RT_CGNAME}
+    retval="$?"
+    if ((retval != 0)); then
+        log_error "Cgset of cpuset.mems for $RT_CGNAME failed!"
+        return ${retval}
+    fi
+
+    output="$(cgget -n -v -r cpuset.mems ${RT_CGNAME})"
+    retval="$?"
+    if ((retval != 0)); then
+        log_error "Reading of cpuset.mems for $RT_CGNAME failed!"
+        return ${retval}
+    fi
+    if ((output != 0)); then
+        log_error "The cpuset.mems for $RT_CGNAME could not be" \
+            "set to '0'!"
+        return -1
+    fi
+
+    cgset -r cpuset.cpus=${rt_cpus} ${RT_CGNAME}
+    retval="$?"
+    if ((retval != 0)); then
+        log_error "Cpuset of cpus $rt_cpus for $RT_CGNAME failed!"
+        return ${retval}
+    fi
+
+    output="$(cgget -n -v -r cpuset.cpus ${RT_CGNAME})"
+    retval="$?"
+    if ((retval != 0)); then
+        log_error "Reading of cpuset.cpus for $RT_CGNAME failed!"
+        return ${retval}
+    fi
+    if [[ "$output" != "$rt_cpus" ]]; then
+        log_error "The cpuset.cpus for $RT_CGNAME could not be" \
+            "set to '$rt_cpus'!"
+        return -1
+    fi
+
+    # Originally, this script tried to set the cpu_exclusive attribute
+    # on the '/rt' cgroup to TRUE. Unfortunately, that did not take and also
+    # did not cause an error, leading to hidden bug. The reason why it didn't
+    # work is because Docker deamon have specified one parent cgroup with
+    # default setting of 'cpuset.cpus' to all available CPUs (for example, '0-7').
+    # When a new container is created in default mode, this container creates
+    # its base cgroup with values inherited from this parent cgroup and sets
+    # the filesystem ('/sys/fs/cgroup') namespaced to the container base cgroup.
+    #
+    # When this function creates a new cpuset cgroup '/rt', it creates it as
+    # a subgroup of the container base one. Setting a single CPU (or range)
+    # with 'cpuset.cpus' on it will reduce the cores on which processes will be
+    # able to be scheduled, but will not magically remove this range of CPU cores
+    # from all others cgroups (minimally the base Docker one, the containers ones
+    # or all others which are created on the system) - and for this reason the call
+    # to set 'cpuset.cpu_exclusive' will FAIL.
+    #
+    # TODO: Investigate other options for setting exclusivity on a given CPU core
+    # which do not rely on 'isolcpus' kernel command line option, because this cannot
+    # be very simply distributed as an update through OCI Registry
+    #
+    #cgset -r cpuset.cpu_exclusive=1 ${RT_CGNAME}
+
+    cgset -r cpuset.sched_load_balance=0 ${RT_CGNAME}
+    retval="$?"
+    if ((retval != 0)); then
+        log_error "Cgset of cpuset.sched_load_balance for $RT_CGNAME failed!"
+        return ${retval}
+    fi
+
+    output="$(cgget -n -v -r cpuset.sched_load_balance ${RT_CGNAME})"
+    retval="$?"
+    if ((retval != 0)); then
+        log_error "Reading of cpuset.sched_load_balance for $RT_CGNAME failed!"
+        return ${retval}
+    fi
+    if ((output != 0)); then
+        log_error "The cpuset.sched_load_balance for $RT_CGNAME " \
+            "could not be set to 'FALSE'!"
+        return -1
+    fi
+
+    log_info "Finished creating CPU cgroup for real-time hardening on core(s) $rt_cpus."
+
+    return 0
+}
+
+# create logrotate config and start cron
+create_logrotate_config() {
+    local user_home_directory="$1"
+    local etc_directory="$2"
+    local log_path="$user_home_directory/.ros/log"
+    local logrotate_status_path="$user_home_directory/.pathpilot/logrotate.status"
+    local anacron_spool_path="$user_home_directory/.pathpilot/anacron_spool/"
+
+    sed "s@\${ROS_LOG_PATH}@${log_path}@g;s@\${ROS_DISTRIBUTION}@${ROS_DISTRO}@g;s@\${ROS_LOG_USER}@${USER}@g" \
+        ${etc_directory}/logrotate_ros.conf >${etc_directory}/logrotate.conf
+    local retval="$?"
+    if ((retval != 0)); then
+        log_error "Cannot set logrotate.conf for ROS $ROS_DISTRO under $log_path!"
+        return ${retval}
+    fi
+
+    retval=0
+    echo -e "#!/bin/bash\nlogrotate -s ${logrotate_status_path} /etc/pathpilot/logrotate.conf" >>/etc/cron.daily/logrotate_ros
+    retval=$((retval + $?))
+    chmod +x /etc/cron.daily/logrotate_ros
+    retval=$((retval + $?))
+    echo "ANACRON_ARGS=\"-s -S ${anacron_spool_path}\"" >>/etc/default/anacron
+    retval=$((retval + $?))
+    mkdir -p "${anacron_spool_path}"
+    retval=$((retval + $?))
+    if ((retval != 0)); then
+        log_error "Encountered errors setting up anacron."
+        return ${retval}
+    fi
+
+    service cron start
+    retval="$?"
+    if ((retval != 0)); then
+        log_error "Cannot start cron service!"
+        return ${retval}
+    fi
+    service anacron start
+    retval="$?"
+    if ((retval != 0)); then
+        log_error "Cannot start anacron service!"
+        return ${retval}
+    fi
+
+    log_info "Log rotate configuration set up."
+
+    return 0
+}
+
+start_rsyslog() {
+    sed -i 's/^module(load="imuxsock")/#module(load="imuxsock")/g' /etc/rsyslog.conf
+    local retval="$?"
+    if ((retval != 0)); then
+        log_error "Cannot set rsyslog.conf for Machinekit HAL logging"
+        return ${retval}
+    fi
+
+    service rsyslog start
+    retval="$?"
+    if ((retval != 0)); then
+        log_error "Cannot start rsyslog service!"
+        return ${retval}
+    fi
+
+    log_info "RSysLog service started successfully."
+
+    return 0
+}
+
+configure_and_start_udev() {
+    /lib/systemd/systemd-udevd --daemon
+    local retval="$?"
+    if ((retval != 0)); then
+        log_error "Could not start the UDEV daemon in the container."
+        return ${retval}
+    fi
+
+    udevadm control --reload-rules
+    local retval="$?"
+    if ((retval != 0)); then
+        log_error "UDEV daemon could not reload rules."
+        return ${retval}
+    fi
+
+    # Good enough solution for now given the 0.1s this action takes
+    # and all the Tormach's rules are just for setting the right permission
+    udevadm trigger --attr-match=subsystem=usb
+    local retval="$?"
+    if ((retval != 0)); then
+        log_error "UDEV daemon could not trigger execution of rules for subsystem USB."
+        return ${retval}
+    fi
+
+    log_info "UDEV service started successfully."
+
+    return 0
+}
+
+check_for_docker_config() {
+    local prefix="$1"
+    local docker_config_file="$prefix/config.json"
+
+    check_for_file "$docker_config_file"
+}
+
+export_pathpilot_docker_config() {
+    local run_directory="$1"
+    local docker_directory="$run_directory/docker"
+
+    check_for_docker_config "$docker_directory"
+    local retval="$?"
+    if ((retval == 0)); then
+        export_variable_for_user "DOCKER_CONFIG" "$docker_directory"
+
+        log_info "Docker config file set as an environment variable."
+    else
+        log_warning "DOCKER_CONFIG environment variable could not be exported." \
+            "No Docker config.json file in $docker_directory."
+    fi
+
+    return ${retval}
+}
+
+install_directory() {
+    local uid="$1"
+    local gid="$2"
+    local mode="$3"
+    local folder="$4"
+
+    install -d -m ${mode} -o ${uid} -g ${gid} ${folder}
+    local retval="$?"
+    if ((retval != 0)); then
+        log_error "Installation of folder $folder under UID $uid, GID " \
+            "$gid with MODE $mode failed!"
+        return ${retval}
+    fi
+
+    log_info "Installation of folder $folder was sucessful."
+
+    return 0
+}
+
+mount_directory() {
+    local source="$1"
+    local destination="$2"
+    local options="$3"
+    local uid="$4"
+    local gid="$5"
+
+    local retval="1"
+
+    mount -o ${options} ${source} ${destination}
+    retval="$?"
+    if ((retval != 0)); then
+        log_error "Could not mount source $source to destination $destination " \
+            "with options $options"
+        return 1
+    fi
+
+    chown -R ${uid}:${gid} ${destination}
+    retval="$?"
+    if ((retval != 0)); then
+        log_error "Could not change the ownership of folder $destination " \
+            "to $uid:$gid"
+        return 1
+    fi
+
+    return 0
+}
+
+inject_distributed_robot_programs() {
+    local home_directory="$1"
+    local uid="$2"
+    local gid="$3"
+
+    local tormach_robot_programs_directory="$home_directory/nc_files/robot_programs/tormach"
+    local robot_programs_directory="/opt/pathpilot/robot/programs"
+    local retval="1"
+
+    if [[ -d "$robot_programs_directory" ]]; then
+        if [[ ! -d "$tormach_robot_programs_directory" ]]; then
+            install_directory "$uid" "$gid" "0700" "$tormach_robot_programs_directory"
+            retval="$?"
+            if ((retval != 0)); then
+                log_error "Could not create required directory $robot_programs_directory"
+                return 1
+            fi
+        fi
+
+        mount_directory "$robot_programs_directory" \
+            "$tormach_robot_programs_directory" \
+            "bind,rw" \
+            "$uid" \
+            "$gid"
+        retval="$?"
+        if ((retval != 0)); then
+            log_error "Could not inject distributed robot programs into \$HOME $home_directory"
+            return ${retval}
+        fi
+    else
+        log_warning "Distributed robot programs not injected." \
+            "The directory $robot_programs_directory " \
+            "does NOT exist in the running image!"
+        return
+    fi
+
+    log_info "TRPL programs sucessfully injected to the interpreter directory."
+
+    return 0
+}
+
+trim_array() {
+    local value="$3"
+
+    trim_space
+    eval "$1[$2]=$value"
+
+    return 0
+}
+
+trim_space() {
+    if [[ "$value" =~ "^([[:space:]]+)" ]]; then
+        val="${value:${#BASH_REMATCH[0]}}"
+    fi
+
+    if [[ "$value" =~ "([[:space:]]+)$" ]]; then
+        val="${value:0:${#value}-${#BASH_REMATCH[0]}}"
+    fi
+
+    return 0
+}
+
+#add_file_to_local_source_list()
+#add_file_to_user_source_list()
+add_file_to_global_source_list() {
+    local file="$1"
+
+    if [[ "$GLOBAL_FILES_TO_SOURCE" != "" ]]; then
+        GLOBAL_FILES_TO_SOURCE+=","
+
+    fi
+
+    GLOBAL_FILES_TO_SOURCE+="$file"
+
+    return 0
+}
+
+export_variable_for_all() {
+    local variable="$1"
+    local value="$2"
+
+    local command_string="export ${variable}=${value};"$'\n'
+
+    GLOBAL_PREPROCESS_COMMAND+="$command_string"
+}
+
+export_variable_for_user() {
+    local variable="$1"
+    local value="$2"
+
+    local command_string="export ${variable}=${value};"$'\n'
+
+    USER_PREPROCESS_COMMAND+="$command_string"
+}
+
+source_files_command() {
+    local input_list="$1"
+    local target_variable="$2"
+
+    local -a array
+    readarray -c1 -C 'trim_array array' -td: <<<"$input_list"
+    local retval="$?"
+    if ((retval != 0)); then
+        log_error "Could not read the input into list"
+        return ${retval}
+    fi
+
+    local item=""
+    for element in "${array[@]}"; do
+        check_for_file "$element"
+        retval="$?"
+        if ((retval != 0)); then
+            log_error "Skipping file $element!"
+            continue
+        else
+            log_info "Adding file $element to the list to source."
+        fi
+
+        item+="source $element;"$'\n'
+    done
+
+    read -r -d '' $target_variable <<<"${!target_variable}"$'\n'"set +o nounset"$'\n'"${item}set -o nounset;"
+
+    return 0
+}
+
+subprocess_files_command() {
+    local input_list="$1"
+    local target_variable="$2"
+
+    local -a array
+    readarray -c1 -C 'trim_array array' -td: <<<"$input_list"
+    local retval="$?"
+    if ((retval != 0)); then
+        log_error "Could not read the input into list"
+        return ${retval}
+    fi
+
+    local item=""
+    for element in "${array[@]}"; do
+        check_for_file "$element"
+        retval="$?"
+        if ((retval != 0)); then
+            log_error "Skipping file $element!"
+            continue
+        else
+            log_info "Adding file $element to the list to subprocess."
+        fi
+
+        item+="bash -f $element;"$'\n'
+    done
+
+    read -r -d '' $target_variable <<<"${!target_variable}"$'\n'"set -o nounset"$'\n'"${item}set +o nounset;"
+
+    return 0
+}
+
+check_for_uid_gid() {
+    local re="^[1-9][0-9]{0,}$"
+
+    if [[ "$UID" =~ $re && "$GID" =~ $re ]]; then
+        return 0
+    fi
+
+    if [[ "$UID" == "0" && "$GID" == "" ]]; then
+        return 1
+    fi
+
+    log_error "Passed only UID or only GID, this is illegal configuration!"
+    return 2
+}
+
+check_for_root_permission() {
+    local current_uid="$(id -u)"
+    local current_gid="$(id -g)"
+
+    if ((current_uid == 0 && current_gid == 0)); then
+        return 0
+    fi
+    log_error "Not running as the Root, but as UID $current_uid and GID " \
+        "$current_gid. This is not possible!"
+    return 1
+}
+
+process_files_to_source() {
+    local retval="0"
+
+    if [[ "$GLOBAL_FILES_TO_SOURCE" != "" ]]; then
+        source_files_command "$GLOBAL_FILES_TO_SOURCE" "GLOBAL_PREPROCESS_COMMAND"
+        retval=$((retval + $?))
+    else
+        log_info "No files to globally source were found."
+    fi
+
+    if [[ "$USER_FILES_TO_SOURCE" != "" ]]; then
+        source_files_command "$USER_FILES_TO_SOURCE" "USER_PREPROCESS_COMMAND"
+        retval=$((retval + $?))
+    else
+        log_info "No files to source for given user were found."
+    fi
+
+    if [[ "$LOCAL_FILES_TO_SOURCE" != "" ]]; then
+        source_files_command "$LOCAL_FILES_TO_SOURCE" "LOCAL_PREPROCESS_COMMAND"
+        retval=$((retval + $?))
+    else
+        log_info "No files to locally source were found."
+    fi
+
+    return ${retval}
+}
+
+process_files_to_subprocess() {
+    local retval="0"
+
+    if [[ "$GLOBAL_FILES_TO_SUBPROCESS" != "" ]]; then
+        subprocess_files_command "$GLOBAL_FILES_TO_SUBPROCESS" "GLOBAL_PREPROCESS_COMMAND"
+        retval=$((retval + $?))
+    else
+        log_info "No files to subprocess were found."
+    fi
+
+    if [[ "$USER_FILES_TO_SUBPROCESS" != "" ]]; then
+        subprocess_files_command "$USER_FILES_TO_SUBPROCESS" "USER_PREPROCESS_COMMAND"
+        retval=$((retval + $?))
+    else
+        log_info "No files to subprocess were found."
+    fi
+
+    if [[ "$LOCAL_FILES_TO_SUBPROCESS" != "" ]]; then
+        subprocess_files_command "$LOCAL_FILES_TO_SUBPROCESS" "LOCAL_PREPROCESS_COMMAND"
+        retval=$((retval + $?))
+    else
+        log_info "No files to subprocess were found."
+    fi
+
+    return ${retval}
+}
+
+finalize_preprocess_commands() {
+    local user="$1"
+    local global_profile_file="/etc/bash.bashrc"
+    local retval="0"
+
+    process_files_to_source
+    retval=$((retval + $?))
+
+    process_files_to_subprocess
+    retval=$((retval + $?))
+
+    if [[ "$GLOBAL_PREPROCESS_COMMAND" != "" ]]; then
+        printf "$GLOBAL_PREPROCESS_COMMAND\n\n" >>${global_profile_file}
+        retval=$((retval + $?))
+
+        log_info "Adding a global command to $global_profile_file"
+    fi
+
+    if [[ "$USER_PREPROCESS_COMMAND" != "" ]]; then
+        # Do not add the user specific command to the ~/.bashrc file as would be
+        # logical for most applications as that files is shared for all TPPR runs.
+        # The $global_profile_file is modified at each TPPR start from clean state
+        read -r -d '' conditioned_command <<-EOM
+if [[ "\$USER" == \"$user\" ]]; then
+$USER_PREPROCESS_COMMAND
+fi
+EOM
+        printf "$conditioned_command\n\n" >>${global_profile_file}
+        retval=$((retval + $?))
+
+        log_info "Adding a user command to $global_profile_file"
+    fi
+
+    return ${retval}
+}
+
+run_pathpilot_robot_supervisord() {
+    local target_user="$1"
+    local supervisord_configuration_directory="$2"
+    local supervisord_run_directory="$3"
+
+    # PathPilot Robot's supervirord configuration explicitly requires these environment
+    # variables even in the cases they are empty
+    export ROSLAUNCH_ARGS
+    export LAUNCHER_UI_ARGS
+
+    sudo -u ${target_user} -E bash -xc "
+        eval \"${GLOBAL_PREPROCESS_COMMAND}\"
+        eval \"${USER_PREPROCESS_COMMAND}\"
+        eval \"${LOCAL_PREPROCESS_COMMAND}\"
+        exec supervisord \
+            --configuration=${supervisord_configuration_directory}/supervisord.conf \
+            --pidfile=${supervisord_run_directory}/supervisord.pid \
+            --identifier=\"Virtual PathPilot Robot\"
+    "
+
+    local retval="$?"
+    if ((retval != 0)); then
+        log_error "Trying to exec supervisord under user $target_user with additional " \
+            "commands: \n'GLOBAL_PREPROCESS_COMMAND: $GLOBAL_PREPROCESS_COMMAND'\n" \
+            "\n'USER_PREPROCESS_COMMAND: $USER_PREPROCESS_COMMAND'\n" \
+            "\n'LOCAL_PREPROCESS_COMMAND: $LOCAL_PREPROCESS_COMMAND'\n" \
+            "failed with ERROR CODE $retval"
+    fi
+    return ${retval}
+}
+
+run_pathpilot_robot_command() {
+    local target_user="$1"
+    local run_command="$2"
+
+    sudo -u ${target_user} -E bash -c "
+        eval \"${GLOBAL_PREPROCESS_COMMAND}\"
+        eval \"${USER_PREPROCESS_COMMAND}\"
+        eval \"${LOCAL_PREPROCESS_COMMAND}\"
+        exec ${run_command}
+    "
+
+    local retval="$?"
+    if ((retval != 0)); then
+        log_error "Trying to exec custom command \n'$run_command'\n under" \
+            "user $target_user with additional commands:" \
+            "\n'GLOBAL_PREPROCESS_COMMAND: $GLOBAL_PREPROCESS_COMMAND'\n" \
+            "\n'USER_PREPROCESS_COMMAND: $USER_PREPROCESS_COMMAND'\n" \
+            "\n'LOCAL_PREPROCESS_COMMAND: $LOCAL_PREPROCESS_COMMAND'\n" \
+            "failed with ERROR CODE $retval"
+    fi
+    return ${retval}
+}
+
+set_ros_master_env() {
+    # Set up ROS_MASTER_URL using ip address of default route interface
+    local REGEX='^.*src \([0-9]*\.[0-9]*\.[0-9]*\.[0-9]*\) .*$'
+    local IP_ADDR=$(ip route get 8 | sed -n "1 s/$REGEX/\1/p")
+    test -n "$IP_ADDR" || IP_ADDR=127.0.0.1 # Default to loopback interface
+    export ROS_IP=$IP_ADDR
+    export ROS_MASTER_URI=http://$ROS_IP:11311
+    log_info "Set ROS_MASTER_URI=$ROS_MASTER_URI ROS_IP=$ROS_IP"
+}
+
+################################################################################
+# Main Function
+################################################################################
+
+_main() {
+    # We were asked to identify the image
+    if [[ "$IDENTIFY" == "1" ]]; then
+        identify
+    fi
+
+    local retval="-1"
+
+    # Check we are root and if not exit out
+    check_for_root_permission
+    retval="$?"
+    if ((retval != 0)); then
+        failure
+    fi
+
+    # Virtual PathPilot run was requested
+    if [[ "$VIRTUAL_PATHPILOT" == "1" ]]; then
+        log_info "VIRTUAL_PATHPILOT run requested!"
+
+        # Check no user, UID or GID were passed
+        check_for_uid_gid
+        retval="$?"
+        if ((retval != 1)); then
+            log_error "Requested VIRTUAL_PATHPILOT run but passed GID and UID" \
+                "specification. This is not possible."
+            failure
+        fi
+
+        local pathpilot_uid="$(id -u ${PPRUSER})"
+        local pathpilot_gid="$(id -g ${PPRUSER})"
+
+        local xdg_runtime_dir="/run/user/$pathpilot_uid"
+
+        export DISPLAY=":99"
+        export USER="$PPRUSER"
+        export HOME="/home/$USER"
+        export XDG_RUNTIME_DIR="$xdg_runtime_dir"
+        export RUN_DIR="$HOME/.pathpilot"
+        export LOG_DIR="$RUN_DIR/logs"
+        export FLAVOR="posix"         # Explicitly state we want vanilla Linux Machinekit-HAL
+        export ROS_LOG_DIR="$LOG_DIR" # Put ROS logs together for easy access
+        export HARDWARE_MODE=sim
+
+        install_directory "$pathpilot_uid" "$pathpilot_gid" "0700" "$xdg_runtime_dir"
+        local retval="$?"
+        if ((retval != 0)); then
+            failure
+        fi
+
+        add_hostname_to_hosts "$HOSTNAME"
+        retval="$?"
+        if ((retval != 0)); then
+            failure
+        fi
+
+        # Turn off Machinekit-HAL mDNS announcements; dbus socket not bind-mounted
+        set_machinekit_hal_remote "0"
+        retval="$?"
+        if ((retval != 0)); then
+            failure
+        fi
+
+        install_directory "$pathpilot_uid" "$pathpilot_gid" "700" "$LOG_DIR"
+        retval="$?"
+        if ((retval != 0)); then
+            failure
+        fi
+
+        install_directory "$pathpilot_uid" "$pathpilot_gid" "700" "$RUN_DIR"
+        retval="$?"
+        if ((retval != 0)); then
+            failure
+        fi
+
+        install_directory "$pathpilot_uid" "$pathpilot_gid" "1777" "/tmp/.X11-unix"
+        retval="$?"
+        if ((retval != 0)); then
+            failure
+        fi
+
+        add_file_to_global_source_list "$ROS_SETUP"
+        retval="$?"
+        if ((retval != 0)); then
+            failure
+        fi
+
+        finalize_preprocess_commands "$USER"
+        retval="$?"
+        if ((retval != 0)); then
+            failure
+        fi
+
+        run_pathpilot_robot_supervisord "$USER" \
+            "/etc/pathpilot" "$RUN_DIR" # For Virtual PathPilot Robot run,
+        # do not allow changing of config
+        # file under any circumstances
+
+        # The end of the line, execution should never reach this
+        retval="$?"
+        if ((retval != 0)); then
+            failure
+        fi
+        success
+    fi
+
+    # Normal run was requested
+    check_for_uid_gid
+    retval="$?"
+    if ((retval == 0)); then
+        check_user_and_home
+
+        log_info "Requested run under specified user UID $UID and GID $GID." \
+            "Creating new user."
+
+        add_user "$USER" "$UID" "$GID" "$HOME"
+        retval="$?"
+        if ((retval != 0)); then
+            failure
+        fi
+    else
+        USER="$PPRUSER"
+        HOME="/home/$PPRUSER"
+
+        export ${USER} ${HOME}
+    fi
+
+    local -a base_user_groups=(plugdev robotusers)
+
+    check_for_file "/var/run/docker.sock"
+    retval="$?"
+    if ((retval == 0)); then
+        retval="$?"
+        fix_gid_for_device "/var/run/docker.sock" "docker"
+        if ((retval != 0)); then
+            failure
+        fi
+
+        base_user_groups+=("docker")
+    else
+        log_error "Docker socket in container is hard requirement!"
+        failure
+    fi
+
+    add_user_to_groups "$USER" "${base_user_groups[@]}"
+    retval="$?"
+    if ((retval != 0)); then
+        failure
+    fi
+
+    add_hostname_to_hosts "$HOSTNAME"
+    retval="$?"
+    if ((retval != 0)); then
+        failure
+    fi
+
+    inject_distributed_robot_programs "$HOME" "$UID" "$GID"
+    retval="$?"
+    if ((retval != 0)); then
+        failure
+    fi
+
+    add_file_to_global_source_list "$ROS_SETUP"
+    retval="$?"
+    if ((retval != 0)); then
+        failure
+    fi
+
+    local run_dir="$HOME/.pathpilot"
+    local log_dir="$run_dir/logs"
+
+    export_variable_for_user "RUN_DIR" "$run_dir"
+    export_variable_for_user "LOG_DIR" "$log_dir"
+
+    install_directory "$UID" "$GID" "700" "$log_dir"
+    retval="$?"
+    if ((retval != 0)); then
+        failure
+    fi
+
+    install_directory "$UID" "$GID" "700" "$run_dir"
+    retval="$?"
+    if ((retval != 0)); then
+        failure
+    fi
+
+    if [[ "$DOCKER_CONFIG" != "" ]]; then
+        check_for_docker_config "$DOCKER_CONFIG" ||
+            failure "Specified DOCKER_CONFIG as $DOCKER_CONFIG, but no" \
+                "Docker config.json file found at this location!"
+    else
+        export_pathpilot_docker_config "$run_dir"
+        log_warning "Try to specify DOCKER_CONFIG environment variable when" \
+            "running this container."
+    fi
+
+    if [[ "$LAUNCHER" == "1" ]]; then
+        log_info "PathPilot Robot Launcher run requested."
+
+        finalize_preprocess_commands "$USER"
+        retval="$?"
+        if ((retval != 0)); then
+            failure
+        fi
+
+        run_pathpilot_robot_supervisord "$USER" "$ETC_DIR" "$run_dir"
+
+        # The end of the line
+        retval="$?"
+        if ((retval != 0)); then
+            failure
+        fi
+        success
+    fi
+
+    # Everything else in the books
+    # Presuming that the main point from here on is to run the Tormach PathPilot Robot suite
+
+    local -a robot_extended_user_groups=(dialout video ethercat)
+
+    add_user_to_groups "$USER" "${robot_extended_user_groups[@]}"
+    retval="$?"
+    if ((retval != 0)); then
+        failure
+    fi
+
+    # Propagate the /dev/EtherCAT0 device if it exists
+    propagate_ethercat_device
+    retval="$?"
+    if ((retval != 0)); then
+        failure
+    fi
+
+    # Turn off Machinekit-HAL mDNS announcements; dbus socket not bind-mounted
+    set_machinekit_hal_remote "0"
+    retval="$?"
+    if ((retval != 0)); then
+        failure
+    fi
+
+    if [[ "$RT_CPUS" != "" ]]; then
+        create_rt_cgroup "$RT_CPUS"
+        retval="$?"
+        if ((retval != 0)); then
+            failure
+        fi
+    fi
+
+    create_logrotate_config "$HOME" "$ETC_DIR"
+    retval="$?"
+    if ((retval != 0)); then
+        failure
+    fi
+
+    start_rsyslog
+    retval="$?"
+    if ((retval != 0)); then
+        failure
+    fi
+
+    configure_and_start_udev
+    retval="$?"
+    if ((retval != 0)); then
+        failure
+    fi
+
+    finalize_preprocess_commands "$USER"
+    retval="$?"
+    if ((retval != 0)); then
+        failure
+    fi
+
+    # Set ROS_MASTER_URL
+    set_ros_master_env
+
+    # Execute the main command
+    local -a default_cmd=("/bin/bash" "--login" "-i")
+    log_info "Running command '${EXECUTE_COMMAND:-${default_cmd[@]}}'"
+    run_pathpilot_robot_command "$USER" "${EXECUTE_COMMAND:-${default_cmd[@]}}"
+
+    # The end of the line
+    retval="$?"
+    if ((retval != 0)); then
+        failure
+    fi
+    success
+}
+
+################################################################################
+# Start of execution
+################################################################################
+
+_main
+# Chatch all unaddressed exit situations
+log_error "There was an error in script execution!"
+failure

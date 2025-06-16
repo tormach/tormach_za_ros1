@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<launch>
+
+  <rosparam param="tool_scene_sync/tool_urdfs"
+    file="$(find za6_tools)/config/tool_urdfs.yaml"
+    subst_value="true" command="load"
+    />
+
+  <include file="$(find robot_scene)/launch/tool_scene_sync.launch">
+    <arg name="tool_attach_link" value="flange"/>
+    <arg name="tool_touch_links" value="[link_6]"/>
+  </include>
+
+</launch>

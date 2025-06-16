@@ -1,0 +1,471 @@
+<masters>
+  <master idx="0" appTimePeriod="1000000" refClockSyncCycles="1">
+    <slave idx="0" type="generic" vid="00100000" pid="000c0108" configPdos="true">
+      <dcConf assignActivate="300" sync0Cycle="*1" sync0Shift="500000"/>
+      <!-- Mailboxes -->
+      <syncManager idx="0" dir="out"/>
+      <syncManager idx="1" dir="in"/>
+      <!-- Outputs, RPDO of slave -->
+      <syncManager idx="2" dir="out">
+        <pdo idx="1600">
+          <pdoEntry idx="6040" subIdx="00" bitLen="16" halType="u32" halPin="drive-command"/>
+          <pdoEntry idx="607A" subIdx="00" bitLen="32" halType="s32" halPin="target-position"/>
+        </pdo>
+      </syncManager>
+      <!-- Outputs, TPDO of slave -->
+      <syncManager idx="3" dir="in">
+        <pdo idx="1A00">
+          <pdoEntry idx="603F" subIdx="00" bitLen="16" halType="u32" halPin="error-code"/>
+          <pdoEntry idx="6041" subIdx="00" bitLen="16" halType="u32" halPin="status-word"/>
+          <pdoEntry idx="6041" subIdx="00" bitLen="16" halType="complex">
+            <!-- Bit0: Ready to switch on -->
+            <complexEntry bitLen="1" halType="bit" halPin="ready-to-switch-on" />
+            <!-- Bit1: Switched on -->
+            <complexEntry bitLen="1" halType="bit" halPin="switched-on" />
+            <!-- Bit2: Operation enabled -->
+            <complexEntry bitLen="1" halType="bit" halPin="operation-enabled" />
+            <!-- Bit3: Fault -->
+            <complexEntry bitLen="1" halType="bit" halPin="fault" />
+            <!-- Bit4: Voltage enabled -->
+            <complexEntry bitLen="1" halType="bit" halPin="voltage-enabled" />
+            <!-- Bit5: Quick stop -->
+            <complexEntry bitLen="1" halType="bit" halPin="quick-stop-fb" />
+            <!-- Bit6: Switch on disabled -->
+            <complexEntry bitLen="1" halType="bit" halPin="switch-on-disabled" />
+            <!-- Bit7: Warning bit -->
+            <complexEntry bitLen="1" halType="bit" halPin="warning" />
+            <!-- Bit8: Manufacturer specific -->
+            <complexEntry bitLen="1" />
+            <!-- Bit9: Remote -->
+            <complexEntry bitLen="1" halType="bit" halPin="remote" />
+            <!-- Bit10: Operation mode specific -->
+            <complexEntry bitLen="1" halType="bit" halPin="operation-mode-specific-10" />
+            <!-- Bit11: Internal limit active -->
+            <complexEntry bitLen="1" halType="bit" halPin="internal-limit-active" />
+            <!-- Bit12~Bit13 Operation mode specific -->
+            <complexEntry bitLen="2" halType="u32" halPin="operation-mode-specific-12-13" />
+            <!-- Bit14~Bit15: Manufacturer specific -->
+            <complexEntry bitLen="2"/>
+          </pdoEntry>
+          <pdoEntry idx="6064" subIdx="00" bitLen="32" halType="s32" halPin="position-actual-value"/>
+          <pdoEntry idx="6068" subIdx="00" bitLen="32" halType="s32" halPin="velocity-actual-value"/>
+          <pdoEntry idx="6077" subIdx="00" bitLen="16" halType="s32" halPin="torque-actual-value"/>
+          <pdoEntry idx="60F4" subIdx="00" bitLen="32" halType="s32" halPin="following-error-actual-value"/>
+        </pdo>
+      </syncManager>
+    </slave>
+    <slave idx="1" type="generic" vid="00100000" pid="000c0108" configPdos="true">
+      <dcConf assignActivate="300" sync0Cycle="*1" sync0Shift="500000" />
+      <!-- Mailboxes -->
+      <syncManager idx="0" dir="out"/>
+      <syncManager idx="1" dir="in"/>
+      <!-- Outputs, RPDO of slave -->
+      <syncManager idx="2" dir="out">
+        <pdo idx="1600">
+          <pdoEntry idx="6040" subIdx="00" bitLen="16" halType="u32" halPin="drive-command"/>
+          <pdoEntry idx="607A" subIdx="00" bitLen="32" halType="s32" halPin="target-position"/>
+        </pdo>
+      </syncManager>
+      <!-- Outputs, TPDO of slave -->
+      <syncManager idx="3" dir="in">
+        <pdo idx="1A00">
+          <pdoEntry idx="603F" subIdx="00" bitLen="16" halType="u32" halPin="error-code"/>
+          <pdoEntry idx="6041" subIdx="00" bitLen="16" halType="u32" halPin="status-word"/>
+          <pdoEntry idx="6041" subIdx="00" bitLen="16" halType="complex">
+            <!-- Bit0: Ready to switch on -->
+            <complexEntry bitLen="1" halType="bit" halPin="ready-to-switch-on" />
+            <!-- Bit1: Switched on -->
+            <complexEntry bitLen="1" halType="bit" halPin="switched-on" />
+            <!-- Bit2: Operation enabled -->
+            <complexEntry bitLen="1" halType="bit" halPin="operation-enabled" />
+            <!-- Bit3: Fault -->
+            <complexEntry bitLen="1" halType="bit" halPin="fault" />
+            <!-- Bit4: Voltage enabled -->
+            <complexEntry bitLen="1" halType="bit" halPin="voltage-enabled" />
+            <!-- Bit5: Quick stop -->
+            <complexEntry bitLen="1" halType="bit" halPin="quick-stop-fb" />
+            <!-- Bit6: Switch on disabled -->
+            <complexEntry bitLen="1" halType="bit" halPin="switch-on-disabled" />
+            <!-- Bit7: Warning bit -->
+            <complexEntry bitLen="1" halType="bit" halPin="warning" />
+            <!-- Bit8: Manufacturer specific -->
+            <complexEntry bitLen="1" />
+            <!-- Bit9: Remote -->
+            <complexEntry bitLen="1" halType="bit" halPin="remote" />
+            <!-- Bit10: Operation mode specific -->
+            <complexEntry bitLen="1" halType="bit" halPin="operation-mode-specific-10" />
+            <!-- Bit11: Internal limit active -->
+            <complexEntry bitLen="1" halType="bit" halPin="internal-limit-active" />
+            <!-- Bit12~Bit13 Operation mode specific -->
+            <complexEntry bitLen="2" halType="u32" halPin="mode-flag" />
+            <!-- Bit14~Bit15: Manufacturer specific -->
+            <complexEntry bitLen="2"/>
+          </pdoEntry>
+          <pdoEntry idx="6064" subIdx="00" bitLen="32" halType="s32" halPin="position-actual-value"/>
+          <pdoEntry idx="6068" subIdx="00" bitLen="32" halType="s32" halPin="velocity-actual-value"/>
+          <pdoEntry idx="6077" subIdx="00" bitLen="16" halType="s32" halPin="torque-actual-value"/>
+          <pdoEntry idx="60F4" subIdx="00" bitLen="32" halType="s32" halPin="following-error-actual-value"/>
+        </pdo>
+      </syncManager>
+    </slave>
+    <slave idx="2" type="generic" vid="00100000" pid="000c0108" configPdos="true">
+      <dcConf assignActivate="300" sync0Cycle="*1" sync0Shift="500000" />
+      <!-- Mailboxes -->
+      <syncManager idx="0" dir="out"/>
+      <syncManager idx="1" dir="in"/>
+      <!-- Outputs, RPDO of slave -->
+      <syncManager idx="2" dir="out">
+        <pdo idx="1600">
+          <pdoEntry idx="6040" subIdx="00" bitLen="16" halType="u32" halPin="drive-command"/>
+          <pdoEntry idx="607A" subIdx="00" bitLen="32" halType="s32" halPin="target-position"/>
+        </pdo>
+      </syncManager>
+      <!-- Outputs, TPDO of slave -->
+      <syncManager idx="3" dir="in">
+        <pdo idx="1A00">
+          <pdoEntry idx="603F" subIdx="00" bitLen="16" halType="u32" halPin="error-code"/>
+          <pdoEntry idx="6041" subIdx="00" bitLen="16" halType="u32" halPin="status-word"/>
+          <pdoEntry idx="6041" subIdx="00" bitLen="16" halType="complex">
+            <!-- Bit0: Ready to switch on -->
+            <complexEntry bitLen="1" halType="bit" halPin="ready-to-switch-on" />
+            <!-- Bit1: Switched on -->
+            <complexEntry bitLen="1" halType="bit" halPin="switched-on" />
+            <!-- Bit2: Operation enabled -->
+            <complexEntry bitLen="1" halType="bit" halPin="operation-enabled" />
+            <!-- Bit3: Fault -->
+            <complexEntry bitLen="1" halType="bit" halPin="fault" />
+            <!-- Bit4: Voltage enabled -->
+            <complexEntry bitLen="1" halType="bit" halPin="voltage-enabled" />
+            <!-- Bit5: Quick stop -->
+            <complexEntry bitLen="1" halType="bit" halPin="quick-stop-fb" />
+            <!-- Bit6: Switch on disabled -->
+            <complexEntry bitLen="1" halType="bit" halPin="switch-on-disabled" />
+            <!-- Bit7: Warning bit -->
+            <complexEntry bitLen="1" halType="bit" halPin="warning" />
+            <!-- Bit8: Manufacturer specific -->
+            <complexEntry bitLen="1" />
+            <!-- Bit9: Remote -->
+            <complexEntry bitLen="1" halType="bit" halPin="remote" />
+            <!-- Bit10: Operation mode specific -->
+            <complexEntry bitLen="1" halType="bit" halPin="operation-mode-specific-10" />
+            <!-- Bit11: Internal limit active -->
+            <complexEntry bitLen="1" halType="bit" halPin="internal-limit-active" />
+            <!-- Bit12~Bit13 Operation mode specific -->
+            <complexEntry bitLen="2" halType="u32" halPin="mode-flag" />
+            <!-- Bit14~Bit15: Manufacturer specific -->
+            <complexEntry bitLen="2"/>
+          </pdoEntry>
+          <pdoEntry idx="6064" subIdx="00" bitLen="32" halType="s32" halPin="position-actual-value"/>
+          <pdoEntry idx="6068" subIdx="00" bitLen="32" halType="s32" halPin="velocity-actual-value"/>
+          <pdoEntry idx="6077" subIdx="00" bitLen="16" halType="s32" halPin="torque-actual-value"/>
+          <pdoEntry idx="60F4" subIdx="00" bitLen="32" halType="s32" halPin="following-error-actual-value"/>
+        </pdo>
+      </syncManager>
+    </slave>
+    <slave idx="3" type="generic" vid="00100000" pid="000c0108" configPdos="true">
+      <dcConf assignActivate="300" sync0Cycle="*1" sync0Shift="500000" />
+      <!-- Mailboxes -->
+      <syncManager idx="0" dir="out"/>
+      <syncManager idx="1" dir="in"/>
+      <!-- Outputs, RPDO of slave -->
+      <syncManager idx="2" dir="out">
+        <pdo idx="1600">
+          <pdoEntry idx="6040" subIdx="00" bitLen="16" halType="u32" halPin="drive-command"/>
+          <pdoEntry idx="607A" subIdx="00" bitLen="32" halType="s32" halPin="target-position"/>
+        </pdo>
+      </syncManager>
+      <!-- Outputs, TPDO of slave -->
+      <syncManager idx="3" dir="in">
+        <pdo idx="1A00">
+          <pdoEntry idx="603F" subIdx="00" bitLen="16" halType="u32" halPin="error-code"/>
+          <pdoEntry idx="6041" subIdx="00" bitLen="16" halType="u32" halPin="status-word"/>
+          <pdoEntry idx="6041" subIdx="00" bitLen="16" halType="complex">
+            <!-- Bit0: Ready to switch on -->
+            <complexEntry bitLen="1" halType="bit" halPin="ready-to-switch-on" />
+            <!-- Bit1: Switched on -->
+            <complexEntry bitLen="1" halType="bit" halPin="switched-on" />
+            <!-- Bit2: Operation enabled -->
+            <complexEntry bitLen="1" halType="bit" halPin="operation-enabled" />
+            <!-- Bit3: Fault -->
+            <complexEntry bitLen="1" halType="bit" halPin="fault" />
+            <!-- Bit4: Voltage enabled -->
+            <complexEntry bitLen="1" halType="bit" halPin="voltage-enabled" />
+            <!-- Bit5: Quick stop -->
+            <complexEntry bitLen="1" halType="bit" halPin="quick-stop-fb" />
+            <!-- Bit6: Switch on disabled -->
+            <complexEntry bitLen="1" halType="bit" halPin="switch-on-disabled" />
+            <!-- Bit7: Warning bit -->
+            <complexEntry bitLen="1" halType="bit" halPin="warning" />
+            <!-- Bit8: Manufacturer specific -->
+            <complexEntry bitLen="1" />
+            <!-- Bit9: Remote -->
+            <complexEntry bitLen="1" halType="bit" halPin="remote" />
+            <!-- Bit10: Operation mode specific -->
+            <complexEntry bitLen="1" halType="bit" halPin="operation-mode-specific-10" />
+            <!-- Bit11: Internal limit active -->
+            <complexEntry bitLen="1" halType="bit" halPin="internal-limit-active" />
+            <!-- Bit12~Bit13 Operation mode specific -->
+            <complexEntry bitLen="2" halType="u32" halPin="mode-flag" />
+            <!-- Bit14~Bit15: Manufacturer specific -->
+            <complexEntry bitLen="2"/>
+          </pdoEntry>
+          <pdoEntry idx="6064" subIdx="00" bitLen="32" halType="s32" halPin="position-actual-value"/>
+          <pdoEntry idx="6068" subIdx="00" bitLen="32" halType="s32" halPin="velocity-actual-value"/>
+          <pdoEntry idx="6077" subIdx="00" bitLen="16" halType="s32" halPin="torque-actual-value"/>
+          <pdoEntry idx="60F4" subIdx="00" bitLen="32" halType="s32" halPin="following-error-actual-value"/>
+        </pdo>
+      </syncManager>
+    </slave>
+    <slave idx="4" type="generic" vid="00100000" pid="000c0108" configPdos="true">
+      <dcConf assignActivate="300" sync0Cycle="*1" sync0Shift="500000" />
+      <!-- Mailboxes -->
+      <syncManager idx="0" dir="out"/>
+      <syncManager idx="1" dir="in"/>
+      <!-- Outputs, RPDO of slave -->
+      <syncManager idx="2" dir="out">
+        <pdo idx="1600">
+          <pdoEntry idx="6040" subIdx="00" bitLen="16" halType="u32" halPin="drive-command"/>
+          <pdoEntry idx="607A" subIdx="00" bitLen="32" halType="s32" halPin="target-position"/>
+        </pdo>
+      </syncManager>
+      <!-- Outputs, TPDO of slave -->
+      <syncManager idx="3" dir="in">
+        <pdo idx="1A00">
+          <pdoEntry idx="603F" subIdx="00" bitLen="16" halType="u32" halPin="error-code"/>
+          <pdoEntry idx="6041" subIdx="00" bitLen="16" halType="u32" halPin="status-word"/>
+          <pdoEntry idx="6041" subIdx="00" bitLen="16" halType="complex">
+            <!-- Bit0: Ready to switch on -->
+            <complexEntry bitLen="1" halType="bit" halPin="ready-to-switch-on" />
+            <!-- Bit1: Switched on -->
+            <complexEntry bitLen="1" halType="bit" halPin="switched-on" />
+            <!-- Bit2: Operation enabled -->
+            <complexEntry bitLen="1" halType="bit" halPin="operation-enabled" />
+            <!-- Bit3: Fault -->
+            <complexEntry bitLen="1" halType="bit" halPin="fault" />
+            <!-- Bit4: Voltage enabled -->
+            <complexEntry bitLen="1" halType="bit" halPin="voltage-enabled" />
+            <!-- Bit5: Quick stop -->
+            <complexEntry bitLen="1" halType="bit" halPin="quick-stop-fb" />
+            <!-- Bit6: Switch on disabled -->
+            <complexEntry bitLen="1" halType="bit" halPin="switch-on-disabled" />
+            <!-- Bit7: Warning bit -->
+            <complexEntry bitLen="1" halType="bit" halPin="warning" />
+            <!-- Bit8: Manufacturer specific -->
+            <complexEntry bitLen="1" />
+            <!-- Bit9: Remote -->
+            <complexEntry bitLen="1" halType="bit" halPin="remote" />
+            <!-- Bit10: Operation mode specific -->
+            <complexEntry bitLen="1" halType="bit" halPin="operation-mode-specific-10" />
+            <!-- Bit11: Internal limit active -->
+            <complexEntry bitLen="1" halType="bit" halPin="internal-limit-active" />
+            <!-- Bit12~Bit13 Operation mode specific -->
+            <complexEntry bitLen="2" halType="u32" halPin="mode-flag" />
+            <!-- Bit14~Bit15: Manufacturer specific -->
+            <complexEntry bitLen="2"/>
+          </pdoEntry>
+          <pdoEntry idx="6064" subIdx="00" bitLen="32" halType="s32" halPin="position-actual-value"/>
+          <pdoEntry idx="6068" subIdx="00" bitLen="32" halType="s32" halPin="velocity-actual-value"/>
+          <pdoEntry idx="6077" subIdx="00" bitLen="16" halType="s32" halPin="torque-actual-value"/>
+          <pdoEntry idx="60F4" subIdx="00" bitLen="32" halType="s32" halPin="following-error-actual-value"/>
+        </pdo>
+      </syncManager>
+    </slave>
+    <slave idx="5" type="generic" vid="00100000" pid="000c0108" configPdos="true">
+      <dcConf assignActivate="300" sync0Cycle="*1" sync0Shift="500000" />
+      <!-- Mailboxes -->
+      <syncManager idx="0" dir="out"/>
+      <syncManager idx="1" dir="in"/>
+      <!-- Outputs, RPDO of slave -->
+      <syncManager idx="2" dir="out">
+        <pdo idx="1600">
+          <pdoEntry idx="6040" subIdx="00" bitLen="16" halType="u32" halPin="drive-command"/>
+          <pdoEntry idx="607A" subIdx="00" bitLen="32" halType="s32" halPin="target-position"/>
+        </pdo>
+      </syncManager>
+      <!-- Outputs, TPDO of slave -->
+      <syncManager idx="3" dir="in">
+        <pdo idx="1A00">
+          <pdoEntry idx="603F" subIdx="00" bitLen="16" halType="u32" halPin="error-code"/>
+          <pdoEntry idx="6041" subIdx="00" bitLen="16" halType="u32" halPin="status-word"/>
+          <pdoEntry idx="6041" subIdx="00" bitLen="16" halType="complex">
+            <!-- Bit0: Ready to switch on -->
+            <complexEntry bitLen="1" halType="bit" halPin="ready-to-switch-on" />
+            <!-- Bit1: Switched on -->
+            <complexEntry bitLen="1" halType="bit" halPin="switched-on" />
+            <!-- Bit2: Operation enabled -->
+            <complexEntry bitLen="1" halType="bit" halPin="operation-enabled" />
+            <!-- Bit3: Fault -->
+            <complexEntry bitLen="1" halType="bit" halPin="fault" />
+            <!-- Bit4: Voltage enabled -->
+            <complexEntry bitLen="1" halType="bit" halPin="voltage-enabled" />
+            <!-- Bit5: Quick stop -->
+            <complexEntry bitLen="1" halType="bit" halPin="quick-stop-fb" />
+            <!-- Bit6: Switch on disabled -->
+            <complexEntry bitLen="1" halType="bit" halPin="switch-on-disabled" />
+            <!-- Bit7: Warning bit -->
+            <complexEntry bitLen="1" halType="bit" halPin="warning" />
+            <!-- Bit8: Manufacturer specific -->
+            <complexEntry bitLen="1" />
+            <!-- Bit9: Remote -->
+            <complexEntry bitLen="1" halType="bit" halPin="remote" />
+            <!-- Bit10: Operation mode specific -->
+            <complexEntry bitLen="1" halType="bit" halPin="operation-mode-specific-10" />
+            <!-- Bit11: Internal limit active -->
+            <complexEntry bitLen="1" halType="bit" halPin="internal-limit-active" />
+            <!-- Bit12~Bit13 Operation mode specific -->
+            <complexEntry bitLen="2" halType="u32" halPin="mode-flag" />
+            <!-- Bit14~Bit15: Manufacturer specific -->
+            <complexEntry bitLen="2"/>
+          </pdoEntry>
+          <pdoEntry idx="6064" subIdx="00" bitLen="32" halType="s32" halPin="position-actual-value"/>
+          <pdoEntry idx="6068" subIdx="00" bitLen="32" halType="s32" halPin="velocity-actual-value"/>
+          <pdoEntry idx="6077" subIdx="00" bitLen="16" halType="s32" halPin="torque-actual-value"/>
+          <pdoEntry idx="60F4" subIdx="00" bitLen="32" halType="s32" halPin="following-error-actual-value"/>
+        </pdo>
+      </syncManager>
+    </slave>
+    <slave idx="6" type="generic" vid="00000a09" pid="0000000201">
+      <!-- Mailboxes -->
+      <syncManager idx="0" dir="out">
+        <pdo idx="1600">
+          <pdoEntry idx="7001" subIdx="01" bitLen="8" halType="complex">
+            <complexEntry bitLen="8" halType="bit" halPin="dout"/>
+          </pdoEntry>
+        </pdo>
+      </syncManager>
+      <syncManager idx="1" dir="out">
+        <pdo idx="1601">
+          <pdoEntry idx="7001" subIdx="02" bitLen="8" halType="complex">
+            <complexEntry bitLen="1" halType="bit" halPin="dout-8"/>
+            <complexEntry bitLen="1" halType="bit" halPin="dout-9"/>
+            <complexEntry bitLen="1" halType="bit" halPin="dout-10"/>
+            <complexEntry bitLen="1" halType="bit" halPin="dout-11"/>
+            <complexEntry bitLen="1" halType="bit" halPin="dout-12"/>
+            <complexEntry bitLen="1" halType="bit" halPin="dout-13"/>
+            <complexEntry bitLen="1" halType="bit" halPin="dout-14"/>
+            <complexEntry bitLen="1" halType="bit" halPin="dout-15"/>
+          </pdoEntry>
+        </pdo>
+      </syncManager>
+      <syncManager idx="2" dir="in">
+        <pdo idx="1A00">
+          <pdoEntry idx="6001" subIdx="01" bitLen="8" halType="complex">
+            <complexEntry bitLen="1" halType="bit" halPin="din-0"/>
+            <complexEntry bitLen="1" halType="bit" halPin="din-1"/>
+            <complexEntry bitLen="1" halType="bit" halPin="din-2"/>
+            <complexEntry bitLen="1" halType="bit" halPin="din-3"/>
+            <complexEntry bitLen="1" halType="bit" halPin="din-4"/>
+            <complexEntry bitLen="1" halType="bit" halPin="din-5"/>
+            <complexEntry bitLen="1" halType="bit" halPin="din-6"/>
+            <complexEntry bitLen="1" halType="bit" halPin="din-7"/>
+          </pdoEntry>
+        </pdo>
+        <pdo idx="1A01">
+          <pdoEntry idx="6001" subIdx="02" bitLen="8" halType="complex">
+            <complexEntry bitLen="1" halType="bit" halPin="din-8"/>
+            <complexEntry bitLen="1" halType="bit" halPin="din-9"/>
+            <complexEntry bitLen="1" halType="bit" halPin="din-10"/>
+            <complexEntry bitLen="1" halType="bit" halPin="din-11"/>
+            <complexEntry bitLen="1" halType="bit" halPin="din-12"/>
+            <complexEntry bitLen="1" halType="bit" halPin="din-13"/>
+            <complexEntry bitLen="1" halType="bit" halPin="din-14"/>
+            <complexEntry bitLen="1" halType="bit" halPin="din-15"/>
+          </pdoEntry>
+        </pdo>
+      </syncManager>
+    </slave>
+    <slave idx="7" type="generic" vid="0000ffff" pid="0000000b">
+      <dcConf assignActivate="300" sync0Cycle="*1" sync0Shift="500000" />
+      <!-- Mailboxes -->
+      <syncManager idx="0" dir="out"/>
+      <syncManager idx="1" dir="in"/>
+      <!-- Outputs, RPDO of slave -->
+      <syncManager idx="2" dir="out">
+        <pdo idx="1600">
+          <!-- Byte 0, action request -->
+          <pdoEntry idx="2000" subIdx="01" bitLen="8" halType="complex">
+            <!-- Bit0: Activation bit -->
+            <complexEntry bitLen="1" halType="bit" halPin="activate" />
+            <!-- Bit1: Reserved -->
+            <complexEntry bitLen="1" />
+            <!-- Bit2: Reserved -->
+            <complexEntry bitLen="1" />
+            <!-- Bit3: Go to requested position -->
+            <complexEntry bitLen="1" halType="bit" halPin="go-to-position" />
+            <!-- Bit4: Automatic release routine-->
+            <complexEntry bitLen="1" halType="bit" halPin="auto-release-routine" />
+            <!-- Bit5: Automatic release direction -->
+            <complexEntry bitLen="1" halType="bit" halPin="auto-release-direction" />
+            <!-- Bit6: Reserved -->
+            <complexEntry bitLen="1" />
+            <!-- Bit7: Reserved -->
+            <complexEntry bitLen="1" />
+          </pdoEntry>
+          <!-- Bytes 1&2, reserved -->
+          <pdoEntry idx="2000" subIdx="02" bitLen="8" />
+          <pdoEntry idx="2000" subIdx="03" bitLen="8" />
+          <!-- Byte 3, Position request -->
+          <pdoEntry idx="2000" subIdx="04" bitLen="8" halType="u32" halPin="position-cmd"/>
+          <!-- Byte 4, Speed -->
+          <pdoEntry idx="2000" subIdx="05" bitLen="8" halType="u32" halPin="speed"/>
+          <!-- Byte 4, Force -->
+          <pdoEntry idx="2000" subIdx="06" bitLen="8" halType="u32" halPin="force"/>
+          <!-- Bytes 6-15, reserved -->
+          <pdoEntry idx="2000" subIdx="07" bitLen="8"/>
+          <pdoEntry idx="2000" subIdx="08" bitLen="8"/>
+          <pdoEntry idx="2000" subIdx="09" bitLen="8"/>
+          <pdoEntry idx="2000" subIdx="0A" bitLen="8"/>
+          <pdoEntry idx="2000" subIdx="0B" bitLen="8"/>
+          <pdoEntry idx="2000" subIdx="0C" bitLen="8"/>
+          <pdoEntry idx="2000" subIdx="0D" bitLen="8"/>
+          <pdoEntry idx="2000" subIdx="0E" bitLen="8"/>
+          <pdoEntry idx="2000" subIdx="0F" bitLen="8"/>
+          <pdoEntry idx="2000" subIdx="10" bitLen="8"/>
+        </pdo>
+      </syncManager>
+      <syncManager idx="3" dir="in">
+        <pdo idx="1A00">
+          <!-- Byte 0, Gripper status -->
+          <pdoEntry idx="3000" subIdx="01" bitLen="8" halType="complex">
+            <!-- Bit0: activation status -->
+            <complexEntry bitLen="1" halType="bit" halPin="activation-fb"/>
+            <!-- Bit1&2: Reserved -->
+            <complexEntry bitLen="2"/>
+            <!-- Bit3: Action status -->
+            <complexEntry bitLen="1" halType="bit" halPin="go-to-position-fb"/>
+            <!-- Bit4&5: Automatic release routine-->
+            <complexEntry bitLen="2" halType="u32" halPin="gripper-status"/>
+            <!-- Bit6&7: Object detection status -->
+            <complexEntry bitLen="2" halType="u32" halPin="object-detection-status"/>
+          </pdoEntry>
+          <!-- Byte 1, Reserved -->
+          <pdoEntry idx="3000" subIdx="02" bitLen="8"/>
+          <!-- Byte 2, Fault status -->
+          <pdoEntry idx="3000" subIdx="03" bitLen="8" halType="complex">
+            <!-- Bit0-3: Gripper fault-->
+            <complexEntry bitLen="4" halType="u32" halPin="gripper-fault"/>
+            <!-- Bit4-7: Controller fault -->
+            <complexEntry bitLen="4" halType="u32" halPin="controller-fault"/>
+          </pdoEntry>
+          <!-- Byte 3, Position request feedback -->
+          <pdoEntry idx="3000" subIdx="04" bitLen="8" halType="u32" halPin="position-cmd-fb"/>
+          <!-- Byte 4, Position -->
+          <pdoEntry idx="3000" subIdx="05" bitLen="8" halType="u32" halPin="position-actual"/>
+          <!-- Byte 4, Current -->
+          <pdoEntry idx="3000" subIdx="06" bitLen="8" halType="u32" halPin="current"/>
+          <!-- Bytes 6-15, reserved -->
+          <pdoEntry idx="3000" subIdx="07" bitLen="8"/>
+          <pdoEntry idx="3000" subIdx="08" bitLen="8"/>
+          <pdoEntry idx="3000" subIdx="09" bitLen="8"/>
+          <pdoEntry idx="3000" subIdx="0A" bitLen="8"/>
+          <pdoEntry idx="3000" subIdx="0B" bitLen="8"/>
+          <pdoEntry idx="3000" subIdx="0C" bitLen="8"/>
+          <pdoEntry idx="3000" subIdx="0D" bitLen="8"/>
+          <pdoEntry idx="3000" subIdx="0E" bitLen="8"/>
+          <pdoEntry idx="3000" subIdx="0F" bitLen="8"/>
+          <pdoEntry idx="3000" subIdx="10" bitLen="8"/>
+        </pdo>
+      </syncManager>
+    </slave>
+  </master>
+</masters>

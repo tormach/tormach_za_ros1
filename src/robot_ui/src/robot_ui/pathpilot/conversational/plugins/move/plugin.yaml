@@ -1,0 +1,6 @@
+name: move
+title: Move
+description: Plan a robot move
+type: conversational
+priority: 1
+tooltip: msg_move_tab

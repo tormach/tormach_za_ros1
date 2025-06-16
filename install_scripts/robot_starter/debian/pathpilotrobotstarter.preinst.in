@@ -1,0 +1,84 @@
+#!/usr/bin/env bash
+set -o errexit
+
+# Preinstall script for Tormach PathPilot Robot Launcher starter
+# package 'pathpilotrobotstarter'
+
+#DEBHELPER#
+
+# Remove the files manually installed during robot's deployement
+
+failure(){
+    printf "%b"                                                \
+           "Tormach PathPilot Robot Starter pre-installation " \
+           "script failed.\n"
+    exit 1
+}
+
+_remove_manually_installed_files(){
+    # Remove the '.desktop' file, the package will use
+    # this exact PATH
+    if [[ -f @CMAKE_INSTALL_FULL_DATAROOTDIR@/applications/robot-launcher.desktop ]]
+    then
+        printf "%b"                                                                \
+               "Removing the old file: "                                           \
+               "@CMAKE_INSTALL_FULL_DATAROOTDIR@/applications/robot-launcher.desktop!\n"
+        rm -f @CMAKE_INSTALL_FULL_DATAROOTDIR@/applications/robot-launcher.desktop || failure
+    fi
+
+    # Remove the '.desktop' file from PathPilot USER's
+    # home directory, the package will use this exact PATH
+    if [[ -f /home/pathpilot/Desktop/robot-launcher.desktop ]]
+    then
+        printf "%b"                                                \
+               "Removing the old file: "                           \
+               "/home/pathpilot/Desktop/robot-launcher.desktop!\n"
+        rm -f /home/pathpilot/Desktop/robot-launcher.desktop || failure
+    fi
+
+    # Remove the 'launch-pathpilot-launcher' main file,
+    # the package will use put this functionality
+    # to the @CMAKE_INSTALL_FULL_BINDIR@ base PATH
+    if [[ -f /usr/local/launch-pathpilot-launcher ]]
+    then
+        printf "%b"                                                       \
+               "Removing the old file: "                                  \
+               "/usr/local/launch-pathpilot-launcher!\n"
+        rm -f /usr/local/launch-pathpilot-launcher || failure
+    fi
+
+    # Remove the PathPilot Robot's ROS icons, the package will use
+    # this exact PATH
+    ICONS_FOLDER="@CMAKE_INSTALL_FULL_DATAROOTDIR@/icons/hicolor"
+    ICONS_NAME="PathPilotROS.png"
+
+    readarray -d '' icons < <(find ${ICONS_FOLDER} -type f -name "$ICONS_NAME" -print0) || failure
+
+    for file in "${icons[@]}"; do
+        printf "%b"                      \
+               "Removing the old file: " \
+               "${file}!\n"
+        rm -f ${file} || failure
+    done
+}
+
+case "$1" in
+    install)
+        if (( $# == 1 ))
+        then
+            _remove_manually_installed_files || failure
+        fi
+        # This should be an upgrade, so nothing to do
+    ;;
+
+    upgrade|abort-upgrade)
+    ;;
+
+    *)
+        printf "%b"                                                  \
+               "Tormach PathPilot Robot Starter pre-install script " \
+               "called with unknown argument. Please report this "   \
+               "incident!\n" >&2
+        failure
+    ;;
+esac

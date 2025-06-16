@@ -1,0 +1,4 @@
+<?xml version="1.0"?>
+<launch>
+  <node pkg="robot_jog" type="interactive_jog_node" name="interactive_jog_node" />
+</launch>

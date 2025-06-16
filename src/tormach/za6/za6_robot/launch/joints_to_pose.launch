@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<launch>
+
+  <param name="joints_to_pose/joint_topic" value="joint_states_throttle"/>
+  <param name="joints_to_pose/planning_frame_topic" value="user_frames/active_frame"/>
+  <param name="joints_to_pose/tool_frame_topic" value="tool_frames/active_frame"/>
+  <param name="joints_to_pose/pose_topic" value="pose_states_throttle"/>
+  <param name="joints_to_pose/world_pose_topic" value="world_pose_states_throttle"/>
+  <param name="joints_to_pose/move_group_name" value="manipulator"/>
+  <param name="joints_to_pose/target_link_name" value="tool0"/>
+  <param name="joints_to_pose/base_link_name" value="world"/>
+
+  <node
+        name="$(anon joints_to_pose)"
+        pkg="cartesian_state"
+        type="joints_to_pose"
+        required="true"
+    />
+
+  <!-- load OPW parameters -->
+  <rosparam file="$(find za6_robot)/config/opw_params_za6.yaml" command="load"/>
+
+  <param name="movej_ik_switch" value="bio" />
+
+  <include file="$(find movej_ik_server)/launch/movej_ik_server.launch"/>
+  <include file="$(find robot_machine_watchdog)/launch/launch.launch"/>
+  <!--<include file="$(find ydlidar_ros_driver)/launch/GS2.launch"/>-->
+  <!--<include file="$(find lidar_simulator)/launch/launch.launch"/>-->
+  <!--<include file="$(find lidar_simulator)/launch/launch_interactive.launch"/>-->
+  <include file="$(find lidar_pointcloud_processor)/launch/launch.launch"/>
+  <include file="$(find workpiece_visualizer)/launch/visualizer.launch"/>
+</launch>

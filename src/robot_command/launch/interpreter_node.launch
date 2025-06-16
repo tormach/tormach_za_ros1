@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<launch>
+  <arg name="interpreter" default="execution" />
+  <arg name="debug" default="false" />
+
+  <param name="/robot_command/interpreter" value="$(arg interpreter)" />
+  <param name="/robot_command/debug" value="$(arg debug)" />
+
+  <node
+      pkg="robot_command"
+      type="interpreter_node"
+      name="interpreter_node"
+      output="screen"
+      required="true"
+      />
+</launch>

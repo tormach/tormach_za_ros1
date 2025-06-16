@@ -1,0 +1,14 @@
+<launch>
+  <!-- Launch the workpiece visualizer server -->
+  <node name="workpiece_visualizer_server" pkg="workpiece_visualizer" type="workpiece_visualizer_server" output="screen">
+    <!-- Workpiece dimensions -->
+    <param name="workpiece_x" value="0.120" />
+    <param name="workpiece_y" value="0.1018" />
+    <param name="workpiece_z" value="0.0381" />
+  </node>
+
+  <!-- The RViz node launch has been removed -->
+
+  <!-- Optional: Add any additional nodes or parameters here -->
+
+</launch>

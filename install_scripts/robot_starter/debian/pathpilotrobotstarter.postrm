@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+set -o errexit
+
+# Postuninstall script for Tormach PathPilot Robot Launcher starter
+# package 'pathpilotrobotstarter'
+
+#DEBHELPER#
+
+# Not How It Should Be Done(TM), but will suffice for now
+
+USER_HOMES="/home"
+
+readarray -d '' array < <(find ${USER_HOMES} -type l -name 'robot-launcher.desktop' -print0)
+
+for file in "${array[@]}"; do
+    printf "%b"                      \
+           "Removing the old file: " \
+           "${file}!\n"
+    rm -f ${file}
+done

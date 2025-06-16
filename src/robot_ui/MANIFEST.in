@@ -1,0 +1,6 @@
+recursive-include src/robot_ui *.qml qmldir
+recursive-include src/robot_ui/res/icons *.png *.jpg *.svg
+recursive-include src/robot_ui/res/fonts *.ttf
+recursive-include src/robot_ui/res *.json
+recursive-include src/robot_ui/res/3d *.stl
+recursive-include src/robot_ui/launcher_ui/screens launcher.scxml

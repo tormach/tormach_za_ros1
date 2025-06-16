@@ -1,0 +1,7 @@
+name: control_structures
+title: Control Structures
+description: Create control structures such as loops and conditions
+type: conversational
+enabled: True
+priority: 7
+tooltip: control_structure_tab

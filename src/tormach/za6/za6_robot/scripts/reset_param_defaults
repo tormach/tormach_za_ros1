@@ -1,0 +1,50 @@
+#!/usr/bin/env python
+import rospy
+from redis_store import ConfigClient
+
+
+class ResetParamDefaults:
+    """
+    Resets parameters stored in redis to their default values on startup.
+    """
+
+    MIN_MAX_VEL = 0.05
+
+    def __init__(self):
+        rospy.init_node('reset_param_defaults', anonymous=True)
+        self._config = ConfigClient()
+        self._config.wait_for_service(rospy.get_param('~timeout', None))
+
+    def reset(self):
+        # this scaling value was used in the older releases,
+        # eventually remove it from robot_command completely
+        # reset to 1.0 for now
+        rospy.logdebug("Resetting maximum velocity to 1.0.")
+        self._config.set_param('/user_config/maximum_velocity', 1.0)
+
+        rospy.loginfo("Resetting persistent parameters to default values.")
+        max_vel = self._config.get_param('/user_config/maximum_velocity_scale')
+        if max_vel < self.MIN_MAX_VEL:
+            rospy.loginfo(f"Resetting maximum velocity to {self.MIN_MAX_VEL}.")
+            self._config.set_param(
+                '/user_config/maximum_velocity_scale', self.MIN_MAX_VEL
+            )
+        else:
+            rospy.loginfo(f"Maximum velocity already set to {max_vel}.")
+
+        rospy.loginfo("Resetting velocity scale to 1.0.")
+        self._config.set_param('/user_config/uniform_velocity_scale', 1.0)
+
+        rospy.loginfo("Resetting jog ignoreprobe to False.")
+        self._config.set_param('/user_config/jog/ignoreprobe', False)
+
+        is_mastering = rospy.get_param('~mastering', False)
+        rospy.loginfo(f"Resetting mastering flag to {is_mastering}")
+        self._config.set_param(
+            '/user_config/custom/mastering/in_mastering_config', is_mastering
+        )
+
+
+if __name__ == '__main__':
+    reset_defaults = ResetParamDefaults()
+    reset_defaults.reset()

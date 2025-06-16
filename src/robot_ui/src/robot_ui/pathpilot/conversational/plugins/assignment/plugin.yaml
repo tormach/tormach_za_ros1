@@ -1,0 +1,7 @@
+name: assignment
+title: Assignment
+description: Create assignments
+type: conversational
+priority: 8
+tooltip: msg_assignment_tab
+toolTipPosRight: False

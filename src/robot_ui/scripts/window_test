@@ -1,0 +1,79 @@
+#!/usr/bin/env python
+
+import rospy
+from std_msgs.msg import UInt32
+
+from PySide6.QtCore import QObject, QTimer, Slot
+from PySide6.QtWidgets import (
+    QApplication,
+    QLabel,
+    QVBoxLayout,
+    QWidget,
+    QPushButton,
+)
+
+
+class WindowTest(QObject):
+    SHUTDOWN_CHECK_INTERVAL_MS = 100
+
+    def __init__(self, parent=None):
+        super().__init__(parent)
+
+        rospy.init_node('window_test')
+        rospy.on_shutdown(lambda: QApplication.quit())
+
+        self._win_id_pub = rospy.Publisher(
+            '/window_test/window_id', UInt32, queue_size=1, latch=True
+        )
+
+        self._window = None
+        self.destroyed.connect(lambda: self._shutdown())
+        self._create_window()
+        self._start_check_timer()
+
+    def _create_window(self):
+        self._window = QWidget()
+        self._window.resize(200, 200)
+        self._window.setWindowTitle('Window Test')
+        # add layout to window
+        layout = QVBoxLayout(self._window)
+        self._window.setLayout(layout)
+        # self._window.setLayout(QVBoxLayout())
+        # add a label widget to the window
+        layout.addWidget(QLabel('Hello World'))
+        layout.addWidget(QPushButton('Button'))
+        self._window.show()
+
+        self._win_id_pub.publish(int(self._window.winId()))
+
+    def _destroy_window(self):
+        if not self._window:
+            return
+        self._win_id_pub.publish(0)
+        window = self._window
+        self._window = None
+        window.close()
+        window.deleteLater()
+
+    def _start_check_timer(self):
+        self._timer = QTimer(self)
+        self._timer.timeout.connect(self._check_continue)
+        self._timer.start(self.SHUTDOWN_CHECK_INTERVAL_MS)
+
+    @Slot()
+    def _check_continue(self):
+        pass
+
+    @Slot()
+    def _shutdown(self):
+        self._timer.stop()
+        self._destroy_window()
+
+
+if __name__ == '__main__':
+    import sys
+
+    app = QApplication(sys.argv)
+    window_test = WindowTest()
+    ret = app.exec()
+    sys.exit(ret)

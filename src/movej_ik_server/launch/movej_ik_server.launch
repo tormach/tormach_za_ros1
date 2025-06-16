@@ -1,0 +1,7 @@
+<launch>
+  <!-- load allowed arm configurations -->
+  <rosparam file="$(find movej_ik_server)/config/allowed_arm_configs.yaml" command="load" />
+
+  <!-- launch the movej_ik_server node -->
+  <node name="movej_ik_server" pkg="movej_ik_server" type="movej_ik_server" output="screen" />
+</launch>

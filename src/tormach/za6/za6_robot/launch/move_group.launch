@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<launch>
+
+  <!-- Override settings in
+       ../../za6_moveit_config/launch/move_group.launch -->
+
+  <arg name="pipeline" default="pilz_industrial_motion_planner" />
+  <arg name="mastering" default="false"/>
+  <arg name="tool" default="none"/>
+
+  <arg name="debug" default="false" />
+  <arg name="info" default="$(arg debug)" />
+  <arg name="allow_trajectory_execution" default="true"/>
+  <arg name="max_safe_path_cost" default="1"/>
+  <arg name="publish_monitored_planning_scene" default="true"/>
+  <arg name="capabilities" default="move_group/MoveGroupRetimeTrajectoryService"/>
+  <arg name="disable_capabilities" default="move_group/ClearOctomapService move_group/MoveGroupCartesianPathService"/>
+
+  <!-- add sequence capabilities for pilz_industrial_motion_planner pipeline -->
+  <arg name="_capabilities" value="$(arg capabilities)" unless="$(eval arg('pipeline')=='pilz_industrial_motion_planner')" />
+  <arg name="_capabilities"
+       value="$(arg capabilities) pilz_industrial_motion_planner/MoveGroupSequenceAction pilz_industrial_motion_planner/MoveGroupSequenceService"
+       if="$(eval arg('pipeline')=='pilz_industrial_motion_planner')" />
+
+  <include
+      file="$(find za6_moveit_config)/launch/move_group.launch"
+      >
+    <arg name="debug" value="$(arg debug)" />
+    <arg name="info" value="$(arg info)" />
+    <arg name="allow_trajectory_execution" value="$(arg allow_trajectory_execution)"/>
+    <arg name="max_safe_path_cost" value="$(arg max_safe_path_cost)"/>
+    <arg name="publish_monitored_planning_scene" value="$(arg publish_monitored_planning_scene)"/>
+    <arg name="capabilities" value="$(arg _capabilities)"/>
+    <arg name="disable_capabilities" value="$(arg disable_capabilities)"/>
+    <arg name="pipeline" value="$(arg pipeline)" />
+    <arg name="load_robot_description" value="false"/>
+  </include>
+
+  <!-- Load local custom settings from overrides.launch -->
+  <include file="$(find za6_robot)/launch/overrides.launch">
+    <arg name="mastering" value="$(arg mastering)"/>
+    <arg name="tool" value="$(arg tool)"/>
+  </include>
+
+</launch>

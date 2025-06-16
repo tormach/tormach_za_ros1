@@ -1,0 +1,634 @@
+{
+    "std_header_font": "font_desc=\"Roboto Condensed 12\" foreground=\"black\"",
+    "std_body_font": "font_desc=\"Roboto Condensed 10\" foreground=\"black\"",
+    "std_long_width": 250,
+    "std_bk_color": "#FFFFFF",
+    "common": {
+        "gcode_options_button": {
+            "shorttext_id": "gcode_options_button_text",
+            "longtext_id": "gcode_options_button_tooltip"
+        },
+        "conv_edit_job_duplicate_button": {
+            "shorttext_id": "conv_edit_job_duplicate_button_text",
+            "longtext_id": "conv_edit_job_duplicate_button_tooltip",
+            "images": [
+                "probe_find_pocket_x_center.svg"
+            ],
+            "long_width": 320
+        },
+        "cycle_start": {
+            "shorttext_id": "msg_cycle_start_text",
+            "longtext_id": "msg_cycle_start_tooltip",
+            "long_width": 275
+        },
+        "reset": {
+            "shorttext_id": "msg_reset_text",
+            "longtext_id": "msg_reset_tooltip",
+            "long_width": 250
+        },
+        "single_block": {
+            "shorttext_id": "msg_single_block_text",
+            "longtext_id": "msg_single_block_tooltip",
+            "long_width": 300
+        },
+        "optional_pause": {
+            "shorttext_id": "msg_optional_pause_text",
+            "longtext_id": "msg_optional_pause_tooltip",
+            "long_width": 350
+        },
+        "feedhold": {
+            "shorttext_id": "msg_feedhold_text",
+            "longtext_id": "msg_feedhold_tooltip",
+            "long_width": 275
+        },
+        "stop": {
+            "shorttext_id": "msg_stop_text",
+            "longtext_id": "msg_stop_tooltip",
+            "long_width": 275
+        },
+        "add_new_waypoint_from_current_position": {
+            "shorttext_id": "add_new_waypoint_from_current_position_text",
+            "longtext_id": "add_new_waypoint_from_current_position_tooltip",
+            "long_width": 450
+        },
+        "conv_move_type_radio": {
+            "shorttext_id": "conv_move_type_radio_text",
+            "longtext_id": "conv_move_type_radio_tooltip",
+            "long_width": 300
+        },
+        "conv_move_add_to_program": {
+            "shorttext_id": "conv_move_add_to_program_text",
+            "longtext_id": "conv_move_add_to_program_tooltip",
+            "long_width": 300
+        },
+        "conv_move_pose_waypoints_radio": {
+            "shorttext_id": "conv_move_pose_waypoints_radio_text",
+            "longtext_id": "conv_move_pose_waypoints_radio_tooltip",
+            "long_width": 300
+        },
+        "conv_move_joint_waypoints_radio": {
+            "shorttext_id": "conv_move_joint_waypoints_radio_text",
+            "longtext_id": "conv_move_joint_waypoints_radio_tooltip",
+            "long_width": 300
+        },
+        "conv_move_program_waypoints_radio": {
+            "shorttext_id": "conv_move_program_waypoints_radio_text",
+            "longtext_id": "conv_move_program_waypoints_radio_tooltip",
+            "long_width": 300
+        },
+        "conv_move_global_waypoints_radio": {
+            "shorttext_id": "conv_move_global_waypoints_radio_text",
+            "longtext_id": "conv_move_global_waypoints_radio_tooltip",
+            "long_width": 300
+        },
+        "uniform_velocity_slider": {
+            "shorttext_id": "uniform_velocity_slider_combo_text",
+            "longtext_id": "uniform_velocity_slider_combo_tooltip",
+            "long_width": 325
+        },
+        "feedrate_override_slider": {
+            "shorttext_id": "feedrate_override_slider_combo_text",
+            "longtext_id": "feedrate_override_slider_combo_tooltip",
+            "long_width": 325
+        },
+        "jograte_slider": {
+            "shorttext_id": "jograte_slider_text",
+            "longtext_id": "jograte_slider_tooltip",
+            "long_width": 325
+        },
+        "jog_type_switch": {
+            "shorttext_id": "jog_type_switch_text",
+            "longtext_id": "jog_type_switch_tooltip",
+            "long_width": 300
+        },
+        "jog_step_size_0.100": {
+            "shorttext_id": "jog_step_size_0.100_text",
+            "longtext_id": "jog_step_size_0.100_tooltip",
+            "long_width": 300
+        },
+        "jog_step_size_1.000": {
+            "shorttext_id": "jog_step_size_1.000_text",
+            "longtext_id": "jog_step_size_1.000_tooltip",
+            "long_width": 300
+        },
+        "jog_step_size_10.00": {
+            "shorttext_id": "jog_step_size_10.00_text",
+            "longtext_id": "jog_step_size_10.00_tooltip",
+            "long_width": 300
+        },
+        "jog_step_size_100.0": {
+            "shorttext_id": "jog_step_size_100.0_text",
+            "longtext_id": "jog_step_size_100.0_tooltip",
+            "long_width": 300
+        },
+        "dro_zero_x": {
+            "shorttext_id": "dro_zero_x_text",
+            "longtext_id": "dro_zero_x_tooltip",
+            "long_width": 250
+        },
+        "dro_zero_y": {
+            "shorttext_id": "dro_zero_y_text",
+            "longtext_id": "dro_zero_y_tooltip",
+            "long_width": 250
+        },
+        "dro_zero_z": {
+            "shorttext_id": "dro_zero_z_text",
+            "longtext_id": "dro_zero_z_tooltip",
+            "long_width": 250
+        },
+        "dro_zero_a": {
+            "shorttext_id": "dro_zero_a_text",
+            "longtext_id": "dro_zero_a_tooltip",
+            "long_width": 250
+        },
+        "dro_zero_b": {
+            "shorttext_id": "dro_zero_b_text",
+            "longtext_id": "dro_zero_b_tooltip",
+            "long_width": 250
+        },
+        "dro_zero_c": {
+            "shorttext_id": "dro_zero_c_text",
+            "longtext_id": "dro_zero_c_tooltip",
+            "long_width": 250
+        },
+        "add_user_frame": {
+            "shorttext_id": "add_user_frame_text",
+            "longtext_id": "add_user_frame_tooltip",
+            "long_width": 300
+        },
+        "set_command_conversational_notebook": {
+            "shorttext_id": "set_command_conversational_notebook_text",
+            "longtext_id": "set_command_conversational_notebook_tooltip",
+            "long_width": 300
+        },
+        "subprogram_conversational_notebook": {
+            "shorttext_id": "subprogram_conversational_notebook_text",
+            "longtext_id": "subprogram_conversational_notebook_tooltip",
+            "long_width": 300
+        },
+    "add_waypoint_popup_close_singularity": {
+      "shorttext_id": "add_waypoint_popup_close_singularity_text",
+      "longtext_id": "add_waypoint_popup_close_singularity_tooltip",
+      "long_width": 300
+    },
+        "run_subprogram": {
+            "shorttext_id": "run_subprogram_text",
+            "longtext_id": "run_subprogram_tooltip",
+            "long_width": 300
+        },
+        "msg_frame_user_or_tool_toggle": {
+            "shorttext_id": "msg_frame_user_or_tool_toggle_text",
+            "longtext_id": "msg_frame_user_or_tool_toggle_tooltip",
+            "long_width": 400
+        },
+        "msg_jog_ignore_probe": {
+            "shorttext_id": "msg_jog_ignore_probe_text",
+            "longtext_id": "msg_jog_ignore_probe_tooltip",
+            "long_width": 300
+        },
+        "msg_exit": {
+            "shorttext_id": "msg_exit_text",
+            "longtext_id": "msg_exit_tooltip",
+            "long_width": 300
+        },
+        "msg_main_tab": {
+            "shorttext_id": "msg_main_tab_text",
+            "longtext_id": "msg_main_tab_tooltip",
+            "long_width": 300
+        },
+        "msg_file_tab": {
+            "shorttext_id": "msg_file_tab_text",
+            "longtext_id": "msg_file_tab_tooltip",
+            "long_width": 300
+        },
+        "msg_frames_tab": {
+            "shorttext_id": "msg_frames_tab_text",
+            "longtext_id": "msg_frames_tab_tooltip",
+            "long_width": 300
+        },
+        "msg_settings_tab": {
+            "shorttext_id": "msg_settings_tab_text",
+            "longtext_id": "msg_setting_tab_tooltip",
+            "long_width": 300
+        },
+        "msg_conversation_tab": {
+            "shorttext_id": "msg_conversation_tab_text",
+            "longtext_id": "msg_conversation_tab_tooltip",
+            "long_width": 300
+        },
+        "msg_jog_tab": {
+            "shorttext_id": "msg_jog_tab_text",
+            "longtext_id": "msg_jog_tab_tooltip",
+            "long_width": 300
+        },
+        "msg_status_tab": {
+            "shorttext_id": "msg_status_tab_text",
+            "longtext_id": "msg_status_tab_tooltip",
+            "long_width": 300
+        },
+        "msg_back": {
+            "shorttext_id": "msg_back_text",
+            "longtext_id": "msg_back_tooltip",
+            "long_width": 300
+        },
+        "msg_home": {
+            "shorttext_id": "msg_home_text",
+            "longtext_id": "msg_home_tooltip",
+            "long_width": 300
+        },
+        "msg_load_program": {
+            "shorttext_id": "msg_load_program_text",
+            "longtext_id": "msg_load_program_tooltip",
+            "long_width": 300
+        },
+        "msg_usb_or_hub": {
+            "shorttext_id": "msg_usb_or_hub_text",
+            "longtext_id": "msg_usb_or_hub_tooltip",
+            "long_width": 300
+        },
+        "msg_hub_home": {
+            "shorttext_id": "msg_hub_home_text",
+            "longtext_id": "msg_hub_home_tooltip",
+            "long_width": 300
+        },
+        "msg_reload": {
+            "shorttext_id": "msg_reload_text",
+            "longtext_id": "msg_reload_tooltip",
+            "long_width": 300
+        },
+        "msg_log_out": {
+            "shorttext_id": "msg_log_out_text",
+            "longtext_id": "msg_log_out_tooltip",
+            "long_width": 300
+        },
+        "msg_copy_external_to_pp": {
+            "shorttext_id": "msg_copy_external_to_pp_text",
+            "longtext_id": "msg_copy_external_to_pp_tooltip",
+            "long_width": 300
+        },
+        "msg_copy_pp_to_external": {
+            "shorttext_id": "msg_copy_pp_to_external_text",
+            "longtext_id": "msg_copy_pp_to_external_tooltip",
+            "long_width": 300
+        },
+        "msg_create_new_folder": {
+            "shorttext_id": "msg_create_new_folder_text",
+            "longtext_id": "msg_create_new_folder_tooltip",
+            "long_width": 300
+        },
+        "msg_raname_file": {
+            "shorttext_id": "msg_raname_file_text",
+            "longtext_id": "msg_raname_file_tooltip",
+            "long_width": 300
+        },
+        "msg_delete_file": {
+            "shorttext_id": "msg_delete_file_text",
+            "longtext_id": "msg_delete_file_tooltip",
+            "long_width": 300
+        },
+        "msg_search_for_file": {
+            "shorttext_id": "msg_search_for_file_text",
+            "longtext_id": "msg_search_for_file_tooltip",
+            "long_width": 300
+        },
+        "msg_conv_edit": {
+            "shorttext_id": "msg_conv_edit_text",
+            "longtext_id": "msg_conv_edit_tooltip",
+            "long_width": 300
+        },
+        "msg_edit_program": {
+            "shorttext_id": "msg_edit_program_text",
+            "longtext_id": "msg_conv_edit_tooltip",
+            "long_width": 300
+        },
+        "msg_remove_frame": {
+            "shorttext_id": "msg_remove_frame_text",
+            "longtext_id": "msg_remove_frame_tooltip",
+            "long_width": 300
+        },
+        "msg_update_frame_from_current_position": {
+            "shorttext_id": "msg_update_frame_from_current_position_text",
+            "longtext_id": "msg_update_frame_from_current_position_tooltip",
+            "long_width": 300
+        },
+        "msg_update_frame_using_wizard": {
+            "shorttext_id": "msg_update_frame_using_wizard_text",
+            "longtext_id": "msg_update_frame_using_wizard_tooltip",
+            "long_width": 300
+        },
+        "msg_user_frames_tab": {
+            "shorttext_id": "msg_user_frames_tab_text",
+            "longtext_id": "msg_user_frames_tab_tooltip",
+            "long_width": 300
+        },
+        "msg_tool_frames_tab": {
+            "shorttext_id": "msg_tool_frames_tab_text",
+            "longtext_id": "msg_tool_frames_tab_tooltip",
+            "long_width": 300
+        },
+        "msg_machine_frames_tab": {
+            "shorttext_id": "msg_machine_frames_tab_text",
+            "longtext_id": "msg_machine_frames_tab_tooltip",
+            "long_width": 300
+        },
+        "msg_add_pp_cnc_instance": {
+            "shorttext_id": "msg_add_pp_cnc_instance_text",
+            "longtext_id": "msg_add_pp_cnc_instance_tooltip",
+            "long_width": 300
+        },
+        "msg_remove_pp_cnc_instance": {
+            "shorttext_id": "msg_remove_pp_cnc_instance_text",
+            "longtext_id": "msg_remove_pp_cnc_instance_tooltip",
+            "long_width": 300
+        },
+        "msg_zero_all_joints": {
+            "shorttext_id": "msg_zero_all_joints_text",
+            "longtext_id": "msg_zero_all_joints_tooltip",
+            "long_width": 300
+        },
+        "msg_power_off": {
+            "shorttext_id": "msg_power_off_text",
+            "longtext_id": "msg_power_off_tooltip",
+            "long_width": 300
+        },
+        "msg_enable_preview": {
+            "shorttext_id": "msg_enable_preview_text",
+            "longtext_id": "msg_enable_preview_tooltip",
+            "long_width": 300
+        },
+        "msg_create_from_default": {
+            "shorttext_id": "msg_create_from_default_text",
+            "longtext_id": "msg_create_from_default_tooltip",
+            "long_width": 300
+        },
+        "msg_edit_in_rviz": {
+            "shorttext_id": "msg_edit_in_rviz_text",
+            "longtext_id": "msg_edit_in_rviz_tooltip",
+            "long_width": 300
+        },
+        "msg_rviz_config_name_input": {
+            "shorttext_id": "msg_rviz_config_name_input_text",
+            "longtext_id": "msg_rviz_config_name_input_tooltip",
+            "long_width": 300
+        },
+        "msg_code_editor_name_inpute": {
+            "shorttext_id": "msg_code_editor_name_inpute_text",
+            "longtext_id": "msg_code_editor_name_inpute_tooltip",
+            "long_width": 300
+        },
+        "msg_probe_setting_toggle": {
+            "shorttext_id": "msg_probe_setting_toggle_text",
+            "longtext_id": "msg_probe_setting_toggle_tooltip",
+            "long_width": 300
+        },
+        "msg_enable_main_loop_warning": {
+            "shorttext_id": "msg_enable_main_loop_warning_text",
+            "longtext_id": "msg_enable_main_loop_warning_tooltip",
+            "long_width": 300
+        },
+        "msg_tools_hal_scope": {
+            "shorttext_id": "msg_tools_hal_scope_text",
+            "longtext_id": "msg_tools_hal_scope_tooltip",
+            "long_width": 300
+        },
+        "msg_tools_hal_meter": {
+            "shorttext_id": "msg_tools_hal_meter_text",
+            "longtext_id": "msg_tools_hal_meter_tooltip",
+            "long_width": 300
+        },
+        "msg_tools_rviz": {
+            "shorttext_id": "msg_tools_rviz_text",
+            "longtext_id": "msg_tools_rviz_tooltip",
+            "long_width": 300
+        },
+        "msg_tools_rqt_gui": {
+            "shorttext_id": "msg_tools_rqt_gui_text",
+            "longtext_id": "msg_tools_rqt_gui_tooltip",
+            "long_width": 300
+        },
+        "msg_new_waypoint_from_current_position": {
+            "shorttext_id": "msg_new_waypoint_from_current_position_text",
+            "longtext_id": "msg_new_waypoint_from_current_position_tooltip",
+            "long_width": 300
+        },
+        "msg_hold_to_move_to_marker": {
+            "shorttext_id": "msg_hold_to_move_to_marker_text",
+            "longtext_id": "msg_hold_to_move_to_marker_tooltip",
+            "long_width": 300
+        },
+        "msg_cartesian_jog_marke": {
+            "shorttext_id": "msg_cartesian_jog_marker_ops",
+            "longtext_id": "msg_cartesian_jog_marker_ops_tooltip",
+            "long_width": 300
+        },
+        "msg_left": {
+            "shorttext_id": "msg_left_text",
+            "longtext_id": "msg_left_tooltip",
+            "long_width": 300
+        },
+        "msg_top": {
+            "shorttext_id": "msg_top_text",
+            "longtext_id": "msg_top_tooltip",
+            "long_width": 300
+        },
+        "msg_bottom": {
+            "shorttext_id": "msg_bottom_text",
+            "longtext_id": "msg_bottom_tooltip",
+            "long_width": 300
+        },
+        "msg_right": {
+            "shorttext_id": "msg_right_text",
+            "longtext_id": "msg_right_tooltip",
+            "long_width": 300
+        },
+        "msg_front": {
+            "shorttext_id": "msg_front_text",
+            "longtext_id": "msg_front_tooltip",
+            "long_width": 300
+        },
+        "msg_basic_advanced": {
+            "shorttext_id": "msg_basic_advanced_text",
+            "longtext_id": "msg_basic_advanced_tooltip",
+            "long_width": 250
+        },
+        "msg_reset": {
+            "shorttext_id": "msg_reset_text",
+            "longtext_id": "msg_reset_tooltip",
+            "long_width": 250
+        },
+        "msg_current": {
+            "shorttext_id": "msg_current_text",
+            "longtext_id": "msg_current_tooltip",
+            "long_width": 250
+        },
+        "msg_pose_reachable": {
+            "shorttext_id": "msg_pose_reachable_text",
+            "longtext_id": "msg_pose_reachable_tooltip",
+            "long_width": 300
+        },
+        "msg_clear_messages": {
+            "shorttext_id": "msg_clear_messages_text",
+            "longtext_id": "msg_clear_messages_tooltip",
+            "long_width": 300
+        },
+        "msg_log_data": {
+            "shorttext_id": "msg_log_data_text",
+            "longtext_id": "msg_log_data_tooltip",
+            "long_width": 300
+        },
+        "msg_log_level": {
+            "shorttext_id": "msg_log_level_text",
+            "longtext_id": "msg_log_level_tooltip",
+            "long_width": 300
+        },
+        "msg_update_waypoint_from_current_position": {
+            "shorttext_id": "msg_update_waypoint_from_current_position_text",
+            "longtext_id": "msg_update_waypoint_from_current_position_tooltip",
+            "long_width": 300
+        },
+        "msg_remove_waypoint": {
+            "shorttext_id": "msg_remove_waypoint_text",
+            "longtext_id": "msg_remove_waypoint_tooltip",
+            "long_width": 300
+        },
+        "msg_go_to_waypoint": {
+            "shorttext_id": "msg_go_to_waypoint_text",
+            "longtext_id": "msg_go_to_waypoint_tooltip",
+            "long_width": 300
+        },
+        "msg_add_change_frame_to_active_frame_to_program": {
+            "shorttext_id": "msg_add_change_frame_to_active_frame_to_program_text",
+            "longtext_id": "msg_add_change_frame_to_active_frame_to_program_tooltip",
+            "long_width": 350
+        },
+        "msg_add_move_to_selected_waypoint_to_program": {
+            "shorttext_id": "msg_add_move_to_selected_waypoint_to_program_text",
+            "longtext_id": "msg_add_move_to_selected_waypoint_to_program_tooltip",
+            "long_width": 300
+        },
+        "msg_add_to_program": {
+            "shorttext_id": "msg_add_to_program_text",
+            "longtext_id": "msg_add_to_program_tooltip",
+            "long_width": 300
+        },
+        "msg_move_tab": {
+            "shorttext_id": "msg_move_tab_text",
+            "longtext_id": "msg_move_tab_tooltip",
+            "long_width": 300
+        },
+        "msg_wait_tab": {
+            "shorttext_id": "msg_wait_tab_text",
+            "longtext_id": "msg_wait_tab_tooltip",
+            "long_width": 300
+        },
+        "msg_notify_tab": {
+            "shorttext_id": "msg_notify_tab_text",
+            "longtext_id": "msg_notify_tab_tooltip",
+            "long_width": 300
+        },
+        "msg_pathpilot_tab": {
+            "shorttext_id": "msg_pathpilot_tab_text",
+            "longtext_id": "msg_pathpilot_tab_tooltip",
+            "long_width": 300
+        },
+        "control_structure_tab": {
+            "shorttext_id": "control_structure_tab_text",
+            "longtext_id": "control_structure_tab_tooltip",
+            "long_width": 300
+        },
+        "msg_comment_tab": {
+            "shorttext_id": "msg_comment_tab_text",
+            "longtext_id": "msg_comment_tab_tooltip",
+            "long_width": 300
+        },
+        "msg_assignment_tab": {
+            "shorttext_id": "msg_assignment_tab_text",
+            "longtext_id": "msg_assignment_tab_tooltip",
+            "long_width": 300
+        },
+        "msg_if_then_else_tab": {
+            "shorttext_id": "msg_if_then_else_tab_text",
+            "longtext_id": "msg_if_then_else_tab_tooltip",
+            "long_width": 300
+        },
+        "msg_loop_tab": {
+            "shorttext_id": "msg_loop_tab_text",
+            "longtext_id": "msg_loop_tab_tooltip",
+            "long_width": 300
+        },
+        "msg_subprogram_tab": {
+            "shorttext_id": "msg_subprogram_tab_text",
+            "longtext_id": "msg_subprogram_tab_tooltip",
+            "long_width": 300
+        },
+        "msg_save": {
+            "shorttext_id": "msg_save_text",
+            "longtext_id": "msg_save_tooltip",
+            "long_width": 300
+        },
+        "msg_save_as": {
+            "shorttext_id": "msg_save_as_text",
+            "longtext_id": "msg_save_as_tooltip",
+            "long_width": 300
+        },
+        "msg_new_program": {
+            "shorttext_id": "msg_new_program_text",
+            "longtext_id": "msg_new_program_tooltip",
+            "long_width": 300
+        },
+        "msg_undo": {
+            "shorttext_id": "msg_undo_text",
+            "longtext_id": "msg_undo_tooltip",
+            "long_width": 300
+        },
+        "msg_redo": {
+            "shorttext_id": "msg_redo_text",
+            "longtext_id": "msg_redo_tooltip",
+            "long_width": 300
+        },
+        "msg_copy": {
+            "shorttext_id": "msg_copy_text",
+            "longtext_id": "msg_copy_tooltip",
+            "long_width": 300
+        },
+        "msg_cut": {
+            "shorttext_id": "msg_cut_text",
+            "longtext_id": "msg_cut_tooltip",
+            "long_width": 300
+        },
+        "msg_paste": {
+            "shorttext_id": "msg_paste_text",
+            "longtext_id": "msg_paste_tooltip",
+            "long_width": 300
+        },
+        "msg_move_up": {
+            "shorttext_id": "msg_move_up_text",
+            "longtext_id": "msg_move_up_tooltip",
+            "long_width": 300
+        },
+        "msg_move_down": {
+            "shorttext_id": "msg_move_down_text",
+            "longtext_id": "msg_move_down_tooltip",
+            "long_width": 300
+        },
+        "msg_toggle_active": {
+            "shorttext_id": "msg_toggle_active_text",
+            "longtext_id": "msg_toggle_active_tooltip",
+            "long_width": 300
+        },
+        "msg_delete": {
+            "shorttext_id": "msg_delete_text",
+            "longtext_id": "msg_delete_tooltip",
+            "long_width": 300
+        },
+        "msg_toggle_global_waypoints": {
+            "shorttext_id": "msg_toggle_global_waypoints_text",
+            "longtext_id": "msg_toggle_global_waypoints_tooltip",
+            "long_width": 300
+        },
+        "msg_toggle_program_waypoints": {
+            "shorttext_id": "msg_toggle_program_waypoints_text",
+            "longtext_id": "msg_toggle_program_waypoints_tooltip",
+            "long_width": 300
+        }    }
+}

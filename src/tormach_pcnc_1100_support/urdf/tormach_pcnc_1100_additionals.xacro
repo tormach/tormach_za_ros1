@@ -1,0 +1,61 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+  <xacro:macro name="tormach_pcnc_1100_sump" params="prefix">
+    <material name="${prefix}TormachWhite">
+      <color rgba="0.95 0.95 0.95 1.0"/>
+    </material>
+
+    <!-- link list -->
+    <link name="${prefix}sump">
+      <visual>
+        <geometry>
+          <mesh filename="package://tormach_pcnc_1100_support/meshes/sump.stl"/>
+        </geometry>
+        <material name="${prefix}TormachWhite"/>
+        <origin rpy="0.0 0 0.0" xyz="0 0 0"/>
+      </visual>
+      <collision>
+        <geometry>
+          <mesh filename="package://tormach_pcnc_1100_support/meshes/sump.stl"/>
+        </geometry>
+        <origin rpy="0.0 0 0.0" xyz="0 0 0"/>
+      </collision>
+    </link>
+    <!-- joint list -->
+    <joint name="${prefix}sump_joint" type="fixed">
+      <limit effort="0" lower="0" upper="0" velocity="0.5"/>
+      <parent link="${prefix}frame"/>
+      <child link="${prefix}sump"/>
+      <axis xyz="0 1 0"/>
+      <origin rpy="0.0 0.0 0.0" xyz="0 0 0"/>
+    </joint>
+  </xacro:macro>
+
+  <xacro:macro name="tormach_pcnc_1100_cover_right" params="prefix">
+    <!-- link list -->
+    <link name="${prefix}cover_right">
+      <visual>
+        <geometry>
+          <mesh filename="package://tormach_pcnc_1100_support/meshes/cover-right.stl"/>
+        </geometry>
+        <material name="${prefix}TormachWhite"/>
+        <origin rpy="0.0 0 0.0" xyz="0 0 0"/>
+      </visual>
+      <collision>
+        <geometry>
+          <mesh filename="package://tormach_pcnc_1100_support/meshes/cover-right.stl"/>
+        </geometry>
+        <origin rpy="0.0 0 0.0" xyz="0 0 0"/>
+      </collision>
+    </link>
+    <!-- joint list -->
+    <joint name="${prefix}_cover_right_joint" type="fixed">
+      <limit effort="0" lower="0" upper="0" velocity="0"/>
+      <parent link="${prefix}frame"/>
+      <child link="${prefix}cover_right"/>
+      <axis xyz="0 1 0"/>
+      <origin rpy="0.0 0.0 0.0" xyz="0 0 0"/>
+    </joint>
+  </xacro:macro>
+
+</robot>

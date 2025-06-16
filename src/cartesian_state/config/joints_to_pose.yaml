@@ -1,0 +1,9 @@
+joints_to_pose:
+  joint_topic: "joint_states"
+  planning_frame_topic: "user_frames/active_frame"
+  tool_frame_topic: "tool_frames/active_frame"
+  pose_topic: "pose_states"
+  world_pose_topic: "world_pose_states"
+  move_group_name: "manipulator"
+  target_link_name: "tool0"
+  base_link_name: "world"

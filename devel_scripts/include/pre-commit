@@ -1,0 +1,31 @@
+#!/bin/bash -e
+
+HOOK_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
+cd $(git rev-parse --show-toplevel)
+
+# Fix console output
+clean_output() {
+    # Get rid of ansi coloring
+    # https://stackoverflow.com/questions/17998978/removing-colors-from-output
+    # ...and remove CRs that zap output in magit
+    sed -r "s/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[mGK]//g" | tr '\r' ' '
+}
+if test -n "$INSIDE_EMACS"; then
+    CLEAN=clean_output
+else
+    CLEAN=cat
+fi
+
+# Select wrapper script
+if test "$ENV_COOKIE" != docker-run; then
+    WRAPPER="./install_scripts/docker-dev.sh -G /bin/bash --login -c"
+    export SKIP_IMAGE_CHECK=1
+    export SKIP_HW_CHECK=1
+else
+    WRAPPER=
+fi
+
+PRE_COMMIT=${HOOK_DIR}/pre-commit-run
+
+${WRAPPER} "${PRE_COMMIT}" | ${CLEAN}
+exit ${PIPESTATUS[0]}

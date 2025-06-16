@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>robot_command</name>
+  <version>0.1.0</version>
+  <description>
+    Robot Command
+  </description>
+  <maintainer email="alexander@roessler.systems">Alexander Rössler</maintainer>
+  <license>TODO</license>
+
+  <url>TODO</url>
+  <author>Alexander Rössler</author>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <depend>moveit_commander</depend>
+  <depend>rospy</depend>
+  <depend>python-parso</depend>
+  <depend>python3-fysom</depend>
+  <depend>python3-attrs</depend>
+  <depend>python-pint</depend>
+  <depend>python3-future</depend>
+  <depend>ros_machinetalk</depend>
+  <depend>redis_store</depend>
+  <depend>tf</depend>
+  <depend>actionlib_msgs</depend>
+  <depend>geometry_msgs</depend>
+  <depend>moveit_msgs</depend>
+  <depend>robot_command_msgs</depend>
+  <depend>movej_ik_server_msgs</depend>
+  <depend>movej_ik_server</depend>
+  <depend>std_msgs</depend>
+  <depend>unique_id</depend>
+  <depend>uuid_msgs</depend>
+  <depend>tf2_geometry_msgs</depend>
+  <depend>robot_frame</depend>
+
+  <build_depend>python3-catkin-pkg</build_depend>
+  <!-- the following four are actually doc_depends, but rosdep skips those -->
+  <!-- https://github.com/ros-infrastructure/rosdep/pull/789 -->
+  <build_depend>rosdoc_lite</build_depend>
+  <build_depend>python3-sphinx</build_depend>
+  <build_depend>python3-sphinx-rtd-theme</build_depend>
+  <build_depend>python3-sphinxcontrib-confluencebuilder</build_depend>
+
+  <test_depend>rostest</test_depend>
+  <test_depend>ros_pytest</test_depend>
+  <test_depend>python-pytest-dependency-pip</test_depend>
+
+  <export>
+    <rosdoc config="rosdoc.yaml" />
+  </export>
+</package>

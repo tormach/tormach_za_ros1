@@ -1,0 +1,107 @@
+#!/usr/bin/env python
+import json
+import sys
+
+import rospy
+from robot_frame import FrameClient
+
+NODE_NAME = "frame_client"
+
+
+class ClientNode:
+    def __init__(self):
+        self._client = None
+
+    def start(self):
+        rospy.init_node(NODE_NAME, anonymous=True)
+
+    @staticmethod
+    def print_usage():
+        sys.stdout.write(
+            """\
+frame_client <namespace> <options>
+    list
+    clear
+    set <name> <value> [<description>]
+    get <name>
+    delete <name>
+    activate <name>
+"""
+        )
+
+    def process(self, argv):
+        if len(argv) < 3:
+            sys.stderr.write('Too few arguments.\n')
+            self.print_usage()
+            return 1
+
+        namespace = argv[1]
+        cmd = argv[2]
+
+        self._client = FrameClient(namespace)
+
+        if cmd == 'list':
+            frames = [f"{k}: {v}" for k, v in self._client.frames.items()]
+            sys.stdout.write(
+                "{} frames:\n{}\nActive frame: {}, frame: {}\n".format(
+                    len(frames),
+                    "\n".join(frames),
+                    self._client.active_frame,
+                    self._client.active_frame_frame,
+                )
+            )
+
+        elif cmd == 'clear':
+            self._client.clear_frames()
+
+        elif cmd == 'set':
+            if len(argv) < 5:
+                sys.stderr.write("Too few arguments\n")
+                self.print_usage()
+                return 1
+            name = argv[3]
+            try:
+                value = json.loads(argv[4])
+                if len(value) != 6:
+                    raise ValueError
+            except ValueError:
+                sys.stderr.write(
+                    "Pose value must have following format:" " [x,y,z,a,b,c]\n"
+                )
+                return 1
+            description = argv[5] if len(argv) == 6 else None
+            self._client.set_frame(name, value, description)
+
+        elif cmd in ('get', 'delete', 'activate'):
+            if len(argv) < 4:
+                sys.stderr.write("Too few arguments\n")
+                self.print_usage()
+                return 1
+            name = argv[3]
+            frames = self._client.frames
+            if not name and cmd == 'activate':
+                pass
+            elif name not in frames:
+                sys.stderr.write(f"Can't find frame {name}\n")
+                return 1
+
+            if cmd == 'get':
+                sys.stdout.write(f"{frames[name]}\n")
+            elif cmd == 'delete':
+                self._client.delete_frame(name)
+            elif cmd == 'activate':
+                self._client.change_frame(name)
+
+        return 0
+
+    def stop(self):
+        if self._client:
+            self._client.stop()
+
+
+if __name__ == '__main__':
+    node = ClientNode()
+    node.start()
+    retcode = node.process(sys.argv)
+    node.stop()
+    sys.exit(retcode)

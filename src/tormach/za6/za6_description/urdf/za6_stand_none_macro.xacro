@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+  <xacro:macro name="za6_stand_none_macro" params="prefix">
+
+    <!-- 'world' frame: default pose reference frame -->
+    <link name="world" />
+    <joint name="world-${prefix}base_link" type="fixed">
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <axis xyz="0 0 1"/>
+      <parent link="world"/>
+      <child link="${prefix}base_link"/>
+    </joint>
+
+  </xacro:macro>
+</robot>

@@ -1,0 +1,28 @@
+<launch>
+  <!--  <arg name="use_spacenavd" value="false"/>-->
+
+  <!--   <node name="joy_node" pkg="joy" type="joy_node" required="true"/> -->
+
+  <!--   <node pkg="spacenav_node" type="spacenav_node" name="spacenav_node" output="screen" if="$(arg use_spacenavd)"> -->
+  <!--     <param name="zero_when_static" value="true"/> -->
+  <!--     <param name="static_count_threshold" value="30"/> -->
+  <!--     <param name="static_trans_deadband" value="0.1"/> -->
+  <!--     <param name="static_rot_deadband" value="0.1"/> -->
+  <!--     <remap from="spacenav/joy" to="joy" /> -->
+  <!--   </node> -->
+
+  <!--   <node -->
+  <!--       name="spacemouse_to_twist" -->
+  <!--       pkg="moveit_servo" -->
+  <!--       type="spacenav_to_twist" -->
+  <!--       output="screen" -->
+  <!--       required="true"> -->
+  <!--     <remap from="spacenav/joy" to="joy" /> -->
+  <!--     <remap from="servo_server/delta_twist_cmds" to="jog_arm_server/frame_delta_jog_cmds_joy" /> -->
+  <!--   </node> -->
+
+  <!--   <node pkg="robot_jog" type="continuous_jog_frame_node" name="continuous_jog_frame_node" required="true"/> -->
+
+  <node pkg="robot_jog" type="interactive_jog_node" name="interactive_jog_node" required="true"/>
+
+</launch>

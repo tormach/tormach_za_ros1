@@ -1,0 +1,68 @@
+#!/usr/bin/env python
+import configparser
+import os
+import sys
+import time
+
+import rospy
+from machinetalk.protobuf.types_pb2 import MsgLevel
+
+from pymachinetalk.application import ApplicationLog
+from machinekit import config
+
+
+class MachinekitRosLogBridge:
+    def __init__(self, log_uri):
+        self.node = rospy.init_node('machinekit_ros_log_bridge')
+        self.log = ApplicationLog()
+        self.debug = rospy.get_param('~debug', False)
+        self.log.debug = self.debug
+        self.log_uri = log_uri
+
+    def start(self):
+        self.log.log_uri = self.log_uri
+        self.log.on_message_received.append(self._covert_log_message)
+        self.log.start()
+
+    def stop(self):
+        self.log.stop()
+
+    @staticmethod
+    def _covert_log_message(msg):
+        switch = {
+            MsgLevel.RTAPI_MSG_DBG: lambda text: rospy.logdebug(text),
+            MsgLevel.RTAPI_MSG_INFO: lambda text: rospy.loginfo(text),
+            MsgLevel.RTAPI_MSG_WARN: lambda text: rospy.logwarn(text),
+            MsgLevel.RTAPI_MSG_ERR: lambda text: rospy.logerr(text),
+        }
+        switch.get(msg.level, lambda _: None)(msg.text)
+
+
+def get_log_uri_from_mkconfig():
+    mkconfig = config.Config()
+    mkini = os.getenv("MACHINEKIT_INI")
+    if mkini is None:
+        mkini = mkconfig.MACHINEKIT_INI
+    if not os.path.isfile(mkini):
+        sys.stderr.write(f"MACHINEKIT_INI {mkini}" + " does not exist\n")
+        sys.exit(1)
+
+    mki = configparser.ConfigParser()
+    mki.read(mkini)
+    mk_uuid = mki.get("MACHINEKIT", "MKUUID")
+    if not mki.getint("MACHINEKIT", "REMOTE"):
+        return f"ipc://{mkconfig.rundir}/0.log.{mk_uuid}"
+    port = mki.get("MACHINEKIT", "LOGPUB_PORT")
+    return f"tcp://127.0.0.1:{port}"
+
+
+def main():
+    bridge = MachinekitRosLogBridge(log_uri=get_log_uri_from_mkconfig())
+    bridge.start()
+    while not rospy.is_shutdown():
+        time.sleep(0.1)
+    bridge.stop()
+
+
+if __name__ == '__main__':
+    main()

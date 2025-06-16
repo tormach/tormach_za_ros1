@@ -1,0 +1,4 @@
+<?xml version="1.0"?>
+<launch>
+  <node pkg="robot_jog" type="continuous_jog_frame_node" name="continuous_jog_frame_node" />
+</launch>

@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot name="gr60_gripper" xmlns:xacro="http://ros.org/wiki/xacro">
+  <xacro:macro name="gr60_gripper_macro" params="prefix">
+
+    <material name="${prefix}Black">
+      <color rgba="0.1 0.1 0.1 1.0"/>
+    </material>
+    <material name="${prefix}Silver">
+      <color rgba="0.700 0.700 0.700 1.0"/>
+    </material>
+
+    <link name="${prefix}gripper_body">
+      <inertial>
+        <origin xyz="-3.1377899799655244e-05 1.6494540665816296e-06 -0.033330814967884904" rpy="0 0 0"/>
+        <mass value="0.7320921088997674"/>
+        <inertia ixx="0.000641" iyy="0.000526" izz="0.000498" ixy="-0.0" iyz="-0.0" ixz="1e-06"/>
+      </inertial>
+      <visual>
+        <geometry>
+          <mesh filename="package://gr60_gripper/meshes/body.stl" scale="0.001 0.001 0.001"/>
+        </geometry>
+        <origin rpy="${pi} 0.0 0.0" xyz="0 0 0"/>
+        <material name="${prefix}Black">
+        </material>
+      </visual>
+      <collision>
+        <geometry>
+          <mesh filename="package://gr60_gripper/meshes/body_collision.stl" scale="0.001 0.001 0.001"/>
+        </geometry>
+        <origin rpy="${pi} 0.0 0.0" xyz="0 0 0"/>
+      </collision>
+    </link>
+
+    <link name="${prefix}gripper_finger1">
+      <visual>
+        <geometry>
+          <mesh filename="package://gr60_gripper/meshes/finger_1.stl" scale="0.001 0.001 0.001"/>
+        </geometry>
+        <origin xyz="0.0134 0.06415 0.0" rpy="${pi} 0 0"/>
+        <material name="${prefix}Silver">
+        </material>
+      </visual>
+      <collision>
+        <origin xyz="0.0134 0.06415 0.0" rpy="${pi} 0 0"/>
+        <geometry>
+          <mesh filename="package://gr60_gripper/meshes/finger_1.stl" scale="0.001 0.001 0.001"/>
+        </geometry>
+        <origin rpy="0.0 0.0 0.0" xyz="0.0 0.0 0.0"/>
+      </collision>
+      <inertial>
+        <origin xyz="0.007989848799465349 0.09245151811985064 -0.07644796771340727" rpy="0 0 0"/>
+        <mass value="0.039854625810917525"/>
+        <inertia ixx="2.1e-05" iyy="1.7e-05" izz="8e-06" ixy="-2e-06" iyz="5e-06" ixz="4e-06"/>
+      </inertial>
+    </link>
+
+    <link name="${prefix}gripper_finger2">
+      <visual>
+        <geometry>
+          <mesh filename="package://gr60_gripper/meshes/finger_2.stl" scale="0.001 0.001 0.001"/>
+        </geometry>
+        <origin xyz="-0.0134 0.06415 0.0" rpy="${pi} 0 0"/>
+        <material name="${prefix}Silver">
+        </material>
+      </visual>
+      <collision>
+        <geometry>
+          <mesh filename="package://gr60_gripper/meshes/finger_2.stl" scale="0.001 0.001 0.001"/>
+        </geometry>
+        <origin xyz="-0.0134 0.06415 0.0" rpy="${pi} 0 0"/>
+      </collision>
+      <inertial>
+        <origin xyz="-0.007989848799473256 0.035848481880149344 -0.07644796771340924" rpy="0 0 0"/>
+        <mass value="0.039854625810917525"/>
+        <inertia ixx="2.1e-05" iyy="1.7e-05" izz="8e-06" ixy="-2e-06" iyz="-5e-06" ixz="-4e-06"/>
+      </inertial>
+    </link>
+
+    <joint name="${prefix}gripper_body_finger1" type="prismatic">
+      <limit upper="0.00" lower="-0.03" effort="100" velocity="1.0"/>
+      <parent link="${prefix}gripper_body"/>
+      <child link="${prefix}gripper_finger1"/>
+      <axis xyz="-0.0 1.0 -0.0"/>
+      <origin xyz="-0.0134 ${-0.06415+0.029} -0.01145" rpy="0 0 0"/>
+    </joint>
+
+    <joint name="${prefix}gripper_body_finger2" type="prismatic">
+      <limit upper="0.00" lower="-0.3" effort="100" velocity="1.0"/>
+      <parent link="${prefix}gripper_body"/>
+      <child link="${prefix}gripper_finger2"/>
+      <axis xyz="-0.0 -1.0 -0.0"/>
+      <mimic joint="${prefix}gripper_body_finger1" multiplier="1.0" offset="0.0" />
+      <origin xyz="0.0134 ${-0.06415-0.029} -0.01145" rpy="0 0 0"/>
+    </joint>
+
+  </xacro:macro>
+</robot>

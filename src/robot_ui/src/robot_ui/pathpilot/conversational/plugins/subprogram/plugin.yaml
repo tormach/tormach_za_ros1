@@ -1,0 +1,6 @@
+name: subprogram
+title: Sub Program
+description: Create sub programs
+type: conversational
+priority: 6
+tooltip: msg_subprogram_tab

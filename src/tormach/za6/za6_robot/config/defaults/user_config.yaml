@@ -1,0 +1,36 @@
+user_config:
+  jograte: 0.1
+  feedrate: 0.1 # not in use
+  maximum_velocity: 0.1 # not in use
+  maximum_velocity_scale: 0.1
+  uniform_velocity_scale: 0.1
+  blend_radius: 0.0
+  linear_unit: 'mm'
+  angular_unit: 'deg'
+  time_unit: 's'
+  jog:
+    continuous: false
+    step_size: 0
+    tool_frame: false
+    joint: 1
+    ignoreprobe: false
+    advanced_marker_ops: false
+  recent_paths: []
+  optional_stop: false
+  mdi_history: []
+  code_editor: "juffed"
+  tool: 'none'
+  probe:
+    passive: false
+  conversational:
+    main_loop_warning_enabled: true
+  custom:
+    default: 0 # creates the custom parameter space
+    mastering:
+        default: 0 # Create custom parameter space for mastering UI
+  preview:
+    enabled: true
+    rvizConfig: ""
+    show_global_waypoints: true
+    show_program_waypoints: true
+  dry_run_mode: false
