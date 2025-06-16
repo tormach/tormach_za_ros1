@@ -60,7 +60,7 @@ class RosinstallUpdater:
                 source=dict(
                     test_pull_requests=True,
                     type='git',
-                    url='git@bitbucket.org:tormachinc/moveit.git',
+                    url='https://github.com/tormach/moveit.git',
                     # Alex's pipeline changes + tweaks to TOTG to detect smaller angle changes
                     # Rebased to latest upstream, branch, fix for rviz plugin memory leak
                     #   alex/2023-12-12-fix-rviz-memory-leak
@@ -73,7 +73,7 @@ class RosinstallUpdater:
                 source=dict(
                     test_pull_requests=True,
                     type='git',
-                    url='git@bitbucket.org:tormachinc/moveit_msgs.git',
+                    url='https://github.com/tormach/moveit_msgs.git',
                     # modifications for PILZ planner params
                     # Rebased to latest upstream, branch
                     #   alex/2023-03-31_rebase_onto_latest_upstream
@@ -96,8 +96,8 @@ class RosinstallUpdater:
                 source=dict(
                     test_pull_requests=True,
                     type='git',
-                    url='git@bitbucket.org:tormachinc/rqt_launch.git',
-                    version='main',
+                    url='https://github.com/tormach/rqt_launch.git',
+                    version='pathpilot',
                 ),
                 status='maintained',
             ),
@@ -118,7 +118,7 @@ class RosinstallUpdater:
                 source=dict(
                     test_pull_requests=True,
                     type='git',
-                    url='git@bitbucket.org:tormachinc/ros_controllers.git',
+                    url='https://github.com/tormach/ros_controllers.git',
                     version='5d9b63ecb4578a54e290401813b08e096e1f030a',
                 ),
                 status='maintained',
@@ -127,7 +127,7 @@ class RosinstallUpdater:
                 source=dict(
                     test_pull_requests=True,
                     type='git',
-                    url='git@bitbucket.org:tormachinc/redis_store.git',
+                    url='https://github.com/tormach/redis_store.git',
                     version='953b87bc',
                 ),
                 status='maintained',
@@ -142,7 +142,7 @@ class RosinstallUpdater:
                 source=dict(
                     test_pull_requests=True,
                     type='git',
-                    url='git@bitbucket.org:tormachinc/hal_ros_control.git',
+                    url='https://github.com/tormach/hal_ros_control.git',
                     version='bc715a2e76836cbf2c263be2ff3d6b798debd6ed',
                 ),
                 status='maintained',
@@ -161,7 +161,7 @@ class RosinstallUpdater:
                 source=dict(
                     test_pull_requests=True,
                     type='git',
-                    url='git@bitbucket.org:tormachinc/ydlidar_ros_driver.git',
+                    url='https://github.com/tormach/ydlidar_ros_driver.git',
                     version='715557cb4466aebc5040eea82f16e9c027f140d9',
                 ),
                 status='maintained',

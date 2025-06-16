@@ -20,12 +20,17 @@ set -x
 
 # Set up
 CONTAINER=ros-${IMAGE_TYPE}-test
-if test -n "$TEAMCITY_VERSION"; then
-    # Running on TeamCity agent
+if test -n "$TEAMCITY_VERSION" -o -n "$GITHUB_ACTIONS"; then
+    # Running on TeamCity agent or in GitHub Actions
     export ENV_CI=1
     IN_CI=true
-    CI_USER=buildagent
-    ORIG_UID_GID=1000:1000
+    if test -n "$TEAMCITY_VERSION"; then
+        CI_USER=buildagent
+        ORIG_UID_GID=1000:1000
+    else # GitHub Actions
+        CI_USER=$(id -un)
+        ORIG_UID_GID=$(stat -c %u:%g ~)
+    fi
     # Clean up after old run
     docker ps
     docker kill $CONTAINER >&/dev/null || true
@@ -59,6 +64,7 @@ cleanup_and_exit() {
     # Clean up:
     # - Be sure detached container gets cleaned up
     docker logs $CONTAINER || true
+    sleep 1 # Let stderr & stdout catch up in CI
     docker ps
     docker kill $CONTAINER >&/dev/null || true
     # - Clean up build artifacts to avoid dirtying `dist` img build
@@ -75,8 +81,8 @@ install_scripts/docker-dev.sh -n ${CONTAINER} -k ${DOCKER_DEV_ARGS}
 
 # Wait for container to become ready
 while ! docker exec -tu $CI_USER $CONTAINER id >&/dev/null; do
-    sleep 0.2
-    test $((i += 1)) -lt 20 || # Wait up to 4 seconds
+    sleep 1
+    test $((i += 1)) -lt 40 || # Wait up to 40 seconds
         cleanup_and_exit 5 "Timeout waiting for container"
 done
 

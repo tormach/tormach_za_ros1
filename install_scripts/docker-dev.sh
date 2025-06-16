@@ -264,8 +264,6 @@ if $BUILD; then
 
     if ! ${USE_OVERLAY}; then
         # Build base image when -N is supplied
-        # - Ensure SSH credentials exist
-        test -n "$SSH_AUTH_SOCK" || usage "Empty SSH_AUTH_SOCK; run ssh-agent"
         # - Use a local mirror if specified
         test -z "${DEBIAN_MIRROR}" || DOCKER_DEV_BUILD_OPTS+=(
             --build-arg DEBIAN_MIRROR=${DEBIAN_MIRROR})
@@ -297,7 +295,6 @@ if $BUILD; then
             --build-arg RELEASE_VERSION=${RELEASE_VERSION} \
             --progress=plain \
             --network host \
-            --ssh=default=$SSH_AUTH_SOCK \
             "${DOCKER_DEV_BUILD_OPTS[@]}" \
             ${BUILD_ARGS} \
             "$@" -f install_scripts/docker/Dockerfile "${REPO_DIR}"

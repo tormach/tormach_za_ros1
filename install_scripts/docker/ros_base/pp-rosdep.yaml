@@ -122,10 +122,10 @@ python3-tzlocal:
 python3-aiodocker:
   debian:
     pip:
-      packages: ["git+ssh://git@bitbucket.org/tormachinc/aiodocker.git@zultron/2024-12-04_add_import_image_quiet_param"]
+      packages: ["git+https://github.com/tormach/aiodocker.git@pathpilot"]
   ubuntu:
     pip:
-      packages: ["git+ssh://git@bitbucket.org/tormachinc/aiodocker.git@zultron/2024-12-04_add_import_image_quiet_param"]
+      packages: ["git+https://github.com/tormach/aiodocker.git@pathpilot"]
 python3-dbus-next:
   debian:
       pip:

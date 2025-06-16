@@ -67,4 +67,4 @@ apt-get install -y \
 echo "%robotusers	ALL=(root:root) NOPASSWD: /usr/bin/apt*,/usr/bin/pip*" >/etc/sudoers.d/passwordless
 
 # Install Experimental TRPL Tending features
-pip install git+ssh://git@bitbucket.org/tormachinc/rpl_tending.git@main
+pip install git+https://github.com/tormach/rpl_tending@main
