@@ -77,10 +77,6 @@ COPY install_scripts/docker/base/ base/
 RUN --mount=type=cache,target=/var/cache/apt \
     base/1-system.sh
 
-# install lidar SDK
-RUN --mount=type=cache,target=/var/cache/apt \
-    base/2-install-ydlidar_sdk.sh
-
 ENV \
     # Set locale for tools such as "black" to work correctly
     LC_ALL=en_US.UTF-8 \
@@ -143,6 +139,7 @@ RUN --mount=type=cache,target=/ccache/ \
 FROM ros_base AS ros_custom
 
 COPY --from=ros_custom_build /root/ros_catkin_ws/ros-export/opt /opt
+COPY --from=ros_custom_build /root/ros_catkin_ws/ros-export/usr/local /usr/local
 COPY --from=ros_custom_build /root/.ssh/config /root/.ssh/config
 
 # Copy scripts used in later stages
