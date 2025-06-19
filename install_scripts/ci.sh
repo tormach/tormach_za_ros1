@@ -89,7 +89,7 @@ done
 # Avoid this error
 # fatal: detected dubious ownership in repository at
 #     '/opt/buildagent/work/ba1ace9db7d41c40'
-test $TEST_USER != root ||
+test $CI_USER != root ||
     docker exec "${DOCKER_EXEC_ARGS[@]}" $CONTAINER \
         git config --global --add safe.directory $PWD
 
