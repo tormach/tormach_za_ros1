@@ -25,7 +25,8 @@ jobs:
         driver: docker-container
 
     - name: Set up cache
-      uses: actions/cache@v4
+      # uses: actions/cache@v4
+      uses: zultron/ghactions_cache@v4.2.3.1
       id: cache
       with:
         path: |
@@ -35,11 +36,16 @@ jobs:
           .cache/cache_apt_ros_d_common
           .cache/cache_apt_ros_devel
         key: cache_v2
+        # Cache apt & ccache even from failed builds
+        save-always: true
 
     - name: Inject cache mount contents into Docker
-      uses: reproducible-containers/buildkit-cache-dance@v3.2.0
+      # uses: reproducible-containers/buildkit-cache-dance@v3.2.0
+      uses: zultron/buildkit-cache-dance@v3.2.8
       with:
         builder: ${{ steps.setup-buildx.outputs.name }}
+        # Cache apt & ccache even from failed builds
+        save-always: true
         scratch-dir: ../dance-scratch
         cache-map: |
           {
