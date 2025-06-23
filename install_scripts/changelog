@@ -1,14 +1,16 @@
 #                                                      -*-yaml-*-
+# Versions are ordered from oldest to most recent because PyYAML does not
+# support recursive objects and as such we otherwise cannot use anchors
+# like *FIRST_EULA_VERSION
 
 PathPilotRobot:
   Versions:
-  - Version: 3.2.5
-    Codename: February 2025 Update
-    Description: February 2025 Update
-    CreatedAt: 2025-03-27T13:00:44-05:00
+  - Version: 3.2.6
+    Codename: June 2025 Public Release
+    Description: June 2025 First Public Release
+    CreatedAt: 2025-06-23T14:57:28-05:00
     Changelog: >-
-      Notable changes
-      - New dry-run feature:  Test robot programs in simulation before real run.
-      - Fix a problem after upgrade where robot moves at 10% velocity.
-      - Added remote ROS support.
-      - Creating a global waypoint is now independent of saving robot programs
+        First public release of complete PathPilot Robot stack.
+        https://github.com/tormach/tormach_za_ros1/
+
+    EULA: *FIRST_EULA_VERSION
